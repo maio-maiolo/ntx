@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto y Mejora de Contenidos - Academia Digital</title>
+  <link rel="manifest" href="manifest.json?v=24">
+
+<meta name="theme-color" content="#0a1930">
+
+<!-- Favicon para SOLAPA NAVEGADOR - Libro circular -->
+<link rel="icon" href="/favicon.ico?v=24" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png?v=24">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png?v=24">
+
+<!-- Apple / iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png?v=24">
+
+<!-- PWA / Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192x192.png?v=24">
+<link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512x512.png?v=24">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/responsive-fix.css">
+    <style>
+    :root {--primary-color:#0c2340; --secondary-color:#112334; --accent-blue:#3b82f6; --bg-light:#f4f7fa; --text-main:#333; --text-muted:#666; --white:#fff; --cyan:#06b6d4; --amber:#f59e0b; --violet:#8b5cf6;}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+    body{background:var(--white);color:var(--text-main);overflow-x:hidden;line-height:1.6;}
+    img{max-width:100%;}
+    .hero{background:#112334;color:var(--white);padding:70px 20px;position:relative;overflow:hidden;}
+    .hero-container{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;align-items:center;gap:40px;position:relative;z-index:2;}
+    .hero-content h1{font-size:38px;font-weight:800;line-height:1.2;margin-bottom:15px;color:var(--white);}
+    .hero-content p{font-size:16px;color:#d1d5db;line-height:1.6;max-width:900px;}
+    .hero-image{display:flex;justify-content:center;align-items:center;}
+   .logo-hero-integrado{width:100px;height:auto;object-fit:contain;max-width:80%;}
+/* FIX PC: achicar imagen solo en escritorio */
+@media (min-width: 901px){
+  .hero{padding:50px 20px;}
+  .hero-container{
+    max-width:1100px;
+    grid-template-columns:200px 1fr;
+    gap:50px;
+  }
+  .logo-hero-integrado{
+    width:260px !important;
+    max-width:260px !important;
+  }
+}
+    .contact-section{background:#f8fafc;padding:50px 20px 80px 20px;}
+    .contact-modern-container{max-width:1350px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr;gap:30px;align-items:start;}
+    .forms-grid-wrapper,.sidebar-modern-wrapper{display:flex;flex-direction:column;gap:30px;min-width:0;}
+    .modern-card{background:var(--white);border-radius:16px;padding:30px;box-shadow:0 10px 25px -5px rgba(0,0,0,.03),0 8px 10px -6px rgba(0,0,0,.03);border:1px solid #e2e8f0;transition:transform .2s,box-shadow .2s; min-width:0; overflow:hidden;}
+    .modern-card:hover{box-shadow:0 20px 30px -10px rgba(0,0,0,.06);}
+    .message-accent{border-left:5px solid #F37D37;} .meta-accent{border-left:5px solid #10b981;} .info-accent{border-top:4px solid var(--accent-blue);} .support-accent{border-top:4px solid #38bdf8;}
+    .card-header-modern{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
+    .icon-box{width:48px;height:48px;border-radius:12px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--primary-color);flex-shrink:0;}
+    .message-accent .icon-box{background:#fff7ed;color:#F37D37;} .meta-accent .icon-box{background:#ecfdf5;color:#10b981;}
+    .card-header-modern h3{font-size:18px;font-weight:700;color:var(--primary-color);margin-bottom:2px;} .card-header-modern p{font-size:13px;color:var(--text-muted);margin:0;}
+    .modern-form{display:flex;flex-direction:column;gap:16px; min-width:0;} 
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .form-group{min-width:0;}
+    .form-group label{display:block;font-size:11.5px;font-weight:700;color:var(--primary-color);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+    .form-group input,.form-group select,.form-group textarea{min-height:52px;width:100%;padding:11px 14px;border:1px solid #cbd5e1;border-radius:8px;font-size:13.5px;color:var(--text-main);background:#f8fafc;transition:all .2s; max-width:100%;}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--accent-blue);background:var(--white);box-shadow:0 0 0 3px rgba(59,130,246,.1);}
+    .form-group textarea{min-height:85px;resize:vertical;}
+    .btn-modern{display:block;width:100%;padding:12px;border-radius:8px;border:none;font-weight:700;font-size:14px;cursor:pointer;transition:transform .2s,opacity .2s;margin-top:6px;color:var(--white);text-align:center;text-decoration:none;}
+    .btn-modern:hover{transform:translateY(-1px);opacity:.95;} .btn-orange{background:#F37D37;box-shadow:0 4px 12px rgba(243,125,55,.25);} .btn-green{background:#10b981;box-shadow:0 4px 12px rgba(16,185,129,.25);}
+    .sidebar-title{font-size:18px;font-weight:700;color:var(--primary-color);margin-bottom:18px;display:flex;align-items:center;}
+    .info-list-modern{display:flex;flex-direction:column;gap:16px;} .info-elem{display:flex;align-items:flex-start;gap:14px; min-width:0;} .info-elem i{font-size:16px;color:var(--accent-blue);margin-top:3px; flex-shrink:0;} .info-elem span{display:block;font-size:12px;font-weight:600;color:var(--text-muted);} .info-elem p{font-size:13.5px;font-weight:600;color:var(--primary-color);margin:0; word-break:break-word;}
+    .support-desc{font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:16px;} .aliases-box{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;} .alias-item{display:flex;align-items:center;gap:12px;background:#f8fafc;border:1px solid #e2e8f0;padding:10px 14px;border-radius:10px; min-width:0;} .alias-icon{width:100px;max-width:40%;height:auto;max-height:60px;object-fit:contain;flex-shrink:0;} .alias-data{display:flex;flex-direction:column; min-width:0; word-break:break-word;}
+    .support-note{display:flex;align-items:flex-start;gap:8px;background:#e0f2fe;border:1px solid #bae6fd;padding:10px 12px;border-radius:8px;} .support-note i{color:#0ea5e9;font-size:14px;margin-top:2px; flex-shrink:0;} .support-note p{font-size:12px;color:#075985;line-height:1.4;margin:0;}
+    footer{background:var(--bg-light);border-top:1px solid #e2e8f0;text-align:center;padding:25px;font-size:13px;color:var(--text-muted);}
+    .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:2000;justify-content:center;align-items:center;padding:20px;} .modal-card{background:var(--white);width:100%;max-width:450px;border-radius:20px;overflow:hidden;box-shadow:0 15px 35px rgba(0,0,0,.2);position:relative;}
+    .modal-header{background:#0ea5e9;padding:25px 20px;color:var(--white);display:flex;align-items:center;gap:15px;position:relative;} .modal-heart-icon{background:var(--white);color:#0ea5e9;width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;} .modal-title-box h3{font-size:17px;font-weight:800;} .modal-title-box p{font-size:13px;opacity:.9;} .modal-close-btn{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;} .modal-body{padding:22px 20px 20px 20px;} .modal-body > p{font-size:13.5px;color:var(--text-muted);line-height:1.5;margin-bottom:18px;} .modal-link-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px;} .modal-link-info{display:flex;gap:10px;align-items:center; min-width:0;} .modal-link-info span{font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);} .modal-link-info p{font-size:12px;font-weight:600;color:var(--primary-color);word-break:break-all;} .btn-copiar{background:#0c2340;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer; flex-shrink:0;} .btn-mp-primary{display:flex;align-items:center;justify-content:center;gap:8px;background:#0ea5e9;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;} .modal-footer-text{font-size:11px;color:var(--text-muted);text-align:center;margin-top:10px;display:block;}
+    
+    .modal-card{overflow:hidden;}
+    .modal-header-ledger{background:#000;padding:20px 22px;color:#fff;display:flex;align-items:center;gap:14px;position:relative;flex-wrap:nowrap;}
+    .modal-ledger-logo-box{background:#fff;width:52px;height:52px;min-width:52px;min-height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:6px;box-sizing:border-box;z-index:1;}
+    .modal-ledger-logo-box img{width:100%!important;height:100%!important;max-width:100%!important;object-fit:contain;display:block;}
+    .modal-header-ledger .modal-title-box{flex:1;min-width:0;z-index:1;}
+    .modal-header-ledger .modal-close-btn{z-index:2;}
+    .btn-ledger-primary{display:flex;align-items:center;justify-content:center;gap:8px;background:#000;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;transition:all .2s;}
+    .btn-ledger-primary:hover{background:#1a1a1a;transform:translateY(-1px);}
+    .modal-header-evaluacion{background:#6366f1;padding:25px 20px;color:#fff;display:flex;align-items:center;gap:15px;position:relative;}
+    .modal-evaluacion-icon{background:#fff;color:#6366f1;width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;}
+    .modal-eval-info-box{background:#f5f3ff;border:1px solid #e0e7ff;border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;margin-bottom:16px;}
+    .modal-eval-info-box i{color:#6366f1;margin-top:2px;} .modal-eval-info-box span{font-size:11px;font-weight:700;text-transform:uppercase;color:#6366f1;} .modal-eval-info-box p{font-size:12px;color:#4b5563;margin:2px 0 0 0;}
+    .btn-evaluacion-primary{display:flex;align-items:center;justify-content:center;gap:8px;background:#6366f1;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;width:100%;border:none;cursor:pointer;margin-bottom:10px;}
+    .btn-evaluacion-secondary{display:block;width:100%;background:#f8fafc;color:#64748b;padding:10px;border-radius:10px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #e2e8f0;cursor:pointer;}
+
+    /* ===== RESPONSIVE FIX REAL ===== */
+    @media (max-width: 1024px){
+        .contact-modern-container{grid-template-columns:1fr 380px; gap:24px;}
+        .hero-container{gap:24px;}
+    }
+    @media (max-width: 900px){
+        .contact-modern-container{grid-template-columns:1fr; }
+        .hero-container{grid-template-columns:1fr; text-align:center;}
+        .hero-image{order:-1;}
+        .logo-hero-integrado{width:80px;}
+        .hero-content h1{font-size:32px;}
+        .contact-section{padding:30px 16px 50px 16px;}
+    }
+    @media (max-width: 768px){
+        .hero{padding:40px 16px;}
+        .form-row{grid-template-columns:1fr;}
+        .modern-card{padding:22px 18px;}
+        .hero-content h1{font-size:28px;}
+    }
+    @media (max-width: 480px){
+        .hero-content h1{font-size:24px;}
+        .hero-content p{font-size:14.5px;}
+        .modern-card{padding:18px 14px; border-radius:14px;}
+        .card-header-modern{flex-direction:column; align-items:flex-start; gap:10px;}
+        .card-header-modern h3{font-size:16px;}
+        .form-group input,.form-group select,.form-group textarea{font-size:14px; min-height:48px;}
+        .modal-card{max-width:95vw; margin:0 10px;}
+        .modal-link-box{flex-direction:column; align-items:stretch;}
+        .btn-copiar{width:100%;}
+        .alias-item{flex-direction:column; align-items:flex-start; text-align:left;}
+        .alias-icon{width:90px; max-width:60%;}
+    }
+    @media (max-width: 390px){
+        .contact-modern-container{grid-template-columns:1fr;}
+        .form-row{grid-template-columns:1fr; gap:14px;}
+        .modern-card{overflow:visible;}
+        .form-group select{padding-right:36px; white-space:normal; line-height:1.3; text-overflow:ellipsis; overflow:hidden;}
+        /* FIX específico para el select cortado */
+        #curso option{white-space:normal;}
+    }
+    </style>
+</head>
+<body>
+<link rel="stylesheet" href="css/footer.css?v=1">
+<div id="header-placeholder"></div>
+<section class="hero">
+        <div class="hero-container">
+            <div class="hero-image">
+                <img src="img/contacto.webp" alt="Logo Academia Digital" class="logo-hero-integrado">
+            </div>
+            <div class="hero-content">
+                <h1>Ponte en Contacto y ayudanos a mejorar</h1>
+                <p>¿Tienes dudas sobre nuestras propuestas académicas o deseas dejarnos sugerencias para optimizar nuestros contenidos? Escríbenos y avancemos juntos.</p>
+            </div>
+        </div>
+    </section>
+<!-- Contact Section / Diseño Moderno y Profesional -->
+    <section class="contact-section">
+        <div class="contact-modern-container">
+            <div class="forms-grid-wrapper">
+                <div class="modern-card message-accent">
+                    <div class="card-header-modern">
+                        <div class="icon-box"><i class="fa-solid fa-paper-plane"></i></div>
+                        <div>
+                            <h3>Envíanos un Mensaje</h3>
+                            <p>Consultas generales y orientación académica.</p>
+                        </div>
+                    </div>
+                    <form id="formContacto" action="#" method="POST" class="modern-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombre">Nombre y Apellido</label>
+                                <input type="text" id="nombre" name="nombre" placeholder="Ej. Juan Pérez" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Correo Electrónico</label>
+                                <input type="email" id="email" name="email" placeholder="Ej. juan@correo.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="curso">Curso de Interés</label>
+                            <select id="curso" name="curso">
+                                <option value="general">Consulta General</option>
+                                <option value="informatica">01. Informática y Computación</option>
+                                <option value="redes">02. Redes Digitales</option>
+                                <option value="ofimatica">03. Ofimática</option>
+                                <option value="diseno">04. Imagen Visual</option>
+                                <option value="colaborativo">05. Colaborativo</option>
+                                <option value="multimedia">06. Multimedia</option>
+                                <option value="seguridad">07. Seguridad</option>
+                                <option value="nticx">08. NTICs</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mensaje">Mensaje</label>
+                            <textarea id="mensaje" name="mensaje" placeholder="Escribe tu consulta aquí..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-modern btn-orange"><i class="fa-brands fa-whatsapp" style="margin-right:6px;"></i> Enviar Mensaje</button>
+                    </form>
+                </div>
+                <div class="modern-card meta-accent">
+                    <div class="card-header-modern">
+                        <div class="icon-box"><i class="fa-solid fa-lightbulb"></i></div>
+                        <div>
+                            <h3>Mejoramos junto a vos</h3>
+                            <p>Evalúa los materiales didácticos y déjanos tus sugerencias.</p>
+                        </div>
+                    </div>
+                    <form id="formMejora" action="#" method="POST" class="modern-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="meta-modulo">Módulo / Unidad</label>
+                                <select id="meta-modulo" name="modulo">
+                                    <option value="">Selecciona un módulo</option>
+                                    <option value="informatica">Informática</option>
+                                    <option value="redes">Redes</option>
+                                    <option value="ofimatica">Ofimática</option>
+                                    <option value="diseno">Diseño</option>
+                                    <option value="colaborativo">Colaborativo</option>
+                                    <option value="multimedia">Multimedia</option>
+                                    <option value="seguridad">Seguridad</option>
+                                    <option value="nticx">NTICx</option>
+                                    <option value="ia">IA</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="meta-tipo">Tipo de mejora</label>
+                                <select id="meta-tipo" name="tipo">
+                                    <option value="">Selecciona</option>
+                                    <option value="error">Error / Corrección</option>
+                                    <option value="sugerencia">Sugerencia</option>
+                                    <option value="actualizacion">Actualización</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="meta-detalle">Detalle de la mejora</label>
+                            <textarea id="meta-detalle" name="detalle" placeholder="Contanos qué mejorarías..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-modern btn-green"><i class="fa-brands fa-whatsapp" style="margin-right:6px;"></i> Enviar Sugerencia</button>
+                    </form>
+                </div>
+            </div>
+            <div class="sidebar-modern-wrapper">
+                <div class="modern-card info-accent">
+                    <h3 class="sidebar-title"><i class="fa-solid fa-circle-info" style="margin-right:8px; color:var(--accent-blue);"></i> Información</h3>
+                    <div class="info-list-modern">
+                        <div class="info-elem"><i class="fa-solid fa-envelope"></i><div><span>Email</span><p>info@academiadigital.edu</p></div></div>
+                        <div class="info-elem"><i class="fa-solid fa-location-dot"></i><div><span>Ubicación</span><p>Formación 100% virtual</p></div></div>
+                        <div class="info-elem"><i class="fa-solid fa-clock"></i><div><span>Respuesta</span><p>Dentro de 24-48hs hábiles</p></div></div>
+                    </div>
+                </div>
+                <div class="modern-card support-accent">
+                    <h3 class="sidebar-title"><i class="fa-solid fa-hand-holding-heart" style="margin-right:8px; color:#0ea5e9;"></i> Apoyá el proyecto</h3>
+                    <p class="support-desc">Este proyecto es gratuito y autogestivo. Si te sirvió, podés ayudarnos a mantenerlo online.</p>
+                    <div class="aliases-box">
+                        <div class="alias-item"><img src="img/mp-logo.png" alt="Mercado Pago" class="alias-icon" onerror="this.style.display='none'"><div class="alias-data"><span style="font-size:11px; font-weight:700; text-transform:uppercase; color:#666;">Alias MP</span><p style="font-size:13px; font-weight:700; color:var(--primary-color);">academiadigital.mp</p></div></div>
+                    </div>
+                    <div class="support-note"><i class="fa-solid fa-circle-info"></i><p>Cualquier aporte, por mínimo que sea, nos ayuda a seguir creando contenido gratuito.</p></div>
+                    <button id="openMercadoPagoModalBtn" class="btn-modern" style="margin-top:16px; background:#0ea5e9; box-shadow:0 4px 12px rgba(14,165,233,.25);">Colaborar <i class="fa-solid fa-heart"></i></button>
+                </div>
+                <div class="modern-card" style="border-top:4px solid #10b981;">
+                    <h3 class="sidebar-title"><i class="fa-solid fa-people-group" style="margin-right:8px; color:#10b981;"></i> ¡Gracias por ser parte!</h3>
+                    <p class="support-desc">Cada mensaje, sugerencia y aporte nos motiva a seguir mejorando. Academia Digital existe gracias a estudiantes como vos que creen en la educación libre y gratuita.</p>
+                    <div class="support-note" style="margin-top:14px; background:#f0fdf4; border-color:#bbf7d0;"><i class="fa-solid fa-people-group" style="color:#10b981;"></i><p style="color:#065f46;">Tu participación hace la diferencia. ¡Seguimos creciendo juntos!</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal-overlay" id="mercadoPagoModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <button class="modal-close-btn" id="closeMercadoPagoModalBtn"><i class="fa-solid fa-xmark"></i></button>
+                <div class="modal-heart-icon"><i class="fa-solid fa-heart"></i></div>
+                <div class="modal-title-box"><h3>¡Gracias por tu apoyo!</h3><p>Tu colaboración mantiene vivo el proyecto</p></div>
+            </div>
+            <div class="modal-body">
+                <p>Si el contenido de Academia Digital te resultó útil, podés invitarnos un cafecito virtual. Cualquier monto suma un montón.</p>
+                <div class="modal-link-box">
+                    <div class="modal-link-info"><i class="fa-solid fa-link" style="color: #ef4444;"></i><div><span>Link de Mercado Pago</span><p id="mpLinkText">https://link.mercadopago.com.ar/academiadigital2026</p></div></div>
+                    <button class="btn-copiar" id="copyLinkBtn">Copiar</button>
+                </div>
+                <a href="https://link.mercadopago.com.ar/academiadigital2026" target="_blank" class="btn-mp-primary"><i class="fa-solid fa-heart" style="color: #ef4444;"></i> Colaborar con Mercado Pago <i class="fa-solid fa-arrow-right"></i></a>
+                <span class="modal-footer-text">100% seguro &bull; Mercado Pago &bull; Podés poner el monto que quieras</span>
+            </div>
+        </div>
+    </div>
+<!-- Ventana Modal de Ledger Digital -->
+    <div class="modal-overlay" id="ledgerModal">
+        <div class="modal-card">
+            <div class="modal-header-ledger">
+                <button class="modal-close-btn" id="closeLedgerModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            
+                <div class="modal-ledger-logo-box">
+                    <img src="icon/logo-icon-512.png" alt="Logo Ledger Digital">
+                </div>
+                <div class="modal-title-box">
+                    <h3>LEDGER</h3>
+                    <p>Tus cuentas, al día.</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Mantén tus cuentas al día de forma inteligente. LEDGER, Funciona como un <strong>libro diario de consumos</strong> para registrar y organizar con precisión tus gastos fijos, compras en cuotas, consumos únicos y mucho más.</p>
+                <div class="modal-link-box">
+                    <div class="modal-link-info">
+                        <i class="fa-solid fa-globe" style="color: #000000;"></i>
+                        <div>
+                            <span>Sitio Web Oficial</span>
+                            <p id="ledgerLinkText">https://ledgerdigital.netlify.app/</p>
+                        </div>
+                    </div>
+                    <button class="btn-copiar" id="copyLedgerLinkBtn">Copiar</button>
+                </div>
+                <a href="https://ledgerdigital.netlify.app/" target="_blank" class="btn-ledger-primary">
+                    <i class="fa-solid fa-external-link-alt"></i> Ir a LEDGER <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <span class="modal-footer-text" style="display: block; margin-top: 15px;">Controla tus finanzas personales &bull; Simple y Accesible</span>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Ventana Modal de Evaluacion -->
+    <div class="modal-overlay" id="evaluacionModal">
+        <div class="modal-card">
+            <div class="modal-header-evaluacion">
+                <button class="modal-close-btn" id="closeEvaluacionModalBtn"><i class="fa-solid fa-xmark"></i></button>
+                
+                <div class="modal-evaluacion-icon">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <div class="modal-title-box">
+                    <h3>Evaluación General</h3>
+                    <p>Todos los programas incluidos</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Estás por iniciar la <strong>evaluación integradora</strong> sobre todos los programas de NTX | Academia Digital: Informática, Redes, Ofimática, Diseño, Comunicación, Multimedia y Seguridad.</p>
+                
+                <div class="modal-eval-info-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div>
+                        <span>¿Qué incluye?</span>
+                        <p>Preguntas de los 7 módulos del programa de formación. Podrás ver tu puntaje al finalizar y repasar tus respuestas.</p>
+                    </div>
+                </div>
+                <button id="confirmEvaluacionBtn" class="btn-evaluacion-primary">
+                    <i class="fa-solid fa-play"></i> Sí, iniciar evaluación <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button id="cancelEvaluacionBtn" class="btn-evaluacion-secondary">
+                    Seguir explorando
+                </button>
+                <span class="modal-footer-text" style="display: block; margin-top: 15px;">La evaluación es sin tiempo límite &bull; Podés intentarlo las veces que quieras</span>
+            </div>
+        </div>
+    </div>
+    
+     <div id="footer-placeholder"></div>
+    <script>
+      let mpModal=document.getElementById('mercadoPagoModal');
+      let openMpBtn=document.getElementById('openMercadoPagoModalBtn');
+      let closeMpBtn=document.getElementById('closeMercadoPagoModalBtn');
+      let copyBtn=document.getElementById('copyLinkBtn');
+      let linkEl=document.getElementById('mpLinkText');
+      if(openMpBtn && mpModal) openMpBtn.addEventListener('click', ()=> mpModal.style.display='flex');
+      if(closeMpBtn && mpModal) closeMpBtn.addEventListener('click', ()=> mpModal.style.display='none');
+      if(mpModal) mpModal.addEventListener('click', (e)=>{ if(e.target===mpModal) mpModal.style.display='none'; });
+      if(copyBtn && linkEl){ copyBtn.addEventListener('click', ()=>{ navigator.clipboard.writeText(linkEl.innerText).then(()=>{ let o=copyBtn.innerText; copyBtn.innerText='¡Copiado!'; setTimeout(()=> copyBtn.innerText=o, 2000); }); }); }
+
+      let ledgerModal=document.getElementById('ledgerModal');
+      let openLedgerBtn=document.getElementById('openLedgerModalBtn');
+      let closeLedgerBtn=document.getElementById('closeLedgerModalBtn');
+      let copyLedgerBtn=document.getElementById('copyLedgerLinkBtn');
+      let ledgerLinkEl=document.getElementById('ledgerLinkText');
+      if(openLedgerBtn && ledgerModal) openLedgerBtn.addEventListener('click', (e)=>{ e.preventDefault(); ledgerModal.style.display='flex'; });
+      if(closeLedgerBtn && ledgerModal) closeLedgerBtn.addEventListener('click', ()=> ledgerModal.style.display='none');
+      if(ledgerModal) ledgerModal.addEventListener('click', (e)=>{ if(e.target===ledgerModal) ledgerModal.style.display='none'; });
+      if(copyLedgerBtn && ledgerLinkEl){
+        copyLedgerBtn.addEventListener('click', ()=>{
+          navigator.clipboard.writeText(ledgerLinkEl.innerText).then(()=>{
+            let o=copyLedgerBtn.innerText; copyLedgerBtn.innerText='¡Copiado!'; setTimeout(()=> copyLedgerBtn.innerText=o, 2000);
+          });
+        });
+      }
+
+      let evalModal=document.getElementById('evaluacionModal');
+      let openEval=document.getElementById('openEvaluacionModalBtn');
+      let closeEval=document.getElementById('closeEvaluacionModalBtn');
+      let cancelEval=document.getElementById('cancelEvaluacionBtn');
+      let confirmEval=document.getElementById('confirmEvaluacionBtn');
+      if(openEval && evalModal) openEval.addEventListener('click', (e)=>{ e.preventDefault(); evalModal.style.display='flex'; });
+      if(closeEval && evalModal) closeEval.addEventListener('click', ()=> evalModal.style.display='none');
+      if(cancelEval && evalModal) cancelEval.addEventListener('click', ()=> evalModal.style.display='none');
+      if(confirmEval) confirmEval.addEventListener('click', ()=> window.location.href='examen.html');
+      if(evalModal) evalModal.addEventListener('click', (e)=>{ if(e.target===evalModal) evalModal.style.display='none'; });
+    </script>
+<script src="js/header.js"></script>
+<script src="js/footer.js?v=1"></script>
+<script>
+// CONFIGURACION WHATSAPP
+const WHATSAPP_NUMBER = "5491132558502";
+
+function enviarWhatsApp(mensaje) {
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+    window.open(url, '_blank');
+}
+
+// Form 1: Contacto general
+const formContacto = document.getElementById('formContacto');
+if(formContacto){
+    formContacto.addEventListener('submit', function(e){
+        e.preventDefault();
+        const nombre = document.getElementById('nombre').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const curso = document.getElementById('curso').value;
+        const cursoTexto = document.getElementById('curso').options[document.getElementById('curso').selectedIndex].text;
+        const mensaje = document.getElementById('mensaje').value.trim();
+
+        const texto = `*NUEVA CONSULTA - Academia Digital*%0A%0A` +
+                      `👤 *Nombre:* ${nombre}%0A` +
+                      `📧 *Email:* ${email}%0A` +
+                      `📚 *Curso:* ${cursoTexto}%0A%0A` +
+                      `💬 *Mensaje:*%0A${mensaje}%0A%0A` +
+                      `---%0AEnviado desde academiadigital.edu`;
+
+        // Formato legible para WhatsApp (usamos saltos reales)
+        const textoReal = `*NUEVA CONSULTA - Academia Digital*
+
+👤 *Nombre:* ${nombre}
+📧 *Email:* ${email}
+📚 *Curso:* ${cursoTexto}
+
+💬 *Mensaje:*
+${mensaje}
+
+---
+Enviado desde academiadigital.edu`;
+        
+        enviarWhatsApp(textoReal);
+        
+        // Feedback visual
+        const btn = formContacto.querySelector('button[type="submit"]');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> ¡Abriendo WhatsApp...!';
+        btn.disabled = true;
+        setTimeout(()=>{ btn.innerHTML = orig; btn.disabled = false; }, 3000);
+    });
+}
+
+// Form 2: Mejora de contenidos
+const formMejora = document.getElementById('formMejora');
+if(formMejora){
+    formMejora.addEventListener('submit', function(e){
+        e.preventDefault();
+        const modulo = document.getElementById('meta-modulo').value;
+        const moduloTexto = document.getElementById('meta-modulo').options[document.getElementById('meta-modulo').selectedIndex].text;
+        const tipo = document.getElementById('meta-tipo').value;
+        const tipoTexto = document.getElementById('meta-tipo').options[document.getElementById('meta-tipo').selectedIndex].text;
+        const detalle = document.getElementById('meta-detalle').value.trim();
+
+        if(!modulo || !tipo || !detalle){
+            alert('Por favor completa todos los campos de la sugerencia.');
+            return;
+        }
+
+        const textoReal = `*SUGERENCIA DE MEJORA - Academia Digital*
+
+📦 *Módulo:* ${moduloTexto}
+🏷️ *Tipo:* ${tipoTexto}
+
+📝 *Detalle:*
+${detalle}
+
+---
+Enviado desde academiadigital.edu`;
+        
+        enviarWhatsApp(textoReal);
+
+        const btn = formMejora.querySelector('button[type="submit"]');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> ¡Abriendo WhatsApp...!';
+        btn.disabled = true;
+        setTimeout(()=>{ btn.innerHTML = orig; btn.disabled = false; }, 3000);
+    });
+}
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=24');
+  });
+}
+</script>
+
+</body>
+</html>

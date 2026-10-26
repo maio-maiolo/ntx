@@ -1,0 +1,68 @@
+/* FIX IMAGENES DESBORDADAS - informatica.html y resto de secciones */
+.card-hs, .ciclo-item, .section-box, .content-container {
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+}
+
+/* Contenedor de los HDD/SSD */
+.software-logos {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-height: auto !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  padding-top: 15px !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+.software-logos img {
+  max-width: 48% !important;
+  width: 48% !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: 180px !important;
+  object-fit: contain !important;
+  display: block !important;
+  flex: 1 1 45% !important;
+}
+
+/* Todas las imágenes dentro de cards nunca salen */
+.card-hs img, .hw-sw-grid img, .perifericos-grid img {
+  max-width: 100% !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix global para evitar overflow horizontal */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px){
+  .software-logos img {
+    max-width: 44% !important;
+    width: 44% !important;
+    max-height: 140px !important;
+  }
+  .card-hs {
+    padding: 18px 14px !important;
+  }
+}
+
+@media (max-width: 480px){
+  .software-logos {
+    gap: 8px !important;
+  }
+  .software-logos img {
+    max-width: 46% !important;
+    width: 46% !important;
+    max-height: 110px !important;
+  }
+}

@@ -1,0 +1,9 @@
+/* FIX PARA LA X CAIDA - SOBRESCRIBIR menu.css linea 20 */
+.logo-text span{display:initial !important;}
+.logo-text{font-size:0 !important; line-height:1.05 !important;}
+.logo-text div{line-height:1 !important;}
+/* Asegurar que la x no sea block */
+.logo b{display:inline !important; white-space:nowrap !important;}
+/* Academia Digital debe ser block */
+.logo span{display:block !important;}
+.logo div > div{white-space:nowrap !important;}

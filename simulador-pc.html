@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador PC | NTX</title>
+<link rel="manifest" href="manifest.json?v=24">
+
+<meta name="theme-color" content="#0a1930">
+
+<!-- Favicon para SOLAPA NAVEGADOR - Libro circular -->
+<link rel="icon" href="/favicon.ico?v=24" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png?v=24">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png?v=24">
+
+<!-- Apple / iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png?v=24">
+
+<!-- PWA / Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192x192.png?v=24">
+<link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512x512.png?v=24">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--bg:#0a1020;--panel:#1a233aee;--border:#2a3a5a;--cyan:#22d3ee;--violet:#a78bfa;--emerald:#10b981;--amber:#fbbf24;--text:#e2e8f0;--muted:#94a3b8}
+*{box-sizing:border-box}
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: radial-gradient(1200px 600px at 20% -10%, rgba(34,211,238,.15), transparent), radial-gradient(900px 500px at 90% 10%, rgba(167,139,250,.18), transparent), var(--bg);
+    color: var(--text);
+}
+.grid-bg{position:fixed;inset:0;pointer-events:none;opacity:.04;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:40px 40px}
+
+.floating-nav {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.float-btn {
+    background: rgba(26, 35, 58, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
+}
+
+.float-btn:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(34,211,238,0.2);
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 110%;
+    background: rgba(26, 35, 58, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    width: 200px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: none;
+    z-index: 1001;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.dropdown-menu li a:hover {
+    background: rgba(34, 211, 238, 0.15);
+    color: var(--cyan);
+    box-shadow: inset 3px 0 0 var(--cyan), 0 0 12px rgba(34, 211, 238, 0.25);
+    padding-left: 20px;
+}
+header {
+    text-align: center;
+    padding: 4px 320px;
+    height: 60px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+header h1 {
+    margin: 0;
+    font-size: 25px;
+    font-weight: 900;
+    background: linear-gradient(90deg,#22d3ee,#a78bfa,#f472b6,#22d3ee);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: grad 6s linear infinite;
+}
+@keyframes grad { to { background-position: 200% center } }
+
+.layout {
+    width: 100vw;
+    height: calc(100vh - 55px - 35px);
+    margin: 0;
+    padding: 0 8px 8px;
+    display: grid;
+    grid-template-columns: 240px 1fr 310px;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+@media(max-width:1110px){.layout{grid-template-columns:1fr}}
+
+.panel {
+    background: var(--panel);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.shelf {
+    padding: 6px;
+    gap: 5px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.shelf::-webkit-scrollbar { width: 4px; }
+.shelf::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.shelf h3 { margin: 2px 4px 4px; font-size: 10px; letter-spacing: .08em; }
+
+.comp {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+    border: 1px solid rgba(255,255,255,.08);
+    cursor: grab;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    flex-shrink: 0;
+    max-height: 90px;
+    overflow: hidden;
+}
+.comp:hover { transform: translateY(-1px) scale(1.01); border-color: var(--cyan); box-shadow: 0 0 10px rgba(34,211,238,.25); }
+.comp.dragging { opacity: .4; }
+.comp img { width: 80px; height: 55px; object-fit: contain; background: rgba(0,0,0,.3); border-radius: 4px; padding: 2px; flex-shrink: 0; }
+.comp .meta { flex: 1; min-width: 0; }
+.comp .name { font-size: 13px; font-weight: 800; line-height: 1.1; }
+.comp .sub { font-family: monospace; font-size: 10px; color: var(--muted); margin-top: 1px; }
+.comp.used { 
+    max-height: 0 !important;
+    opacity: 0 !important;
+    margin: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border-width: 0 !important;
+    pointer-events: none;
+    transform: scale(0.9);
+}
+
+.board-wrap {
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.board {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background: #0e172c;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    background-image: url('assets/motherboard.webp');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.slot {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border: 4px dashed rgba(48, 186, 245, 0.658);
+    background: transparent; 
+    backdrop-filter: none; 
+    color: var(--cyan);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.1;
+    transition: all 0.3s ease;
+    z-index: 2;
+    padding: 6px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.slot.drag-over {
+    background: rgba(34, 211, 238, 0.3);
+    border-style: solid;
+    border-color: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
+    transform: translate(-50%, -50%) scale(1.03);
+}
+.slot.filled {
+    border: 1px solid var(--emerald);
+    background: rgba(16, 185, 129, 0.15);
+}
+.slot.ram-slot.filled img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    filter: drop-shadow(0 0 4px rgba(34,211,238,0.5));
+}
+.slot:not(.ram-slot).filled img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.slot.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(calc(-50% - 5px),-50%)}75%{transform:translate(calc(-50% + 5px),-50%)} }
+
+.status { 
+    padding: 8px; 
+    gap: 8px; 
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.status::-webkit-scrollbar { width: 4px; }
+.status::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.progress { height: 8px; background: #0f1a33; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); flex-shrink: 0; }
+.progress i { display: block; height: 100%; background: linear-gradient(90deg,var(--cyan),var(--violet)); width: 0%; transition: .5s; }
+
+.check-container {
+    flex: 0 0 auto;
+    max-height: none;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+}
+
+.check { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.check li { display: flex; gap: 8px; align-items: center; font-size: 14px; font-family: monospace; font-weight: 700; padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02); flex-shrink: 0; transition: all 0.3s ease; animation: slideIn 0.3s ease; } @keyframes slideIn { from { opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
+.check li.ok { border-color: rgba(16,185,129,.3); background: rgba(16,185,129,.08); color: #a7f3d0; }
+
+.info-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 120px;
+    gap: 4px;
+}
+.info-box {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    min-height: 80px;
+    max-height: 250px;
+    font-size: 14px;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.info-box::-webkit-scrollbar { width: 4px; }
+.info-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.info-item {
+    background: rgba(255,255,255,0.02);
+    border-left: 3px solid var(--cyan);
+    padding: 4px 6px;
+    border-radius: 0 4px 4px 0;
+    line-height: 1.2;
+}
+.info-item b { color: var(--cyan); font-size: 14px; }
+
+.controls-bar {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    height: 28px;
+    flex-shrink: 0;
+}
+button { height: 26px; padding: 0 10px; border-radius: 6px; border: 1px solid transparent; font-weight: 800; font-size: 10px; cursor: pointer; transition: .2s; }
+.btn-finish { background: var(--emerald); color: #001a0e; box-shadow: 0 0 10px rgba(16,185,129,.3); }
+.btn-finish:hover { transform: scale(1.02); }
+.btn-reset { background: #1e293b; color: var(--text); border-color: var(--border); }
+.btn-reset:hover { background: #ef4444; border-color: #ef4444; color: white; }
+
+footer {
+    height: 35px;
+    background: rgba(15, 23, 42, 0.9);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--muted);
+    position: relative;
+    z-index: 10;
+}
+
+.toast { position: fixed; left: 50%; bottom: 45px; transform: translateX(-50%) translateY(20px); background: #0f172a; border: 1px solid var(--border); padding: 5px 8px; border-radius: 999px; font-family: monospace; font-size: 9px; opacity: 0; transition: .3s; z-index: 100; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.modal { position: fixed; inset: 0; z-index: 80; display: none; align-items: center; justify-content: center; padding: 16px; }
+.modal.show { display: flex; }
+.modal-bg { position: absolute; inset: 0; background: rgba(2,6,15,.85); backdrop-filter: blur(12px); }
+.modal-box { position: relative; width: 100%; max-width: 450px; border-radius: 14px; background: linear-gradient(180deg,#16213e,#0e172c); border: 1px solid rgba(255,255,255,.1); padding: 16px; }
+.confetti { position: absolute; width: 5px; height: 5px; border-radius: 50%; pointer-events: none; animation: fall 1s ease-out forwards; }
+@keyframes fall { 0% { transform: translateY(0) rotate(0) } 100% { transform: translateY(100px) rotate(720deg); opacity: 0 } }
+
+/* === MODAL DE ADVERTENCIA DE RESOLUCIÓN MÍNIMA === */
+.modal-resolution {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(2, 6, 15, 0.95);
+    backdrop-filter: blur(16px);
+    text-align: center;
+}
+.modal-resolution.show {
+    display: flex;
+}
+.modal-resolution-content {
+    background: linear-gradient(180deg, #16213e, #0e172c);
+    border: 2px solid var(--cyan);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 460px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.3), 0 20px 40px rgba(0,0,0,0.8);
+    animation: modalPulse 3s ease-in-out infinite;
+}
+@keyframes modalPulse {
+    0%, 100% { border-color: var(--cyan); box-shadow: 0 0 25px rgba(34, 211, 238, 0.25); }
+    50% { border-color: var(--violet); box-shadow: 0 0 35px rgba(167, 139, 250, 0.4); }
+}
+.modal-resolution-icon {
+    font-size: 48px;
+    color: var(--cyan);
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 10px rgba(34,211,238,0.5));
+}
+.modal-resolution-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+}
+.modal-resolution-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+.modal-resolution-desc b {
+    color: var(--cyan);
+    font-family: monospace;
+}
+.resolution-badge {
+    display: inline-block;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--cyan);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+.modal-resolution-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+.modal-resolution-btn {
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    color: #001020;
+    border: none;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(34,211,238,0.4);
+    transition: all 0.2s ease;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 44px;
+    padding: 0 10px;
+    margin: 0;
+}
+.modal-resolution-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34,211,238,0.6);
+}
+.modal-resolution-btn-cancel {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: none;
+}
+.modal-resolution-btn-cancel:hover {
+    background: rgba(244, 63, 94, 0.15);
+    border-color: #f43f5e;
+    color: #f43f5e;
+    box-shadow: 0 4px 15px rgba(244,63,94,0.2);
+}
+
+/* === STATUS 50/50 === */
+.status { gap: 8px; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+.status-top { flex-shrink: 0; }
+.check-container { flex: 1 1 0; min-height: 0; height: 50%; overflow-y: auto; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 4px; background: rgba(0,0,0,0.15); }
+.check-container::-webkit-scrollbar, .info-box::-webkit-scrollbar { width: 4px; }
+.check-container::-webkit-scrollbar-thumb, .info-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.info-wrapper { display: flex; flex-direction: column; flex: 1 1 0; min-height: 0; height: 50%; gap: 4px; overflow: hidden; }
+.info-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 6px; padding: 6px; overflow-y: auto; flex: 1; min-height: 0; font-size: 13px; font-family: monospace; display: flex; flex-direction: column; gap: 4px; }
+
+/* === RGB BOTON === */
+.board-wrap { position: relative !important; }
+.rgb-float-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 6px;
+    z-index: 50;
+    background: linear-gradient(90deg, #ff0080, #ff8a00, #ffff00, #00ff88, #00e5ff, #8b5cf6, #ff0080);
+    background-size: 400% 100%;
+    color: #fff;
+    border: 1.2px solid rgba(255,255,255,0.9);
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.4), 0 0 8px rgba(255,0,128,0.4);
+    transition: all 0.2s ease;
+    opacity: 0.45;
+    pointer-events: none;
+    animation: rgbBtnRainbow 2s linear infinite;
+    max-width: 135px;
+}
+.rgb-float-btn.enabled { opacity: 0.9; pointer-events: auto; }
+.rgb-float-btn.enabled:hover { transform: scale(1.05); opacity: 1; box-shadow: 0 0 12px rgba(255,0,128,0.8); }
+.rgb-float-btn.active { background: #fff; color: #000; }
+@keyframes rgbBtnRainbow { 0% { background-position: 0% 50%; } 100% { background-position: 400% 50%; } }
+
+.rgb-desc {
+    position: absolute;
+    bottom: 42px;
+    left: 6px;
+    z-index: 49;
+    background: rgba(0,0,0,0.95);
+    border: 1px solid rgba(251,191,36,0.5);
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: monospace;
+    color: #fbbf24;
+    max-width: 200px;
+    width: auto;
+    min-width: 140px;
+    line-height: 1.3;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    pointer-events: none;
+    white-space: normal;
+    word-wrap: break-word;
+}
+.rgb-desc.unlocked { color: #10b981; border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.12); }
+.rgb-mode-hint { position: absolute; bottom: 44px; left: 6px; z-index: 49; background: rgba(0,0,0,0.85); border: 1px solid var(--border); padding: 3px 5px; border-radius: 5px; font-size: 12px; font-family: monospace; color: var(--muted); opacity: 0; transition: opacity 0.3s; pointer-events: none; max-width: 130px; }
+.rgb-float-btn.enabled:hover ~ .rgb-mode-hint, .rgb-mode-hint.show { opacity: 1; }
+
+/* === EFECTOS RGB === */
+.board.rgb-active.mode-0 { border: 2px solid #ff0080 !important; box-shadow: 0 0 15px #ff0080, 0 0 30px #00e5ff; animation: rgbBoardUltra 1.2s linear infinite, rainbowShift 4s linear infinite; }
+.board.rgb-active.mode-1 { border: 2px solid #22d3ee !important; animation: breathing 2.5s ease-in-out infinite; }
+.board.rgb-active.mode-2 { border: 2px solid #fff !important; animation: stroboBg 0.15s steps(1) infinite; }
+.board.rgb-active.mode-2.strobo-flash { filter: brightness(2.5) contrast(1.5) !important; background-color: #fff !important; }
+
+@keyframes rgbBoardUltra { 0% { border-color: #ff0080 !important; box-shadow: 0 0 15px #ff0080; } 33% { border-color: #ffff00 !important; box-shadow: 0 0 15px #ffff00; } 66% { border-color: #00ff88 !important; box-shadow: 0 0 15px #00ff88; } 100% { border-color: #ff0080 !important; box-shadow: 0 0 15px #ff0080; } }
+@keyframes rainbowShift { 0% { filter: hue-rotate(0deg) brightness(1.1) saturate(1.2); } 100% { filter: hue-rotate(360deg) brightness(1.1) saturate(1.2); } }
+@keyframes breathing { 0%,100% { box-shadow: 0 0 15px #22d3ee, 0 0 30px #22d3ee33; filter: brightness(0.85); border-color: #22d3ee !important; } 50% { box-shadow: 0 0 40px #a78bfa, 0 0 80px #a78bfa88; filter: brightness(1.35); border-color: #a78bfa !important; } }
+@keyframes stroboBg { 0% { filter: brightness(1); } 50% { filter: brightness(1.8); } }
+
+.board.rgb-active.mode-0 .slot.filled { border-width: 2px !important; animation: rgbSlotUltra 0.8s linear infinite; }
+.board.rgb-active.mode-1 .slot.filled { border-width: 2px !important; animation: breathingSlot 2.5s ease-in-out infinite; }
+.board.rgb-active.mode-2 .slot.filled { border-width: 2px !important; border-color: #fff !important; animation: stroboSlot 0.12s steps(1) infinite; }
+
+@keyframes rgbSlotUltra { 0% { border-color: #ff0080; box-shadow: 0 0 10px #ff0080; } 50% { border-color: #00e5ff; box-shadow: 0 0 10px #00e5ff; } 100% { border-color: #ff0080; box-shadow: 0 0 10px #ff0080; } }
+@keyframes breathingSlot { 0%,100% { border-color: #22d3ee; box-shadow: 0 0 8px #22d3ee; } 50% { border-color: #a78bfa; box-shadow: 0 0 18px #a78bfa; } }
+@keyframes stroboSlot { 0% { border-color: #fff; } 50% { border-color: #000; } }
+
+.board.rgb-active.mode-0 .slot.filled img { animation: rgbImgHue 1.5s linear infinite; }
+.board.rgb-active.mode-1 .slot.filled img { animation: breatheImg 2.5s ease-in-out infinite; }
+@keyframes rgbImgHue { 0% { filter: hue-rotate(0deg) brightness(1.3); } 100% { filter: hue-rotate(360deg) brightness(1.3); } }
+@keyframes breatheImg { 0%,100% { filter: brightness(0.9) scale(1); } 50% { filter: brightness(1.4) scale(1.05); } }
+
+.rgb-particle { position: absolute; pointer-events: none; z-index: 60; }
+.rgb-particle.mode-0 { width: 6px; height: 6px; border-radius: 50%; animation: rgbFloatUltra 1s ease-out forwards; }
+.rgb-particle.mode-1 { width: 14px; height: 14px; border-radius: 50%; opacity:0.8; animation: particleBreathe 1.8s ease-in-out forwards; }
+.rgb-particle.mode-2 { width: 100% !important; height: 3px !important; border-radius: 2px !important; left:0 !important; animation: stroboLine 0.12s linear forwards; }
+
+@keyframes rgbFloatUltra { 0% { transform: translateY(0) scale(1.2); opacity: 1; } 100% { transform: translateY(-80px) scale(0); opacity: 0; } }
+@keyframes particleBreathe { 0% { transform: scale(0.5); opacity:0; } 50% { transform: scale(1.5); opacity:1; } 100% { transform: scale(0.8); opacity:0; } }
+@keyframes stroboLine { 0% { transform: scaleX(0); opacity:1; } 100% { transform: scaleX(1); opacity:0; } }
+
+body.rgb-mode.mode-0 { animation: rgbPageBg 3s linear infinite; }
+body.rgb-mode.mode-1 { animation: rgbPageBreathe 2.5s ease-in-out infinite; }
+@keyframes rgbPageBg { 0% { background: radial-gradient(600px 300px at 20% -10%, rgba(255,0,128,.2), transparent), var(--bg); } 50% { background: radial-gradient(600px 300px at 20% -10%, rgba(0,229,255,.2), transparent), var(--bg); } 100% { background: radial-gradient(600px 300px at 20% -10%, rgba(255,0,128,.2), transparent), var(--bg); } }
+@keyframes rgbPageBreathe { 0%,100% { background: radial-gradient(800px 400px at 50% -10%, rgba(34,211,238,.15), transparent), var(--bg); } 50% { background: radial-gradient(800px 400px at 50% -10%, rgba(167,139,250,.25), transparent), var(--bg); } }
+</style>
+</head>
+<body>
+
+<!-- MODAL DE ADVERTENCIA DE RESOLUCIÓN MÍNIMA -->
+<div class="modal-resolution" id="modalResolution">
+  <div class="modal-resolution-content">
+    <div class="modal-resolution-icon">
+      <i class="fa-solid fa-desktop"></i>
+    </div>
+    <div class="modal-resolution-title">INFORMACION IMPORTANTE</div>
+    <div class="modal-resolution-desc">
+      Este simulador de PC requiere un espacio de trabajo amplio para una correcta experiencia educativa.<br><br>
+      Resolución detectada:
+    </div>
+    <div class="resolution-badge" id="currentResolutionText">1024 x 768 px</div>
+    <div class="modal-resolution-desc" style="font-size: 12px; margin-bottom: 16px;">
+      Por favor, ingresa desde una computadora o dispositivo con al menos <b>1110px de ancho por 600px de alto</b>
+    </div>
+    <div class="modal-resolution-buttons">
+      <button class="modal-resolution-btn modal-resolution-btn-cancel" id="cancelResolutionBtn" onclick="cancelResolutionModalPc()"><i></i> Cancelar</button>
+      <button class="modal-resolution-btn" id="dismissResolutionBtn" onclick="dismissResolutionModalPc()">Continuar</button>
+    </div>
+  </div>
+</div>
+
+<div class="floating-nav">
+    <a href="index.html" class="float-btn" title="Volver al Inicio"><i class="fa-solid fa-house"></i> Inicio</a>
+    
+    <div class="dropdown">
+        <button class="float-btn dropdown-toggle" title="Simuladores"><i class="fa-solid fa-gamepad"></i> Simulador <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i></button>
+        <ul class="dropdown-menu">
+           <li><a href="simulador-red.html"><i class="fa-solid fa-network-wired" style="color: var(--violet);"></i> Conectar Redes</a></li>
+            <li><a href="simulador-dispositivos.html"><i class="fa-solid fa-keyboard" style="color: var(--amber);"></i> Dispositivos E/S</a></li>
+             <li><a href="simulador-web.html"><i class="fa-solid fa-laptop-code" style="color:#ec4899;"></i> Desarollador Web</a></li>
+
+        </ul>
+    </div>
+
+    <div class="dropdown">
+        <button class="float-btn dropdown-toggle" title="Menú Principal"><i class="fa-solid fa-bars"></i> Menú <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i></button>
+        <ul class="dropdown-menu">
+            <li><a href="informatica.html"><i class="fa-solid fa-microchip" style="color: #3b82f6;"></i> Informática</a></li>
+            <li><a href="redes.html"><i class="fa-solid fa-network-wired" style="color: #f59e0b;"></i> Redes</a></li>
+            <li><a href="ofimatica.html"><i class="fa-solid fa-database" style="color: #10b981;"></i> Ofimática</a></li>
+            <li><a href="diseño.html"><i class="fa-solid fa-image" style="color: #8b5cf6;"></i> Diseño</a></li>
+            <li><a href="comunicacion.html"><i class="fa-solid fa-comments" style="color: #f97316;"></i> Comunicación</a></li>
+            <li><a href="multimedia.html"><i class="fa-solid fa-video" style="color: #ef4444;"></i> Multimedia</a></li>
+            <li><a href="seguridad.html"><i class="fa-solid fa-shield-halved" style="color: #0284c7;"></i> Seguridad</a></li>
+           
+        </ul>
+    </div>
+
+    <a href="contacto.html" class="float-btn" title="Contacto"><i class="fa-solid fa-envelope"></i> Contacto</a>
+</div>
+
+<div class="grid-bg"></div>
+<header>
+    <h1>Simulador de Ensamblaje PC</h1>
+</header>
+
+<div class="layout">
+  <div class="panel shelf" id="shelf">
+    <h3>📦 COMPONENTES</h3>
+  </div>
+
+  <div class="panel board-wrap" style="position:relative;">
+    <div class="board" id="board"></div>
+    <div class="rgb-desc locked" id="rgbDesc"><i class="fa-solid fa-lock"></i> Completá el ensamble para activar RGB. Doble clic para cambiar efecto</div>
+    <div class="rgb-mode-hint" id="rgbHint">Doble click → cambia modo</div>
+    <button id="rgbBtn" class="rgb-float-btn" title="Completá el ensamble para activar RGB"><i class="fa-solid fa-bolt" style="font-size:8px;"></i> <span id="rgbBtnText">ACTIVAR RGB</span> <i class="fa-solid fa-palette" style="font-size:8px;"></i></button>
+  </div>
+
+  <div class="panel status">
+    <div class="status-top" style="flex-shrink:0;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:10px;font-weight:800">PROGRESO</span><span id="progressText" style="font-family:monospace;font-size:10px;color:#94a3b8">0%</span></div>
+      <div class="progress"><i id="progressBar"></i></div>
+    </div>
+    
+    <div class="check-container">
+      <ul class="check" id="checklist"></ul>
+    </div>
+
+    <div class="info-wrapper">
+      <span style="font-size:10px;font-weight:800">INFORMACIÓN DE COMPONENTES</span>
+      <div class="info-box" id="infoBox">
+        <span style="color:var(--muted)">Instala componentes para ver su descripción aquí...</span>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <button class="btn-finish" id="btnFinish">Finalizar</button>
+      <button class="btn-reset" id="btnReset">Reiniciar</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+    &copy; 2026 NTX Academia Digital - Formación en Informática y NTICs &bull; By Mario Maiolo
+</footer>
+
+<div class="modal" id="modalIncomplete">
+  <div class="modal-bg"></div>
+  <div class="modal-box">
+    <h3>⚠️ Faltan componentes</h3>
+    <div id="missingList" style="margin-top:10px;max-height:150px;overflow-y:auto"></div>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button id="closeIncomplete" style="flex:1;background:#1e293b;color:white;border:1px solid #334155;height:28px">ENTENDIDO</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modalSuccess">
+  <div class="modal-bg"></div>
+  <div class="modal-box" style="max-width:400px;border-color:rgba(16,185,129,.3);text-align:center;">
+    <h3 style="font-size:16px;font-weight:900;margin:6px 0 12px 0">ENSAMBLE EXITOSO</h3>
+    <div style="display:flex;gap:10px;margin-top:10px">
+      <button id="closeSuccess" style="flex:1;background:#1e293b;border:1px solid #334155;color:white;height:28px">CERRAR</button>
+      <button id="newBuild" style="flex:1;background:#10b981;color:black;height:28px">REINICIAR</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+const COMPONENTS = [
+  { id:"psu", type:"psu", name:"FUENTE / POWER", short:"FUENTE", emoji:"🔋", img:"assets/psu.webp", tip:"ATX 1000W", watts:0, desc:"Suministra y distribuye la energía eléctrica a todos los componentes del sistema con voltajes estables." },
+  { id:"fan", type:"fan", name:"VENTILADOR / FAN", short:"FAN", emoji:"🌬️", img:"assets/fan.webp", tip:"120mm ARGB", watts:4, desc:"Extrae el aire caliente del interior del gabinete para mantener un flujo de aire y temperatura óptimos." },
+  { id:"cooler", type:"cooler", name:"DISIPADOR / COOLER", short:"COOLER", emoji:"🌀", img:"assets/cooler.webp", tip:"Air Cooler", watts:6, desc:"Absorbe y disipa el calor generado por el procesador mediante un bloque metálico y ventilación directa." },
+  { id:"cpu", type:"cpu", name:"PROCESADOR / CPU", short:"CPU", emoji:"🧠", img:"assets/cpu.webp", tip:"LGA1700", watts:125, desc:"La mente del PC; ejecuta las instrucciones de los programas y procesa todos los datos del sistema." },
+  { id:"ram1", type:"ram", name:"MEMORIA RAM 1", short:"RAM 1", emoji:"💾", img:"assets/ram.webp", tip:"DDR5 A", watts:6, desc:"Memoria de acceso aleatorio; almacena temporalmente los datos de los programas en ejecución rápida." },
+  { id:"ram2", type:"ram", name:"MEMORIA RAM 2", short:"RAM 2", emoji:"💾", img:"assets/ram.webp", tip:"DDR5 B", watts:6, desc:"Módulo de memoria adicional que expande el ancho de banda y mejora el rendimiento multitarea (Dual Channel)." },
+  { id:"ssd", type:"ssd", name:"SSD M.2 NVMe", short:"SSD M.2", emoji:"💿", img:"assets/ssdm2.webp", tip:"PCIe 4.0", watts:8, desc:"Almacenamiento ultrarrápido conectado directo a la placa base para cargar el sistema operativo y aplicaciones." },
+  { id:"gpu", type:"gpu", name:"TARJETA DE VIDEO / GPU", short:"GPU", emoji:"🎮", img:"assets/gpu.webp", tip:"RTX 4090", watts:450, desc:"Procesa y renderiza gráficos complejos, acelerando juegos, modelado 3D y renderizado visual." },
+  { id:"audio", type:"audio", name:"PLACA DE AUDIO", short:"AUDIO", emoji:"🎵", img:"assets/audio.webp", tip:"PCIe Sound", watts:15, desc:"Mejora la calidad de sonido y procesamiento de audio multicanal de alta fidelidad." },
+  { id:"ssdsata", type:"ssdsata", name:"SSD SATA", short:"SSD SATA", emoji:"💾", img:"assets/ssd.webp", tip:"2.5 pulgadas", watts:3, desc:"Unidad de estado sólido secundaria para almacenamiento general de archivos y juegos con buena velocidad." },
+  { id:"hdd", type:"hdd", name:"DISCO DURO HDD", short:"HDD", emoji:"💽", img:"assets/hdd.webp", tip:"SATA 3.5", watts:8, desc:"Disco mecánico de alta capacidad ideal para almacenar grandes volúmenes de archivos y respaldos." }
+];
+
+const SLOTS = [
+  { id:"psu", label:"FUENTE/POWER", accept:["psu"], x:10, y:12, w:160, h:120, cap:1, desc:"Esquina superior izq" },
+  { id:"fan", label:"FUN/VENTILADOR", accept:["fan"], x:84, y:13, w:100, h:100, cap:1, desc:"Extractor superior der" },
+  { id:"cooler", label:"COOLER/DISIPADOR", accept:["cooler"], x:50, y:10, w:100, h:100, cap:1, desc:"Sobre CPU" },
+  { id:"cpu", label:"CPU", accept:["cpu"], x:50, y:30, w:110, h:110, cap:1, desc:"Zócalo" },
+  { id:"ram1", label:"RAM 1", accept:["ram"], x:65, y:30, w:50, h:250, cap:1, isRam:true, desc:"Slot DDR5 1" },
+  { id:"ram2", label:"RAM 2", accept:["ram"], x:70, y:30, w:50, h:250, cap:1, isRam:true, desc:"Slot DDR5 2" },
+  { id:"ssd", label:"SSD M.2", accept:["ssd"], x:45, y:50, w:170, h:50, cap:1, desc:"Puerto M.2 central" },
+  { id:"gpu", label:"TARJETA GPU", accept:["gpu"], x:35, y:66, w:250, h:130, cap:1, desc:"Slot PCIe principal" },
+  { id: "audio", label:"PLACA DE AUDIO", accept:["audio"], x:32, y:88, w:170, h:140, cap:1, desc:"Slot PCIe secundario" },
+  { id:"ssdsata", label:"SSD SATA", accept:["ssdsata"], x:64, y:92, w:90, h:80, cap:1, desc:"Conexión SATA izq" },
+  { id:"hdd", label:"DISCO HDD", accept:["hdd"], x:74, y:92, w:90, h:80, cap:1, desc:"Conexión SATA der" }
+];
+
+let installed = { psu:[], fan:[], cooler:[], cpu:[], ram1:[], ram2:[], ssd:[], gpu:[], audio:[], ssdsata:[], hdd:[] };
+let draggedId = null; let selectedId = null;
+const shelfEl = document.getElementById('shelf'); const boardEl = document.getElementById('board');
+const checkEl = document.getElementById('checklist'); const progressEl = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText'); const toastEl = document.getElementById('toast');
+const infoBoxEl = document.getElementById('infoBox');
+
+function renderShelf(){
+  shelfEl.querySelectorAll('.comp').forEach(e=>e.remove());
+  COMPONENTS.forEach(c=>{
+    const used = Object.values(installed).flat().includes(c.id);
+    const div = document.createElement('div'); div.className='comp'+(used?' used':''); div.draggable=!used; div.dataset.id=c.id;
+    div.innerHTML=`<img src="${c.img}" alt="${c.name}" onerror="this.style.display='none'"><div class="meta"><div class="name">${c.name}</div><div class="sub">${c.tip} • ${c.watts}W</div></div>`;
+    div.addEventListener('dragstart',e=>{draggedId=c.id;div.classList.add('dragging');e.dataTransfer.setData('text/plain',c.id)});
+    div.addEventListener('dragend',()=>{div.classList.remove('dragging');draggedId=null});
+    div.addEventListener('click',()=>{
+      if(used)return;
+      selectedId=c.id;
+      document.querySelectorAll('.comp').forEach(x=>x.style.outline='');
+      div.style.outline='2px solid #22d3ee';
+      showToast(`Seleccionado: ${c.name} → toca su zócalo`);
+    });
+    shelfEl.appendChild(div);
+  });
+}
+
+function renderSlots(){
+  boardEl.querySelectorAll('.slot').forEach(e=>e.remove());
+  SLOTS.forEach(s=>{
+    const div=document.createElement('div'); 
+    div.className='slot'+(s.isRam?' ram-slot':''); 
+    div.id='slot-'+s.id; div.dataset.slot=s.id; 
+    div.style.left=s.x+'%'; div.style.top=s.y+'%'; div.style.width=s.w+'px'; div.style.height=s.h+'px';
+    const count=installed[s.id]?.length||0; const isFilled=count>=s.cap; if(isFilled) div.classList.add('filled');
+    if(!isFilled) {
+      div.innerHTML = `<span style="font-size: 7px; font-weight: 800;">${s.label}</span>`;
+    } else {
+      installed[s.id].forEach(cid=>{
+        const comp=COMPONENTS.find(x=>x.id===cid); 
+        if(comp){
+          const img=document.createElement('img'); img.src=comp.img; img.alt=comp.name; 
+          div.appendChild(img);
+        }
+      });
+    }
+    div.addEventListener('dragover',e=>{e.preventDefault();div.classList.add('drag-over')});
+    div.addEventListener('dragleave',()=>div.classList.remove('drag-over'));
+    div.addEventListener('drop',e=>{e.preventDefault();div.classList.remove('drag-over'); const id=e.dataTransfer.getData('text/plain')||draggedId||selectedId; if(id) installToSlot(s.id,id)});
+    div.addEventListener('click',()=>{if(selectedId) installToSlot(s.id,selectedId)});
+    boardEl.appendChild(div);
+  });
+}
+
+function showToast(msg){toastEl.textContent=msg;toastEl.classList.add('show');setTimeout(()=>toastEl.classList.remove('show'),2000)}
+
+function installToSlot(slotId,compId){
+  const comp=COMPONENTS.find(c=>c.id===compId); 
+  const slot=SLOTS.find(s=>s.id===slotId); 
+  if(!comp||!slot)return; 
+  if(!slot.accept.includes(comp.type)){
+    const el=document.getElementById('slot-'+slotId); 
+    el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'),400); 
+    showToast(`Este slot no corresponde a ${comp.name}`); 
+    return;
+  } 
+  if(Object.values(installed).flat().includes(compId)){showToast(`${comp.name} ya está colocado`); return} 
+  if(installed[slotId].length>=slot.cap){showToast(`Este zócalo ya está ocupado`); return} 
+  
+  installed[slotId].push(compId); selectedId=null; draggedId=null; spawnConfetti(slotId); renderAll(); 
+  showToast(`✓ ${comp.name} instalado`);
+}
+
+function spawnConfetti(slotId){
+  const slotEl=document.getElementById('slot-'+slotId); 
+  const rect=boardEl.getBoundingClientRect(); 
+  const sRect=slotEl.getBoundingClientRect(); 
+  for(let i=0;i<6;i++){
+    const c=document.createElement('div'); c.className='confetti'; 
+    c.style.left=(sRect.left-rect.left+sRect.width/2)+'px'; 
+    c.style.top=(sRect.top-rect.top+sRect.height/2)+'px'; 
+    c.style.background=`hsl(${180+Math.random()*100},100%,60%)`; 
+    boardEl.appendChild(c); 
+    setTimeout(()=>c.remove(),1000);
+  }
+}
+
+function renderCheck(){
+  checkEl.innerHTML=''; 
+  SLOTS.forEach(s=>{
+    const count=installed[s.id].length; 
+    const li=document.createElement('li'); 
+    li.className=count>=s.cap?'ok':''; 
+    li.innerHTML=`<span>${count>=s.cap?'✅':'⬜'}</span> <span style="flex:1">${s.label}</span> ${count>=s.cap?'<span style="color:#10b981">OK</span>':''}`; 
+    checkEl.appendChild(li);
+  }); 
+  const total=Object.values(installed).flat().length; 
+  const req=COMPONENTS.length; 
+  const pct=Math.round(total/req*100); 
+  progressEl.style.width=pct+'%'; 
+  progressText.textContent=`${pct}% • ${total}/${req}`;
+  infoBoxEl.innerHTML='';
+  const allIds = Object.values(installed).flat();
+  if(allIds.length===0){
+    infoBoxEl.innerHTML='<span style="color:var(--muted)">Instala componentes para ver su descripción aquí...</span>';
+  } else {
+    allIds.forEach(id=>{
+      const comp=COMPONENTS.find(c=>c.id===id);
+      if(comp){
+        const div=document.createElement('div');
+        div.className='info-item';
+        div.innerHTML=`<b>${comp.short}:</b> ${comp.desc}`;
+        infoBoxEl.appendChild(div);
+      }
+    });
+  }
+  requestAnimationFrame(()=>{
+    const cc=document.querySelector('.check-container');
+    if(cc) cc.scrollTo({top:cc.scrollHeight, behavior:'smooth'});
+    if(infoBoxEl) infoBoxEl.scrollTo({top:infoBoxEl.scrollHeight, behavior:'smooth'});
+  });
+}
+function renderAll(){renderShelf();renderSlots();renderCheck(); if(typeof updateRGBButton==='function') updateRGBButton(); }
+
+function finalizarEnsamblaje(){
+  const total=Object.values(installed).flat().length; 
+  const req=COMPONENTS.length; 
+  if(total<req){
+    document.getElementById('modalIncomplete').classList.add('show'); 
+    const list=document.getElementById('missingList'); list.innerHTML=''; 
+    SLOTS.forEach(s=>{
+      if(installed[s.id].length<s.cap){
+        const div=document.createElement('div'); 
+        div.style.cssText='display:flex;justify-content:space-between;padding:6px 8px;background:rgba(0,0,0,.3);border-radius:6px;margin-bottom:4px;font-size:10px;font-family:monospace;'; 
+        div.innerHTML=`<span>${s.label}</span><span style="color:#fbbf24">FALTA</span>`; 
+        list.appendChild(div);
+      }
+    }); 
+    return;
+  } 
+  document.getElementById('modalSuccess').classList.add('show');
+  showToast('¡ENSAMBLE EXITOSO! 🚀');
+}
+
+function reiniciarSimulador(){
+  installed={psu:[],fan:[],cooler:[],cpu:[],ram1:[],ram2:[],ssd:[],gpu:[],audio:[],ssdsata:[],hdd:[]}; 
+  selectedId=null; draggedId=null; 
+  document.getElementById('modalIncomplete').classList.remove('show'); 
+  document.getElementById('modalSuccess').classList.remove('show'); 
+  renderAll(); 
+  showToast('Simulador reiniciado');
+}
+
+document.getElementById('btnFinish').addEventListener('click',finalizarEnsamblaje);
+document.getElementById('btnReset').addEventListener('click',reiniciarSimulador);
+document.getElementById('closeIncomplete').addEventListener('click',()=>document.getElementById('modalIncomplete').classList.remove('show'));
+document.getElementById('closeSuccess').addEventListener('click',()=>document.getElementById('modalSuccess').classList.remove('show'));
+document.getElementById('newBuild').addEventListener('click',()=>{document.getElementById('modalSuccess').classList.remove('show');reiniciarSimulador()});
+
+let rgbActive=false; let rgbMode=0; let rgbInterval=null; let rgbFlashInterval=null;
+const MODES=[
+  {name:'ARCOIRIS',text:'ARCOIRIS 🌈', interval: 120, count: 7},
+  {name:'RESPIRACIÓN',text:'RESPIRA 🌬️', interval: 350, count: 3},
+  {name:'STROBO',text:'STROBO ⚡', interval: 70, count: 10}
+];
+
+function updateRGBButton(){
+  const total=Object.values(installed).flat().length; const req=COMPONENTS.length;
+  const btn=document.getElementById('rgbBtn'); const btnText=document.getElementById('rgbBtnText'); const desc=document.getElementById('rgbDesc');
+  if(!btn) return;
+  if(total>=req){
+    btn.classList.add('enabled');
+    btn.title='¡Completo! Click para RGB - Doble click cambia modo';
+    if(desc){ desc.className='rgb-desc unlocked'; desc.innerHTML='<i class="fa-solid fa-unlock"></i> ¡RGB desbloqueado! Doble click cambia efecto'; desc.style.opacity='1'; setTimeout(()=>desc.style.opacity='0',4000); }
+    if(!rgbActive && btnText) btnText.textContent='ACTIVAR RGB';
+  } else {
+    btn.classList.remove('enabled','active'); if(btnText) btnText.textContent='ACTIVAR RGB'; btn.title='Completá el ensamble para activar RGB';
+    if(desc){ desc.className='rgb-desc locked'; const faltan=req-total; desc.innerHTML=`<i class="fa-solid fa-lock"></i> Faltan ${faltan} para activar RGB. Doble Click para cambiar efecto`; desc.style.opacity='1'; }
+    const b=document.getElementById('board');
+    b?.classList.remove('rgb-active','mode-0','mode-1','mode-2','strobo-flash');
+    document.body.classList.remove('rgb-mode','mode-0','mode-1','mode-2');
+    rgbActive=false; clearInterval(rgbInterval); clearInterval(rgbFlashInterval);
+  }
+}
+
+function applyRGBMode(){
+  const board=document.getElementById('board');
+  if(!board) return;
+  board.classList.remove('mode-0','mode-1','mode-2','strobo-flash');
+  document.body.classList.remove('mode-0','mode-1','mode-2');
+  board.classList.add('mode-'+rgbMode);
+  document.body.classList.add('mode-'+rgbMode);
+  clearInterval(rgbInterval);
+  clearInterval(rgbFlashInterval);
+  if(!rgbActive) return;
+  const cfg=MODES[rgbMode];
+  rgbInterval=setInterval(spawnRGBParticles, cfg.interval);
+  if(rgbMode===2){
+    rgbFlashInterval=setInterval(()=>{
+      board.classList.toggle('strobo-flash');
+      setTimeout(()=>board.classList.remove('strobo-flash'), 60);
+    }, 180);
+  }
+}
+
+function spawnRGBParticles(){
+  if(!rgbActive) return;
+  const board=document.getElementById('board');
+  const cfg=MODES[rgbMode];
+  const colors = rgbMode===0 ? ['#ff0080','#ffff00','#00ff88','#00e5ff','#a78bfa','#f472b6'] : rgbMode===1 ? ['#22d3ee','#a78bfa'] : ['#ffffff','#ff0080','#22d3ee'];
+  for(let i=0;i<cfg.count;i++){
+    const p=document.createElement('div');
+    p.className='rgb-particle mode-'+rgbMode;
+    if(rgbMode===2){
+      p.style.top=(Math.random()*100)+'%';
+      p.style.background=colors[Math.floor(Math.random()*colors.length)];
+      p.style.boxShadow=`0 0 10px ${p.style.background}`;
+    } else {
+      p.style.left=(Math.random()*90+5)+'%';
+      p.style.top=(Math.random()*80+10)+'%';
+      const c=colors[Math.floor(Math.random()*colors.length)];
+      p.style.background=c;
+      p.style.boxShadow=`0 0 10px ${c}, 0 0 20px ${c}`;
+    }
+    board.appendChild(p);
+    setTimeout(()=>p.remove(), rgbMode===1? 1800 : rgbMode===2? 150 : 1000);
+  }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const btn=document.getElementById('rgbBtn'); const hint=document.getElementById('rgbHint'); const desc=document.getElementById('rgbDesc'); const btnText=document.getElementById('rgbBtnText');
+  if(!btn) return;
+  
+  btn.addEventListener('click',()=>{
+    const total=Object.values(installed).flat().length;
+    if(total<COMPONENTS.length){ 
+      showToast('⚠️ Completá el ensamble para activar RGB. Botón derecho cambia efecto'); 
+      if(desc){ 
+        desc.style.opacity='1'; 
+        desc.innerHTML=`<i class="fa-solid fa-lock"></i> Faltan ${COMPONENTS.length-total} para activar RGB. Botón derecho para cambiar efecto`; 
+      } 
+      return; 
+    }
+    rgbActive=!rgbActive;
+    const board=document.getElementById('board');
+    if(rgbActive){
+      board.classList.add('rgb-active'); document.body.classList.add('rgb-mode'); btn.classList.add('active');
+      if(btnText) btnText.textContent=MODES[rgbMode].text+' 🔥';
+      showToast('✨ RGB '+MODES[rgbMode].name+' ACTIVADO');
+      applyRGBMode();
+      if(hint){ hint.classList.add('show'); setTimeout(()=>hint.classList.remove('show'),3000); }
+      if(desc) desc.style.opacity='0';
+    } else {
+      board.classList.remove('rgb-active','mode-0','mode-1','mode-2','strobo-flash');
+      document.body.classList.remove('rgb-mode','mode-0','mode-1','mode-2');
+      btn.classList.remove('active');
+      clearInterval(rgbInterval); clearInterval(rgbFlashInterval);
+      if(btnText) btnText.textContent='ACTIVAR RGB';
+      showToast('RGB desactivado');
+    }
+  });
+
+  const changeMode = (e)=>{
+    e.preventDefault();
+    if(Object.values(installed).flat().length<COMPONENTS.length) return;
+    rgbMode=(rgbMode+1)%3;
+    if(btnText) btnText.textContent=MODES[rgbMode].text+(rgbActive?' 🔥':'');
+    if(rgbActive){ applyRGBMode(); showToast('Modo '+MODES[rgbMode].name); }
+    else { showToast('Próximo: '+MODES[rgbMode].name); }
+  };
+
+  btn.addEventListener('dblclick', changeMode);
+  btn.addEventListener('contextmenu', changeMode);
+});
+
+renderAll();
+
+// === LÓGICA AISLADA DE COMPROBACIÓN DE RESOLUCIÓN PARA PC ===
+function checkScreenResolutionPc() {
+  const modal = document.getElementById('modalResolution');
+  const resText = document.getElementById('currentResolutionText');
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  
+  if(resText) {
+    resText.textContent = `${width} px × ${height} px`;
+  }
+  
+  if(window.forcedResolutionDismissedPc === true) {
+    if(modal) modal.classList.remove('show');
+    return;
+  }
+  
+  if(width < 1110 || height < 600) {
+    if(modal) modal.classList.add('show');
+  } else {
+    if(modal) modal.classList.remove('show');
+  }
+}
+
+function dismissResolutionModalPc() {
+  const modal = document.getElementById('modalResolution');
+  if(modal) modal.classList.remove('show');
+  window.forcedResolutionDismissedPc = true;
+}
+
+function cancelResolutionModalPc() {
+  window.location.href = 'index.html';
+}
+
+window.addEventListener('load', checkScreenResolutionPc);
+window.addEventListener('resize', checkScreenResolutionPc);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=24');
+  });
+}
+
+</script>
+</body>
+</html>

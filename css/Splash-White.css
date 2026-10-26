@@ -1,0 +1,100 @@
+/* NTX Splash Screen - Fondo Blanco - Logo Circular */
+#ntx-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s;
+}
+
+#ntx-splash.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ntx-splash-logo {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 4px solid #00D5FF;
+  box-shadow: 0 0 30px rgba(0,213,255,0.35), 0 10px 30px rgba(10,25,48,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ntx-pulse-white 2s ease-in-out infinite, ntx-float 3s ease-in-out infinite;
+  overflow: hidden;
+}
+
+.ntx-splash-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.ntx-splash-text {
+  margin-top: 28px;
+  text-align: center;
+  animation: ntx-fadeUp 0.8s ease 0.3s both;
+}
+
+.ntx-splash-text h1 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 44px;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.ntx-splash-text h1 .n { color: #00B4E6; }
+.ntx-splash-text h1 .t { color: #0a1930; }
+.ntx-splash-text h1 .x { color: #00B4E6; }
+
+.ntx-splash-text p {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.ntx-splash-loader {
+  margin-top: 36px;
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(0,180,230,0.15);
+  border-top-color: #00B4E6;
+  border-radius: 50%;
+  animation: ntx-spin 0.9s linear infinite;
+}
+
+@keyframes ntx-pulse-white {
+  0%, 100% { box-shadow: 0 0 30px rgba(0,213,255,0.35), 0 10px 30px rgba(10,25,48,0.08); }
+  50% { box-shadow: 0 0 45px rgba(0,213,255,0.55), 0 12px 40px rgba(10,25,48,0.12); }
+}
+
+@keyframes ntx-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes ntx-fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ntx-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 480px) {
+  .ntx-splash-logo { width: 140px; height: 140px; }
+  .ntx-splash-text h1 { font-size: 38px; }
+}

@@ -1,0 +1,115 @@
+/* UNIFORMIZAR AUTOEVALUACIONES - TODAS IGUALES A LA 1 (imagen referencia) */
+.quiz-section,
+[id^="quizSectionContainer"],
+#quizSectionContainer,
+#quizSectionContainer2,
+#quizSectionContainer3,
+#quizSectionContainer4 {
+  background: #f8fafc !important;
+  background-image: none !important;
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  padding: 18px 20px !important;
+  margin-bottom: 20px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
+}
+
+/* Header */
+.quiz-header-toggle {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding-bottom: 0 !important;
+  gap: 12px !important;
+}
+
+/* Titulo - letra chica y pareja */
+.quiz-header-toggle h2,
+.quiz-header-toggle h2[style],
+[id^="quizSectionContainer"] .quiz-header-toggle h2,
+[id^="quizSectionContainer"] .quiz-header-toggle h2[style] {
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.1px !important;
+  margin: 0 !important;
+  border: none !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+/* Icono verde menta igual para todas - pisa inline styles */
+.quiz-header-toggle h2 i,
+.quiz-header-toggle h2 i[style],
+[id^="quizSectionContainer"] .quiz-header-toggle h2 i,
+[id^="quizSectionContainer"] .quiz-header-toggle h2 i[style] {
+  background: #dcfce7 !important;
+  background-color: #dcfce7 !important;
+  color: #166534 !important;
+  padding: 0 !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Flechita */
+.quiz-header-toggle .toggle-icon,
+.toggle-icon,
+[id^="quizSectionContainer"] .toggle-icon {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #64748b !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  border-radius: 999px !important;
+  border: 1px solid #e2e8f0 !important;
+  font-size: 11px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+/* Body cuando abre */
+.quiz-section.open .quiz-body,
+[id^="quizSectionContainer"].open .quiz-body {
+  padding-top: 20px !important;
+}
+
+/* Responsive */
+@media (max-width: 640px){
+  .quiz-header-toggle h2,
+  [id^="quizSectionContainer"] .quiz-header-toggle h2 {
+    font-size: 13.5px !important;
+    gap: 8px !important;
+  }
+  .quiz-header-toggle h2 i,
+  [id^="quizSectionContainer"] .quiz-header-toggle h2 i {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 390px){
+  .quiz-section,
+  [id^="quizSectionContainer"] {
+    padding: 14px 14px !important;
+    border-radius: 14px !important;
+  }
+  .quiz-header-toggle h2 {
+    font-size: 12.8px !important;
+  }
+}

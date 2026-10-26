@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulador Web 2 | NTX</title>
+<link rel="manifest" href="manifest.json?v=24">
+
+<meta name="theme-color" content="#0a1930">
+
+<!-- Favicon para SOLAPA NAVEGADOR - Libro circular -->
+<link rel="icon" href="/favicon.ico?v=24" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png?v=24">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png?v=24">
+
+<!-- Apple / iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png?v=24">
+
+<!-- PWA / Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192x192.png?v=24">
+<link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512x512.png?v=24">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F1F5F9;
+  --panel:#FFFFFF;
+  --panel2:#F8FAFC;
+  --texto:#0F172A;
+  --muted:#64748B;
+  --borde:#E2E8F0;
+  --borde2:#E2E8F0;
+  --ink:#0F172A;
+  --ink-txt:#FFFFFF;
+  --ok:#15803D;
+  --error:#B91C1C;
+  --code-bg:#0F172A;
+  --code-txt:#E2E8F0;
+  --html:#E34F26;
+  --css:#1572B6;
+  --js:#F0DB4F;
+  --radius:20px;
+  --radius-sm:12px;
+  --shadow:0 4px 24px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.04);
+  --shadow-lg:0 8px 32px rgba(15,23,42,.08);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#080C14;--panel:#111827;--panel2:#0D1424;--texto:#E5E7EB;--muted:#94A3B8;--borde:#1F2937;--borde2:#1E293B;--ink:#F8FAFC;--ink-txt:#0F172A;--ok:#34D399;--error:#F87171;--code-bg:#060A12;--code-txt:#E2E8F0;
+    --shadow:0 4px 24px rgba(0,0,0,.3);--shadow-lg:0 8px 32px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{--bg:#080C14;--panel:#111827;--panel2:#0D1424;--texto:#E5E7EB;--muted:#94A3B8;--borde:#1F2937;--borde2:#1E293B;--ink:#F8FAFC;--ink-txt:#0F172A;--ok:#34D399;--error:#F87171;--code-bg:#060A12;--code-txt:#E2E8F0;--shadow:0 4px 24px rgba(0,0,0,.3);--shadow-lg:0 8px 32px rgba(0,0,0,.4)}
+*{box-sizing:border-box}
+html{height:auto;min-height:100%;overflow:auto;scroll-behavior:smooth}
+[hidden]{display:none!important}
+body{
+  margin:0;
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  color:var(--texto);
+  background:var(--bg);
+  font:15.5px/1.7 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-.01em;
+}
+:focus-visible{outline:2px solid var(--texto);outline-offset:3px}
+h2{font-size:17px;font-weight:700;letter-spacing:-.02em;margin:0 0 14px;color:var(--texto)}
+
+/* TOP BAR */
+.top{
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:18px 28px;background:var(--panel);border-bottom:1px solid var(--borde);
+  position:sticky;top:0;z-index:12;backdrop-filter:saturate(1.2) blur(8px);
+}
+.logo{display:flex;align-items:center;gap:12px;font-weight:700;font-size:16px}
+.marca{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,var(--html) 0 33%,var(--css) 33% 66%,var(--js) 66%);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.pill{
+  border:1px solid var(--borde);border-radius:999px;padding:6px 14px;
+  font-size:13.5px;font-weight:600;background:var(--panel2);letter-spacing:-.01em;
+}
+.barra{height:28px;background:#E2E8F0;flex-shrink:0;position:sticky;top:62px;z-index:11;border-radius:999px;margin:8px 32px 0;border:1px solid #CBD5E1;overflow:hidden;display:flex;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+#progreso{height:100%;width:0;background:linear-gradient(90deg,var(--html),var(--css),var(--js));transition:width .6s cubic-bezier(.22,1,.36,1);border-radius:999px;display:flex;align-items:center;padding-left:12px;min-width:fit-content}
+.barra-label{font:800 11px "IBM Plex Sans",sans-serif;letter-spacing:.12em;color:white;text-shadow:0 1px 2px rgba(0,0,0,.3);white-space:nowrap}
+
+/* MAIN GRID - VISTA PREVIA A LA DERECHA TIPO IDE */
+main{
+  display:grid;
+  gap:24px;
+  padding:22px 26px;
+  max-width:1680px;
+  margin:0 auto;
+  width:100%;
+  flex:1;
+  grid-template-columns: 340px minmax(420px, 1.15fr) 460px;
+  grid-template-areas:
+    "brief editor vista"
+    "mapa editor vista";
+  align-items:start;
+}
+@media(max-width:1380px){
+  main{
+    grid-template-columns: 320px 1fr;
+    grid-template-areas:
+      "brief editor"
+      "mapa editor"
+      "vista vista";
+  }
+  .vista{position:static !important; min-height:500px}
+}
+@media(max-width:980px){
+  main{
+    grid-template-columns:1fr;
+    grid-template-areas:"brief" "editor" "vista" "mapa";
+    padding:20px;
+    gap:20px;
+  }
+  .brief, .mapa, .vista{position:static !important}
+}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--borde);
+  border-radius:var(--radius);
+  padding:28px;
+  min-width:0;
+  box-shadow:var(--shadow);
+  transition:box-shadow .2s, transform .2s;
+}
+.panel:hover{box-shadow:var(--shadow-lg)}
+
+.brief{grid-area:brief;position:sticky;top:102px}
+.editor{grid-area:editor;padding:0;overflow:hidden;display:flex;flex-direction:column;min-height:400px;position:sticky;top:102px}
+.vista{grid-area:vista;display:flex;flex-direction:column;gap:16px;padding:24px;min-height:400px;position:sticky;top:88px; max-height:calc(100vh - 95px)}
+.mapa{grid-area:mapa;padding:24px;position:sticky;top:102px}
+
+.meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:6px}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--borde);border-radius:999px;
+  padding:5px 14px 5px 10px;font-weight:700;font-size:13px;
+  color:var(--texto);background:var(--panel2);
+  letter-spacing:.02em;
+}
+#cap[data-cap="HTML"]{--c:var(--html)} #cap[data-cap="CSS"]{--c:var(--css)} #cap[data-cap="JavaScript"]{--c:var(--js)} #cap[data-cap="Reto"]{--c:var(--ink)}
+
+.brief h2{font-size:28px;line-height:1.15;letter-spacing:-.03em;margin:18px 0 12px;font-weight:800}
+.concepto{color:var(--muted);margin:0 0 6px;font-size:15px;line-height:1.7}
+.objetivo{
+  margin:22px 0 18px;padding:18px 20px;border-radius:14px;
+  background:linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid var(--borde);
+}
+.objetivo strong{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.objetivo p{margin:0;font-weight:600;font-size:16px;line-height:1.5}
+
+details{margin-top:16px;background:var(--panel2);border:1px solid var(--borde);border-radius:12px;padding:12px 16px}
+summary{cursor:pointer;color:var(--muted);font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px;list-style:none}
+summary:hover{color:var(--texto)}
+summary::-webkit-details-marker{display:none}
+code{
+  display:block;white-space:pre-wrap;word-break:break-word;
+  background:var(--code-bg);color:var(--code-txt);
+  border-radius:12px;padding:16px 18px;
+  font:13.5px/1.7 "IBM Plex Mono",Consolas,monospace;
+  margin-top:12px;border:1px solid rgba(255,255,255,.06)
+}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font:inherit;font-weight:700;font-size:14.5px;
+  border:1px solid var(--ink);border-radius:12px;
+  padding:12px 20px;background:var(--ink);color:var(--ink-txt);
+  cursor:pointer;transition:all .18s cubic-bezier(.22,1,.36,1);
+  letter-spacing:-.01em;
+}
+.btn.sec{background:var(--panel);color:var(--texto);border-color:var(--borde)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.12);opacity:1}
+.btn:active{transform:translateY(0)}
+#siguiente{
+  /* nuevo estilo distintivo - al lado de reiniciar */
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  color:#fff;
+  border:1px solid #334155;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.05) inset, 0 4px 14px rgba(15,23,42,.18);
+  position:relative;
+  overflow:hidden;
+}
+#siguiente::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+  transform: translateX(-100%);
+  transition: transform .6s cubic-bezier(.22,1,.36,1);
+}
+#siguiente:hover::before{ transform: translateX(100%); }
+#siguiente:hover{
+  transform: translateY(-1px);
+  border-color:#0F172A;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.08) inset, 0 8px 20px rgba(15,23,42,.28);
+}
+#siguiente .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 0 4px rgba(34,197,94,.18);
+  display:inline-block;
+  animation: pulse-dot 1.8s infinite;
+}
+@keyframes pulse-dot{
+  0%{box-shadow:0 0 0 4px rgba(34,197,94,.18)}
+  50%{box-shadow:0 0 0 7px rgba(34,197,94,.10)}
+  100%{box-shadow:0 0 0 4px rgba(34,197,94,.18)}
+}
+#siguiente[hidden]{display:none !important}
+
+.tabs{
+  display:flex;gap:8px;padding:14px 16px 0;
+  background:var(--panel2);border-bottom:1px solid var(--borde);
+}
+.tabs button{
+  --c:#64748B;--tx:#FFFFFF;
+  font:700 13px "IBM Plex Mono",Consolas,monospace;
+  background:var(--c);color:var(--tx);
+  border:0;border-radius:12px 12px 0 0;
+  padding:10px 20px;cursor:pointer;opacity:.45;
+  transition:all .18s;letter-spacing:-.01em;
+}
+.tabs button:hover{opacity:.75;transform:translateY(-1px)}
+.tabs button.activo{opacity:1;box-shadow:0 -2px 10px rgba(0,0,0,.08)}
+.tabs button[data-tab="html"]{--c:#E34F26}
+.tabs button[data-tab="css"]{--c:#1572B6}
+.tabs button[data-tab="js"]{--c:#F0DB4F;--tx:#14213D}
+
+.editor:has(button[data-tab="html"].activo) textarea{box-shadow:inset 4px 0 0 #E34F26}
+.editor:has(button[data-tab="html"].activo){border:2px solid #FFDAD2 !important; border-left:4px solid #E34F26 !important}
+.editor:has(button[data-tab="css"].activo){border:2px solid #BFDBFE !important; border-left:4px solid #1572B6 !important}
+.editor:has(button[data-tab="js"].activo){border:2px solid #FEF08A !important; border-left:4px solid #EAB308 !important}
+
+.editor:has(button[data-tab="css"].activo) textarea{box-shadow:inset 4px 0 0 #1572B6}
+.editor:has(button[data-tab="js"].activo) textarea{box-shadow:inset 4px 0 0 #F0DB4F}
+
+textarea{
+  display:block;width:100%;flex:1;min-height:300px;
+  resize:none;border:0;border-radius:0;
+  padding:24px 26px;
+  background:var(--code-bg);color:var(--code-txt);
+  font:14.5px/1.8 "IBM Plex Mono",Consolas,"Courier New",monospace;
+  tab-size:2;outline:none;overflow:auto;
+  letter-spacing:-.01em;
+}
+textarea:focus-visible{outline:2px solid var(--texto);outline-offset:-2px}
+.acciones{
+  display:flex;align-items:center;gap:14px;
+  padding:18px 22px;background:var(--panel2);
+  border-top:1px solid var(--borde);flex-wrap:wrap;
+}
+.acciones small{color:var(--muted);font-size:12.5px;font-weight:500;margin-left:auto}
+
+/* VISTA PREVIA - DERECHA */
+.vista h2{font-size:15px;font-weight:800;letter-spacing:-.02em;margin-bottom:2px;display:flex;align-items:center;gap:8px}
+.vista h2::before{content:"";width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.15);display:inline-block}
+.vista iframe{
+  width:100%;flex:1;min-height:200px;
+  border:1px solid var(--borde);border-radius:14px;
+  background:white;box-shadow:inset 0 1px 4px rgba(0,0,0,.04);
+}
+.vista{overflow:auto}
+#resultado{
+  border-radius:12px;padding:14px 16px;font-weight:600;font-size:14.5px;
+  display:flex;align-items:center;gap:10px;min-height:20px;
+  transition:all .2s;
+}
+#resultado.ok{background:#DCFCE7;color:#166534;border:1px solid #BBF7D0}
+#resultado.err{background:#FEE2E2;color:#991B1B;border:1px solid #FECACA}
+#consola{
+  background:var(--code-bg);color:var(--code-txt);
+  border-radius:12px;padding:16px 18px;min-height:56px;
+  font:12.5px/1.6 "IBM Plex Mono",monospace;white-space:pre-wrap;
+  border:1px solid rgba(255,255,255,.06)
+}
+#consola:empty{display:none}
+.aliento{
+  display:flex;align-items:center;gap:10px;
+  background:var(--panel2);border:1px dashed var(--borde);
+  border-radius:12px;padding:12px 16px;
+  font-size:14px;color:var(--muted);line-height:1.5;
+}
+
+/* MAPA */
+.mapa h2{font-size:15px;margin-bottom:18px}
+#caps{display:flex;flex-direction:column;gap:12px}
+.cap-grupo{margin-bottom:4px}
+.cap-titulo{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
+.cap-boton{
+  width:100%;text-align:left;
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border-radius:12px;
+  border:1px solid var(--borde);background:var(--panel2);
+  cursor:pointer;transition:all .18s;font:600 14px "IBM Plex Sans",sans-serif;
+}
+.cap-boton:hover{transform:translateY(-1px);border-color:var(--texto);box-shadow:var(--shadow)}
+.cap-boton.activo{background:var(--ink);color:var(--ink-txt);border-color:var(--ink)}
+.cap-boton.completado{border-color:#BBF7D0;background:#F0FDF4}
+.logros{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.logro{
+  display:flex;gap:12px;align-items:center;
+  padding:12px 14px;border-radius:12px;
+  border:1px solid var(--borde);background:var(--panel2);
+  opacity:.6;transition:all .2s;
+}
+.logro.desbloqueado{opacity:1;background:var(--panel);border-color:var(--borde2);box-shadow:var(--shadow)}
+.logro svg{width:20px;height:20px;flex:none}
+
+/* HEADER SUPERIOR NTX */
+header{
+  text-align:center; padding:10px 24px; height:68px; position:relative; z-index:1;
+  display:flex; align-items:center; justify-content:center;
+  background:transparent;
+}
+header h1{
+  margin:0; font-size:24px; font-weight:900;
+  background: linear-gradient(90deg,#e879f9,#a78bfa,#22d3ee);
+  background-size:200% auto; -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation: grad 6s linear infinite; letter-spacing:-.03em;
+}
+@keyframes grad{to{background-position:200% center}}
+
+.floating-nav-main{
+  position:fixed; top:20px; right:20px; display:flex; gap:10px; z-index:1000;
+}
+.nav-pill{
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border:1px solid var(--borde); color:var(--texto); padding:9px 16px; border-radius:12px;
+  font-size:12.5px; font-weight:700; cursor:pointer; text-decoration:none;
+  display:flex; align-items:center; gap:7px; box-shadow:var(--shadow);
+  transition: all .2s ease; white-space:nowrap;
+}
+.nav-pill:hover{border-color:#22d3ee; color:#22d3ee; transform:translateY(-2px); box-shadow:var(--shadow-lg)}
+.nav-dropdown{position:relative}
+.nav-dropdown-menu{
+  position:absolute; right:0; top:115%; background: rgba(255,255,255,0.97); backdrop-filter: blur(16px);
+  border:1px solid var(--borde); border-radius:14px; list-style:none; padding:8px; margin:0; width:220px;
+  box-shadow:var(--shadow-lg); display:none; z-index:1001;
+}
+.nav-dropdown-menu.show{display:block; animation: ddIn .22s cubic-bezier(.22,1,.36,1)}
+@keyframes ddIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)}}
+.nav-dropdown-menu li a{
+  display:flex; align-items:center; gap:10px; padding:11px 14px; color:var(--texto);
+  text-decoration:none; font-size:13px; font-weight:600; transition:.18s; border-radius:10px;
+}
+.nav-dropdown-menu li a:hover{background:var(--panel2); color:#22d3ee;}
+
+.floating-nav-tools{
+  position:fixed; bottom:22px; right:22px; display:flex; gap:10px; z-index:1000;
+}
+.float-btn{
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border:1px solid var(--borde);
+  color:var(--texto); padding:9px 16px; border-radius:12px; font-size:12.5px; font-weight:700;
+  cursor:pointer; display:flex; align-items:center; gap:7px; box-shadow:var(--shadow);
+  transition: all .2s ease;
+}
+.float-btn:hover{border-color:#22d3ee; color:#22d3ee; transform:translateY(-2px); box-shadow:var(--shadow-lg)}
+.float-btn.active{background:linear-gradient(135deg,#22d3ee,#a78bfa); color:#000; border-color:transparent; box-shadow:0 6px 16px rgba(34,211,238,.3)}
+.mod-num{width:20px;height:20px;display:grid;place-items:center;border-radius:6px;font-size:10px;font-weight:900;color:#fff}
+.mod-num.n1{background:#3b82f6}.mod-num.n2{background:#f59e0b}.mod-num.n3{background:#10b981}.mod-num.n4{background:#8b5cf6}.mod-num.n5{background:#f97316}.mod-num.n6{background:#ef4444}.mod-num.n7{background:#0284c7}
+.mod-text{flex:1}
+/* === MODAL DE ADVERTENCIA DE RESOLUCIÓN MÍNIMA - ESTILO REFERENCIA DARK NEON === */
+.modal-resolution {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(3, 7, 18, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-align: center;
+}
+.modal-resolution.show { display: flex; animation: resFadeIn .25s ease; }
+@keyframes resFadeIn { from{opacity:0} to{opacity:1} }
+
+.modal-resolution-content {
+    background: linear-gradient(180deg, #15213f 0%, #0d1830 100%);
+    border: 1.5px solid rgba(125, 211, 252, 0.9);
+    border-radius: 16px;
+    padding: 30px 24px 22px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 0 1px rgba(34,211,238,.15), 0 0 28px rgba(34,211,238,.35), 0 0 80px rgba(34,211,238,.15), 0 20px 50px rgba(0,0,0,.85);
+    animation: resPop .4s cubic-bezier(.22,1,.36,1);
+    position: relative;
+}
+@keyframes resPop { from{opacity:0; transform:translateY(16px) scale(.96)} to{opacity:1; transform:translateY(0) scale(1)} }
+
+.modal-resolution-icon {
+    font-size: 52px;
+    color: #22d3ee;
+    margin: 0 auto 18px;
+    line-height:1;
+    filter: drop-shadow(0 0 14px rgba(34,211,238,.9)) drop-shadow(0 0 28px rgba(34,211,238,.5));
+    display:block;
+}
+.modal-resolution-title {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #f1f5f9;
+    margin-bottom: 14px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    line-height:1.2;
+}
+.modal-resolution-desc {
+    font-size: 13.5px;
+    color: #94a3b8;
+    line-height: 1.55;
+    margin-bottom: 18px;
+    font-weight:400;
+}
+.modal-resolution-desc.small { font-size: 13px; color: #94a3b8; margin-bottom: 10px; }
+.modal-resolution-desc .hl {
+    color: #22d3ee;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight:700;
+    font-size: 12.5px;
+}
+.resolution-badge {
+    display: inline-flex;
+    align-items:center;
+    justify-content:center;
+    background: rgba(14, 35, 56, 0.9);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    padding: 6px 16px;
+    border-radius: 10px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: #22d3ee;
+    margin: 2px auto 18px;
+    font-weight: 700;
+    letter-spacing:.02em;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.modal-resolution-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top:6px;
+}
+.modal-resolution-btn {
+    flex:1;
+    height: 44px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all .2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "IBM Plex Sans", sans-serif;
+    letter-spacing:-.01em;
+    border:none;
+}
+.modal-resolution-btn-cancel {
+    background: #1e293b;
+    color: #f1f5f9;
+    border: 1px solid #334155;
+    box-shadow: 0 1px 2px rgba(0,0,0,.3);
+}
+.modal-resolution-btn-cancel:hover { background:#263449; border-color:#475569; transform:translateY(-1px); }
+.modal-resolution-btn-continue {
+    background: linear-gradient(90deg, #22d3ee 0%, #a78bfa 100%);
+    color: #020617;
+    font-weight:900;
+    box-shadow: 0 4px 18px rgba(34,211,238,.45);
+}
+.modal-resolution-btn-continue:hover { transform:translateY(-1px); box-shadow:0 6px 24px rgba(34,211,238,.6); filter:brightness(1.05); }
+@media(max-width:480px){
+  .modal-resolution-content{ max-width: 92vw; padding:26px 18px 18px; }
+}
+
+.modal{position:fixed; inset:0; background:rgba(0,0,0,.72); backdrop-filter: blur(12px); display:none; place-items:center; z-index:80; padding:16px}
+.modal.show{display:grid} .modal-content{background:linear-gradient(180deg, var(--panel-solid), #0e1430); border:1px solid var(--border); border-radius:16px; box-shadow:0 24px 70px rgba(0,0,0,.65); width:100%; max-width:540px; padding:20px} .modal-content.large{max-width:900px; max-height:92vh; overflow:auto}
+
+.ico{width:18px;height:18px;flex:none}
+.confeti{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.confeti i{position:absolute;top:-10px;width:10px;height:14px;border-radius:2px;animation:caer 2.2s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes caer{to{transform:translate(var(--dx),100vh) rotate(var(--rot));opacity:0}}
+.toast{
+  position:fixed;left:50%;bottom:28px;transform:translateX(-50%);
+  background:var(--ink);color:var(--ink-txt);
+  padding:14px 20px;border-radius:999px;
+  display:flex;align-items:center;gap:10px;
+  font-weight:700;font-size:14px;box-shadow:var(--shadow-lg);
+  z-index:10000;animation:subir .4s cubic-bezier(.22,1,.36,1);
+}
+.toast svg{width:18px;height:18px;flex:none;color:var(--js)}
+@keyframes subir{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}
+.vista.fallo{animation:sacudir .4s}
+@keyframes sacudir{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.rebote{animation:reb .5s cubic-bezier(.22,1,.36,1)}
+@keyframes reb{0%{transform:scale(.96)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:var(--borde);border-radius:99px;border:2px solid var(--panel)}
+::-webkit-scrollbar-thumb:hover{background:#CBD5E1}
+* {scrollbar-width:thin; scrollbar-color: var(--borde) transparent}
+
+
+/* === NUEVA TARJETA MISION CON COLOR FUERTE === */
+.brief{
+  border:2px solid var(--borde) !important;
+  border-left:6px solid var(--c, var(--borde)) !important;
+  background:linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%) !important;
+  box-shadow:var(--shadow), 0 0 0 1px var(--c, transparent) inset !important;
+}
+.brief:has(#cap[data-cap="HTML"]){
+  --c:#E34F26;
+  border-color:#FFDAD2 !important;
+  border-left-color:#E34F26 !important;
+  background:linear-gradient(180deg, #FFF8F6 0%, #FFFFFF 100%) !important;
+}
+.brief:has(#cap[data-cap="CSS"]){
+  --c:#1572B6;
+  border-color:#C2E0FF !important;
+  border-left-color:#1572B6 !important;
+  background:linear-gradient(180deg, #F3F9FF 0%, #FFFFFF 100%) !important;
+}
+.brief:has(#cap[data-cap="JavaScript"]){
+  --c:#CA8A04;
+  border-color:#FEF08A !important;
+  border-left-color:#EAB308 !important;
+  background:linear-gradient(180deg, #FFFEF0 0%, #FFFFFF 100%) !important;
+}
+.brief:has(#cap[data-cap="Reto"]){
+  --c:#0F172A;
+  border-color:#0F172A !important;
+  border-left-color:#0F172A !important;
+}
+.chip{
+  border-width:2px !important;
+  font-weight:800 !important;
+}
+#cap[data-cap="HTML"]{--c:#E34F26; background:#FFF1EF !important; border-color:#E34F26 !important; color:#C2410C !important}
+#cap[data-cap="CSS"]{--c:#1572B6; background:#EFF6FF !important; border-color:#1572B6 !important; color:#1D4ED8 !important}
+#cap[data-cap="JavaScript"]{--c:#EAB308; background:#FEFCE8 !important; border-color:#EAB308 !important; color:#A16207 !important}
+#cap[data-cap="Reto"]{--c:#0F172A; background:#0F172A !important; border-color:#0F172A !important; color:white !important}
+
+.objetivo{
+  border:2px solid var(--borde) !important;
+  border-left:4px solid var(--c, var(--borde)) !important;
+  background:white !important;
+  box-shadow:0 2px 8px rgba(0,0,0,.04) !important;
+}
+.brief:has(#cap[data-cap="HTML"]) .objetivo{border-left-color:#E34F26 !important; background:#FFF8F6 !important}
+.brief:has(#cap[data-cap="CSS"]) .objetivo{border-left-color:#1572B6 !important; background:#F3F9FF !important}
+.brief:has(#cap[data-cap="JavaScript"]) .objetivo{border-left-color:#EAB308 !important; background:#FFFEF0 !important}
+
+/* === SOLAPAS HTML/CSS/JS - DISEÑO NUEVO BORDE FUERTE === */
+.tabs{
+  display:flex !important;
+  gap:12px !important;
+  padding:14px 16px 0 !important;
+  background:#F8FAFC !important;
+  border-bottom:2px solid var(--borde) !important;
+}
+.tabs button{
+  --c:#64748B;
+  background:white !important;
+  color:#64748B !important;
+  border:2px solid var(--borde) !important;
+  border-bottom:0 !important;
+  border-radius:14px 14px 0 0 !important;
+  padding:12px 18px 10px !important;
+  font:800 12.5px "IBM Plex Mono",monospace !important;
+  opacity:1 !important;
+  transition:all .2s cubic-bezier(.22,1,.36,1) !important;
+  position:relative !important;
+  top:2px !important;
+  min-width:110px !important;
+}
+.tabs button:hover{
+  transform:translateY(-2px) !important;
+  box-shadow:0 4px 12px rgba(0,0,0,.08) !important;
+}
+.tabs button.activo{
+  background:white !important;
+  border-width:2.5px !important;
+  border-bottom:2.5px solid white !important;
+  box-shadow:0 -4px 12px rgba(0,0,0,.06) !important;
+  transform:translateY(0) !important;
+}
+/* HTML - Rojo fuerte */
+.tabs button[data-tab="html"]{
+  border-color:#FFCFC5 !important;
+  color:#9CA3AF !important;
+}
+.tabs button[data-tab="html"].activo{
+  border-color:#E34F26 !important;
+  color:#E34F26 !important;
+  background:#FFF8F6 !important;
+  box-shadow:inset 0 3px 0 #E34F26, 0 -4px 16px rgba(227,79,38,.15) !important;
+}
+.tabs button[data-tab="html"] svg{color:#E34F26 !important}
+/* CSS - Azul fuerte */
+.tabs button[data-tab="css"]{
+  border-color:#BFDBFE !important;
+  color:#9CA3AF !important;
+}
+.tabs button[data-tab="css"].activo{
+  border-color:#1572B6 !important;
+  color:#1572B6 !important;
+  background:#F3F9FF !important;
+  box-shadow:inset 0 3px 0 #1572B6, 0 -4px 16px rgba(21,114,182,.15) !important;
+}
+.tabs button[data-tab="css"] svg{color:#1572B6 !important}
+/* JS - Amarillo fuerte */
+.tabs button[data-tab="js"]{
+  border-color:#FEF08A !important;
+  color:#9CA3AF !important;
+}
+.tabs button[data-tab="js"].activo{
+  border-color:#EAB308 !important;
+  color:#A16207 !important;
+  background:#FFFEF0 !important;
+  box-shadow:inset 0 3px 0 #EAB308, 0 -4px 16px rgba(234,179,8,.20) !important;
+}
+.tabs button[data-tab="js"] svg{color:#CA8A04 !important}
+
+/* === FIX DEFINITIVO ICONOS GIGANTES === */
+.tabs button svg,
+#cap svg,
+.chip svg,
+.cap-nombre svg,
+.cap-titulo svg,
+.item svg,
+.num svg,
+.logro svg,
+#resultado svg,
+.aliento svg,
+.objetivo svg,
+.btn svg,
+summary svg{
+  width:16px !important;
+  height:16px !important;
+  max-width:16px !important;
+  max-height:16px !important;
+  flex:none !important;
+  display:inline-block !important;
+  vertical-align:middle;
+}
+.tabs{
+  gap:10px !important;
+  padding:12px 14px 0 !important;
+}
+.tabs button{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  min-width:92px !important;
+  min-height:64px !important;
+  padding:10px 12px 8px !important;
+  border-radius:14px 14px 0 0 !important;
+  font-size:12px !important;
+  line-height:1.2 !important;
+}
+.tabs button svg{
+  width:26px !important;
+  height:26px !important;
+  max-width:26px !important;
+  max-height:26px !important;
+  margin-bottom:2px !important;
+}
+.cap-nombre{display:inline-flex !important; align-items:center !important; gap:8px !important}
+.cap-nombre svg{width:14px !important; height:14px !important}
+.item{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  padding:12px 14px !important;
+}
+.item .num{
+  width:30px !important;
+  height:30px !important;
+  min-width:30px !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:8px !important;
+  background:var(--panel2) !important;
+  border:1px solid var(--borde) !important;
+  font-weight:800 !important;
+  font-size:13px !important;
+  overflow:hidden !important;
+}
+.item .num svg{width:14px !important; height:14px !important}
+.item.hecho .num{background:#DCFCE7 !important; border-color:#BBF7D0 !important; color:#166534 !important}
+.logro{display:flex !important; align-items:center !important; gap:10px !important; padding:10px 12px !important}
+.logro svg{width:18px !important; height:18px !important}
+#resultado svg{width:18px !important; height:18px !important}
+.mapa .panel, .brief .panel{overflow:hidden}
+#caps button{overflow:hidden}
+
+
+/* ===== NUEVA BARRA DE BOTONES ===== */
+.acciones{
+  display:flex !important;
+  align-items:center;
+  gap:12px !important;
+  padding:16px 18px !important;
+  background:#F8FAFC !important;
+  border-top:2px solid #E2E8F0 !important;
+  flex-wrap:wrap;
+}
+.btn{
+  height:44px !important;
+  border-radius:12px !important;
+  font:700 14px "IBM Plex Sans", sans-serif !important;
+  letter-spacing:-.01em !important;
+  padding:0 18px !important;
+  gap:8px !important;
+  transition:all .2s cubic-bezier(.22,1,.36,1) !important;
+}
+.btn#ejecutar{
+  background:#0F172A !important;
+  color:white !important;
+  border:1.5px solid #0F172A !important;
+  box-shadow:0 2px 8px rgba(15,23,42,.18) !important;
+}
+.btn#ejecutar:hover{ transform:translateY(-1px); box-shadow:0 6px 16px rgba(15,23,42,.24) !important; }
+
+.btn#reiniciar{
+  background:white !important;
+  color:#334155 !important;
+  border:1.5px solid #CBD5E1 !important;
+}
+.btn#reiniciar:hover{ border-color:#94A3B8 !important; background:#F8FAFC !important; transform:translateY(-1px); }
+
+.btn#siguiente{
+  background: linear-gradient(135deg, #15803D 0%, #16A34A 100%) !important;
+  color:white !important;
+  border:1.5px solid #15803D !important;
+  box-shadow:0 2px 10px rgba(21,128,61,.28), inset 0 1px 0 rgba(255,255,255,.2) !important;
+  position:relative;
+  overflow:hidden;
+}
+.btn#siguiente:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 18px rgba(21,128,61,.35), inset 0 1px 0 rgba(255,255,255,.25) !important;
+  filter:brightness(1.05);
+}
+.btn#siguiente::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+  transform:translateX(-100%);
+  transition:transform .6s;
+}
+.btn#siguiente:hover::after{ transform:translateX(100%); }
+.btn#siguiente .dot{
+  width:8px;height:8px;border-radius:999px;background:#BBF7D0;
+  box-shadow:0 0 0 4px rgba(187,247,208,.4);
+  animation: pulse-dot 1.8s infinite;
+}
+@keyframes pulse-dot{
+  0%{box-shadow:0 0 0 4px rgba(187,247,208,.4)}
+  50%{box-shadow:0 0 0 7px rgba(187,247,208,.15)}
+  100%{box-shadow:0 0 0 4px rgba(187,247,208,.4)}
+}
+#siguiente[hidden]{display:none !important}
+
+</style>
+</head>
+<body>
+<div class="grid-bg" style="position:fixed;inset:0;pointer-events:none;opacity:.04;background-image:radial-gradient(#0F172A 1px,transparent 1px);background-size:28px 28px"></div>
+
+<!-- HEADER COPIADO DE SIMULADOR-WEB - EXACTO IGUAL QUE PC -->
+<header>
+  <h1>Desarrollador Web (código escrito)</h1>
+</header>
+
+<!-- BOTONES PRINCIPALES ARRIBA A LA DERECHA - EXACTO PC -->
+<div class="floating-nav-main">
+  <a href="index.html" class="nav-pill"><i class="fa-solid fa-house"></i> Inicio</a>
+  <div class="nav-dropdown">
+    <button class="nav-pill" onclick="toggleNavDropdown('sim')"><i class="fa-solid fa-gamepad"></i> Simulador <i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+    <ul id="nav-sim" class="nav-dropdown-menu">     
+      <li><a href="simulador-web.html"><i class="fa-solid fa-laptop-code" style="color:#ec4899;"></i> Arrastrar código web</a></li>
+       <li><a href="simulador-pc.html"><i class="fa-solid fa-computer" style="color:#06b6d4;"></i> Ensamblar PC</a></li>
+       <li><a href="simulador-red.html"><i class="fa-solid fa-network-wired" style="color:#8b5cf6;"></i>Conectar Redes</a></li>
+      <li><a href="simulador-dispositivos.html"><i class="fa-solid fa-keyboard" style="color:#f59e0b;"></i> Dispositivos E/S/M</a></li>
+    </ul>
+  </div>
+  <div class="nav-dropdown">
+    <button class="nav-pill" onclick="toggleNavDropdown('menu')"><i class="fa-solid fa-bars"></i> Menú <i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+    <ul id="nav-menu" class="nav-dropdown-menu">
+       <li><a href="informatica.html"><span class="mod-num n1">1</span><i class="fa-solid fa-microchip" style="color:#3b82f6;"></i><span class="mod-text">Informática</span></a></li>
+       <li><a href="redes.html"><span class="mod-num n2">2</span><i class="fa-solid fa-network-wired" style="color:#f59e0b;"></i><span class="mod-text">Redes</span></a></li>
+       <li><a href="ofimatica.html"><span class="mod-num n3">3</span><i class="fa-solid fa-database" style="color:#10b981;"></i><span class="mod-text">Ofimática</span></a></li>
+       <li><a href="diseño.html"><span class="mod-num n4">4</span><i class="fa-solid fa-image" style="color:#8b5cf6;"></i><span class="mod-text">Diseño</span></a></li>
+       <li><a href="comunicacion.html"><span class="mod-num n5">5</span><i class="fa-solid fa-comments" style="color:#f97316;"></i><span class="mod-text">Comunicación</span></a></li>
+       <li><a href="multimedia.html"><span class="mod-num n6">6</span><i class="fa-solid fa-video" style="color:#ef4444;"></i><span class="mod-text">Multimedia</span></a></li>
+       <li><a href="seguridad.html"><span class="mod-num n7">7</span><i class="fa-solid fa-shield-halved" style="color:#0284c7;"></i><span class="mod-text">Seguridad</span></a></li>
+    </ul>
+  </div>
+  <a href="contacto.html" class="float-btn" title="Contacto"><i class="fa-solid fa-envelope"></i> Contacto</a>
+</div>
+
+<header class="top">
+
+  <div class="stats"><span class="pill" id="rango"></span><span class="pill" id="xp"></span></div>
+</header>
+<div class="barra"><div id="progreso"><span class="barra-label">PROGRESO</span></div></div>
+
+<main>
+  <section class="panel brief">
+    <div class="meta"><span class="chip" id="cap"></span><span id="pos"></span></div>
+    <h2 id="titulo"></h2>
+    <p class="concepto" id="concepto"></p>
+    <div class="objetivo"><strong>Objetivo</strong><p id="tarea"></p></div>
+    <details><summary><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2V17h6v-.3c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></svg>Ver pista</summary><code id="pista"></code></details>
+
+  </section>
+
+  <section class="panel editor">
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="html" class="activo">index.html</button>
+      <button role="tab" data-tab="css">estilo.css</button>
+      <button role="tab" data-tab="js">script.js</button>
+    </div>
+    <textarea id="codigo" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="Editor de código"></textarea>
+    <div class="acciones">
+      <button class="btn" id="ejecutar"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>Ejecutar</button>
+      <button class="btn sec" id="reiniciar"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Reiniciar</button>
+      <button class="btn" id="siguiente" hidden><span class="dot"></span>Siguiente misión<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+      <small>NTX - Academia Digital</small>
+    </div>
+  </section>
+
+  <section class="panel vista">
+    <h2>Vista previa</h2>
+    <iframe id="vista" sandbox="allow-scripts" title="Vista previa de tu web"></iframe>
+    <div id="resultado" role="status"></div>
+    <p id="aliento" class="aliento" hidden></p>
+    <pre id="consola" aria-label="Consola"></pre>
+  </section>
+
+  <nav class="panel mapa">
+    <h2>Ruta de aprendizaje</h2>
+    <div id="caps"></div>
+    <h2 class="logros-titulo">Logros</h2>
+    <div id="logros" class="logros"></div>
+  </nav>
+</main>
+<!-- MODAL RESOLUCION - ESTILO REFERENCIA DARK -->
+<div class="modal-resolution" id="modalResolution">
+  <div class="modal-resolution-content">
+    <div class="modal-resolution-icon"><i class="fa-solid fa-desktop"></i></div>
+    <div class="modal-resolution-title">INFORMACION IMPORTANTE</div>
+    <div class="modal-resolution-desc">
+      Este simulador de desarrollo WEB (html/css/js) requiere un espacio de trabajo amplio para una correcta experiencia educativa.
+    </div>
+    <div class="modal-resolution-desc small">Resolución detectada:</div>
+    <div class="resolution-badge" id="currentResolutionText">0 px × 0 px</div>
+    <div class="modal-resolution-desc small">
+      Por favor, ingresa desde una computadora o dispositivo con al menos <span class="hl">1110px de ancho por 600px de alto</span>
+    </div>
+    <div class="modal-resolution-buttons">
+      <button class="modal-resolution-btn modal-resolution-btn-cancel" onclick="cancelResolutionModalPc()">Cancelar</button>
+      <button class="modal-resolution-btn modal-resolution-btn-continue" onclick="dismissResolutionModalPc()">Continuar</button>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const KEY = 'devsim-v2', CSS0 = '/* Tu CSS aquí */', JS0 = '// Tu JavaScript aquí';
+const CAPS = ['HTML', 'CSS', 'JavaScript', 'Reto'];
+const sv = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const IC = {
+  ok: sv('<path d="M20 6 9 17l-5-5"/>'),
+  err: sv('<circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/>'),
+  HTML: sv('<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>'),
+  CSS: sv('<path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6H17c2.8 0 5-2.2 5-5 0-5.5-4.5-9.6-10-9.6z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="12" cy="7" r="1"/><circle cx="16.5" cy="10.5" r="1"/>'),
+  JavaScript: sv('<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>'),
+  Reto: sv('<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>')
+};
+const RANGOS = [[0,'Principiante 🌱'],[1,'Aprendiz 🐣'],[4,'Junior 💻'],[8,'Desarrollador 🚀'],[12,'Experto 🧠'],[16,'Maestro 🏆']];
+
+Object.assign(IC, {
+  heart: sv('<path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/>'),
+  star: sv('<polygon points="12 2 15.1 8.3 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.3 12 2"/>'),
+  target: sv('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>'),
+  flame: sv('<path d="M12 22c4.4 0 7-2.9 7-6.8 0-3.6-2.4-5.8-4-8.2-.4 2-1.4 3.2-2.6 3.8C12.5 7.2 11 4.6 9 2c-.3 3.2-3 5.2-3 9.8C6 16.4 8.4 22 12 22z"/>'),
+  play: sv('<polygon points="6 4 20 12 6 20 6 4"/>'),
+  layers: sv('<path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/>')
+});
+
+const LOGROS = [
+  {id:'primera', t:'Primer paso', d:'Completa tu primera misión', ic:'star', ok:c=>c.hechas>=1},
+  {id:'impecable', t:'A la primera', d:'Supera una misión sin fallar', ic:'target', ok:c=>c.sinFallos},
+  {id:'persistente', t:'No te rindas', d:'Supera una misión tras 3 fallos', ic:'flame', ok:c=>c.tresFallos},
+  {id:'probador', t:'Probador', d:'Ejecuta tu código 10 veces', ic:'play', ok:c=>c.ejec>=10},
+  {id:'html', t:'Maestro del HTML', d:'Completa las misiones de HTML', ic:'HTML', ok:c=>c.cap.HTML},
+  {id:'css', t:'Estilista', d:'Completa las misiones de CSS', ic:'CSS', ok:c=>c.cap.CSS},
+  {id:'js', t:'Programador', d:'Completa las misiones de JavaScript', ic:'JavaScript', ok:c=>c.cap.JavaScript},
+  {id:'mitad', t:'A medio camino', d:'Completa 8 misiones', ic:'layers', ok:c=>c.hechas>=8},
+  {id:'completo', t:'Desarrollador completo', d:'Completa las 16 misiones', ic:'Reto', ok:c=>c.hechas===MISIONES.length}
+];
+const ALIENTO = {
+  err: ['Casi lo tienes. Revisa la pista y vuelve a intentarlo.', 'Equivocarse forma parte de programar. Ajusta un detalle y prueba otra vez.', 'Cada error te enseña algo. Respira y lee el mensaje con calma.', 'Hasta los desarrolladores más expertos se equivocan a diario.', 'Vas por buen camino. Revisa comillas, paréntesis y nombres.'],
+  ok: ['¡Así se hace! Cada misión te acerca a crear tus propias webs.', '¡Muy bien! Lo estás haciendo genial.', 'Lo has conseguido con esfuerzo. Vamos a por la siguiente.', '¡Qué buen trabajo! Tu código ya hace cosas de verdad.']
+};
+const pick = a => a[Math.floor(Math.random() * a.length)];
+
+const MISIONES = [
+  {id:'titulo', cap:'HTML', titulo:'Tu primer título', concepto:'HTML es el esqueleto de una web. Casi todo se escribe con etiquetas que se abren y se cierran, como <h1>…</h1>.', tarea:'Escribe un <h1> cuyo texto sea «Hola, mundo».', pista:'<h1>Hola, mundo</h1>', html:'', css:CSS0, js:JS0,
+   check:d=>{const h=d.querySelector('h1');return h&&h.textContent.trim()==='Hola, mundo'?null:'Necesitas un <h1> con el texto «Hola, mundo».'}},
+  {id:'parrafos', cap:'HTML', titulo:'Párrafos y enlaces', concepto:'La etiqueta <p> sirve para escribir textos y <a href="…"> crea enlaces a otras páginas.', tarea:'Añade un párrafo con texto y un enlace cuya dirección empiece por https://', pista:'<a href="https://www.ejemplo.com">Visita ejemplo</a>', html:'<h1>Mi blog</h1>', css:CSS0, js:JS0,
+   check:d=>{const p=d.querySelector('p');if(!p||!p.textContent.trim())return 'Añade un <p> con algún texto.';return d.querySelector('a[href^="https://"]')?null:'Añade un <a> cuyo href empiece por https://'}},
+  {id:'listas', cap:'HTML', titulo:'Listas', concepto:'La etiqueta <ul> crea una lista con viñetas, y cada elemento va dentro de un <li>.', tarea:'Crea una <ul> con al menos 3 <li>. Puede ser tu lista de juegos favoritos.', pista:'<ul><li>Fútbol</li><li>Música</li><li>Videojuegos</li></ul>', html:'<h1>Mis favoritos</h1>', css:CSS0, js:JS0,
+   check:d=>{const l=d.querySelector('ul');return l&&l.querySelectorAll('li').length>=3?null:'Crea una <ul> con al menos 3 <li> dentro.'}},
+  {id:'imagenes', cap:'HTML', titulo:'Imágenes', concepto:'<img> muestra una imagen. El atributo src indica de dónde viene y alt describe lo que se ve.', tarea:'Añade una <img> con los atributos src y alt.', pista:'<img src="https://picsum.photos/200" alt="Un paisaje">', html:'<h1>Galería</h1>', css:CSS0, js:JS0,
+   check:d=>{const i=d.querySelector('img');return i&&i.getAttribute('src')&&i.getAttribute('alt')?null:'Añade una <img> con src y alt.'}},
+  {id:'formulario', cap:'HTML', titulo:'Formularios', concepto:'Un <form> agrupa campos para que alguien escriba datos, como su nombre.', tarea:'Crea un <form> con un <input type="text"> y un <button> dentro.', pista:'<form><input type="text"><button>Enviar</button></form>', html:'<h1>Contacto</h1>', css:CSS0, js:JS0,
+   check:d=>{const f=d.querySelector('form');return f&&f.querySelector('input[type="text"]')&&f.querySelector('button')?null:'Crea un <form> con un <input type="text"> y un <button> dentro.'}},
+  {id:'estructura', cap:'HTML', titulo:'Estructura de página', concepto:'Las etiquetas semánticas explican qué parte de la página es cada cosa: cabecera, contenido y pie.', tarea:'Usa <header>, <main> y <footer> en tu página.', pista:'<header>…</header><main>…</main><footer>…</footer>', html:'<h1>Mi página</h1>', css:CSS0, js:JS0,
+   check:d=>{const f=['header','main','footer'].filter(t=>!d.querySelector(t));return f.length?'Te faltan estas etiquetas: '+f.join(', ')+'.':null}},
+
+  {id:'colores', cap:'CSS', titulo:'Colores', concepto:'CSS da estilo al HTML. Un selector como h1 elige qué elementos quieres cambiar.', tarea:'En estilo.css, pon el título h1 de color rojo.', pista:'h1 { color: red; }', html:'<h1>Mi página</h1>', css:CSS0, js:JS0,
+   check:(d,w)=>{const h=d.querySelector('h1');if(!h)return 'Falta el <h1>.';const c=(w.getComputedStyle(h).color.match(/\d+/g)||[]).map(Number);return c[0]>200&&c[1]<100&&c[2]<100?null:'El título todavía no es rojo. Prueba con color: red;'}},
+  {id:'caja', cap:'CSS', titulo:'Cajas redondeadas', concepto:'Una clase agrupa elementos. En CSS, el punto . selecciona todos los elementos de esa clase.', tarea:'Dale bordes redondeados a la caja .caja con border-radius.', pista:'.caja { border-radius: 20px; }', html:'<div class="caja">Soy una caja</div>', css:CSS0, js:JS0,
+   check:(d,w)=>{const c=d.querySelector('.caja');if(!c)return 'Mantén el <div class="caja">.';return parseFloat(w.getComputedStyle(c).borderTopLeftRadius)>0?null:'Usa border-radius en .caja para redondear sus esquinas.'}},
+  {id:'flex', cap:'CSS', titulo:'Centrar con Flexbox', concepto:'display: flex coloca los elementos en fila y permite centrarlos con justify-content y align-items.', tarea:'Haz que .contenedor use display: flex y centre sus elementos en horizontal y en vertical.', pista:'.contenedor { display: flex; justify-content: center; align-items: center; }', html:'<div class="contenedor"><div>1</div><div>2</div><div>3</div></div>', css:'.contenedor { height: 160px; }', js:JS0,
+   check:(d,w)=>{const c=d.querySelector('.contenedor');if(!c)return 'Mantén el <div class="contenedor">.';const s=w.getComputedStyle(c);return s.display==='flex'&&s.justifyContent==='center'&&s.alignItems==='center'?null:'Usa display: flex, justify-content: center y align-items: center.'}},
+  {id:'hover', cap:'CSS', titulo:'Efecto al pasar el ratón', concepto:'Con :hover, un estilo cambia cuando el cursor pasa por encima de un elemento.', tarea:'Crea una regla .boton:hover que cambie el estilo del botón.', pista:'.boton:hover { background: #fde68a; }', html:'<button class="boton">Pásame el ratón</button>', css:'.boton { padding: 10px 16px; }', js:JS0,
+   check:d=>{let ok=false;for(const s of d.styleSheets){try{for(const r of s.cssRules){if(r.selectorText&&/\.boton:hover/.test(r.selectorText))ok=true}}catch(e){}}return ok?null:'Escribe una regla CSS con .boton:hover para cambiar el estilo al pasar el ratón.'}},
+
+  {id:'evento', cap:'JavaScript', titulo:'Tu primer evento', concepto:'JavaScript da vida a la página. El evento click ejecuta código cuando alguien pulsa un elemento.', tarea:'Al pulsar #saludo, el párrafo #mensaje debe decir ¡Hola!', pista:"document.querySelector('#saludo').addEventListener('click', () => { document.querySelector('#mensaje').textContent = '¡Hola!'; });", html:'<button id="saludo">Saludar</button>\n<p id="mensaje"></p>', css:CSS0, js:JS0,
+   check:d=>{const b=d.querySelector('#saludo'),p=d.querySelector('#mensaje');if(!b||!p)return 'Mantén el botón #saludo y el párrafo #mensaje.';b.click();return p.textContent.trim()==='¡Hola!'?null:'Al pulsar el botón, #mensaje debe decir ¡Hola!'}},
+  {id:'contador', cap:'JavaScript', titulo:'Un contador', concepto:'Una variable guarda un dato. Con let puedes cambiarlo cada vez que ocurre algo.', tarea:'Cada clic en #sumar debe aumentar en 1 el número de #numero.', pista:"let n = 0; document.querySelector('#sumar').addEventListener('click', () => { n++; document.querySelector('#numero').textContent = n; });", html:'<p>Clics: <span id="numero">0</span></p>\n<button id="sumar">+1</button>', css:CSS0, js:JS0,
+   check:d=>{const b=d.querySelector('#sumar'),n=d.querySelector('#numero');if(!b||!n)return 'Mantén #sumar y #numero.';for(let i=0;i<3;i++)b.click();return n.textContent.trim()==='3'?null:'Tras 3 clics debería verse un 3. Suma 1 en cada clic.'}},
+  {id:'condicional', cap:'JavaScript', titulo:'Aprobado o suspenso', concepto:'Con if y else, el programa decide qué mostrar según una condición.', tarea:'Si #nota vale 5 o más, #resultado debe decir «Aprobado»; si no, «Suspenso».', pista:"if (Number(nota.value) >= 5) { resultado.textContent = 'Aprobado'; } else { resultado.textContent = 'Suspenso'; }", html:'<input id="nota" type="number" placeholder="Tu nota">\n<button id="evaluar">Evaluar</button>\n<p id="resultado"></p>', css:CSS0, js:JS0,
+   check:d=>{const i=d.querySelector('#nota'),b=d.querySelector('#evaluar'),p=d.querySelector('#resultado');if(!i||!b||!p)return 'Mantén #nota, #evaluar y #resultado.';const t=(v,e)=>{i.value=v;b.click();return p.textContent.trim()===e};return t('7','Aprobado')&&t('3','Suspenso')?null:'Si la nota es 5 o más, debe decir «Aprobado»; si no, «Suspenso».'}},
+  {id:'bucle', cap:'JavaScript', titulo:'Un bucle', concepto:'Un bucle for repite instrucciones. Sirve para no escribir lo mismo muchas veces.', tarea:'Con un bucle for, rellena #numeros con los elementos li del 1 al 5.', pista:"for (let i = 1; i <= 5; i++) { document.querySelector('#numeros').innerHTML += '<li>' + i + '</li>'; }", html:'<h2>Números</h2>\n<ul id="numeros"></ul>', css:CSS0, js:JS0,
+   check:d=>{const l=[...d.querySelectorAll('#numeros li')].map(x=>x.textContent.trim()).join(',');return l==='1,2,3,4,5'?null:'La lista #numeros debe tener 1, 2, 3, 4 y 5 en orden. Prueba con un bucle for.'}},
+  {id:'tareas', cap:'JavaScript', titulo:'Lista de tareas', concepto:'JavaScript puede crear elementos nuevos y añadirlos a la página mientras se usa.', tarea:'Al pulsar #agregar, el texto de #texto debe aparecer como un li dentro de #lista.', pista:"const li = document.createElement('li'); li.textContent = document.querySelector('#texto').value; document.querySelector('#lista').appendChild(li);", html:'<input id="texto" placeholder="Nueva tarea">\n<button id="agregar">Agregar</button>\n<ul id="lista"></ul>', css:CSS0, js:JS0,
+   check:d=>{const i=d.querySelector('#texto'),b=d.querySelector('#agregar');if(!i||!b)return 'Mantén #texto y #agregar.';i.value='Estudiar';b.click();const li=d.querySelector('#lista li');return li&&li.textContent.trim()==='Estudiar'?null:'Al pulsar #agregar, el texto debe aparecer como un li dentro de #lista.'}},
+
+  {id:'reto', cap:'Reto', titulo:'Tu propia página', concepto:'Ahora combinas HTML, CSS y JavaScript, igual que un desarrollador de verdad.', tarea:'Usa un h1, un p, una ul y un button, y cambia el color de fondo del body con CSS.', pista:'body { background-color: #fde68a; }', html:'<h1>Mi web</h1>', css:CSS0, js:JS0,
+   check:(d,w)=>{const f=['h1','p','ul','button'].filter(t=>!d.querySelector(t));if(f.length)return 'Te faltan estas etiquetas: '+f.join(', ')+'.';return ['rgba(0, 0, 0, 0)','rgb(255, 255, 255)'].includes(w.getComputedStyle(d.body).backgroundColor)?'Cambia el color de fondo del body con CSS.':null}}
+];
+
+const LOGGER = `<script>
+['log','warn','error'].forEach(function(k){var o=console[k];console[k]=function(){parent.postMessage({t:'log',k:k,m:[].slice.call(arguments).map(String).join(' ')},'*');o.apply(console,arguments)}});
+addEventListener('error',function(e){parent.postMessage({t:'log',k:'error',m:'Línea '+e.lineno+': '+e.message},'*')});
+<\/script>`;
+
+const vista = $('vista'), ta = $('codigo');
+let tab = 'html', runId = 0;
+let estado = cargar() || { id: MISIONES[0].id, done: {}, codes: {} };
+estado.logros = estado.logros || {}; estado.fallos = estado.fallos || {}; estado.ejec = estado.ejec || 0;
+const M = () => MISIONES.find(m => m.id === estado.id);
+const cod = () => estado.codes[estado.id] || (estado.codes[estado.id] = { html: M().html, css: M().css, js: M().js });
+
+function cargar() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY));
+    if (s && s.done && s.codes && MISIONES.some(m => m.id === s.id)) return s;
+  } catch (e) {}
+  return null;
+}
+function guardar() { try { localStorage.setItem(KEY, JSON.stringify(estado)); } catch (e) {} }
+
+function pintar() {
+  const m = M(), pos = MISIONES.indexOf(m) + 1, hechas = MISIONES.filter(x => estado.done[x.id]).length;
+  $('cap').innerHTML = IC[m.cap] + m.cap;
+  $('cap').dataset.cap = m.cap;
+  $('pos').textContent = 'Misión ' + pos + ' de ' + MISIONES.length;
+  $('titulo').textContent = m.titulo;
+  $('concepto').textContent = m.concepto;
+  $('tarea').textContent = m.tarea;
+  $('pista').textContent = m.pista;
+  $('siguiente').hidden = !(estado.done[m.id] && pos < MISIONES.length);
+  $('xp').textContent = (hechas * 100) + ' NTX';
+  $('rango').textContent = RANGOS.filter(r => hechas >= r[0]).pop()[1];
+  $('progreso').style.width = (hechas / MISIONES.length * 100) + '%';
+  $('logros').innerHTML = LOGROS.map(l => `<div class="logro${estado.logros[l.id] ? ' on' : ''}" title="${l.d}">${IC[l.ic]}<b>${l.t}</b><small>${l.d}</small></div>`).join('');
+  $('caps').innerHTML = CAPS.map(c => {
+    const ms = MISIONES.filter(x => x.cap === c), h = ms.filter(x => estado.done[x.id]).length;
+    return `<h3 class="cap-titulo" data-cap="${c}"><span class="cap-nombre">${IC[c]}${c}</span><span>${h} de ${ms.length}</span></h3>` +
+      ms.map(x => `<button class="item${estado.done[x.id] ? ' hecho' : ''}" data-id="${x.id}" aria-current="${x.id === estado.id}"><span class="num">${estado.done[x.id] ? IC.ok : MISIONES.indexOf(x) + 1}</span>${x.titulo}</button>`).join('');
+  }).join('');
+  document.querySelectorAll('.tabs button').forEach(b => {
+    const on = b.dataset.tab === tab;
+    b.classList.toggle('activo', on);
+    b.setAttribute('aria-selected', on);
+  });
+}
+
+function render(comprobar) {
+  const id = ++runId, c = cod(), m = M();
+  if (comprobar) { estado.ejec = (estado.ejec || 0) + 1; guardar(); comprobarLogros(); }
+  $('consola').textContent = '';
+  const chk = comprobar ? `<script>setTimeout(function(){var r=(${m.check.toString()})(document,window);parent.postMessage({t:'check',id:${id},r:r},'*')},50)<\/script>` : '';
+  vista.srcdoc = `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>${c.css}
+/* === FIX PANTALLA FIJA SIN SCROLL === */
+html,body{overscroll-behavior:none}
+body > header{flex-shrink:0}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:var(--borde);border-radius:99px}
+* {scrollbar-width:thin}
+
+
+
+/* === NUEVA TARJETA MISION CON COLOR FUERTE === */
+.brief{
+  border:2px solid var(--borde) !important;
+  border-left:6px solid var(--c, var(--borde)) !important;
+  background:linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%) !important;
+  box-shadow:var(--shadow), 0 0 0 1px var(--c, transparent) inset !important;
+}
+.brief:has(#cap[data-cap="HTML"]){
+  --c:#E34F26;
+  border-color:#FFDAD2 !important;
+  border-left-color:#E34F26 !important;
+  background:linear-gradient(180deg, #FFF8F6 0%, #FFFFFF 100%) !important;
+}
+.brief:has(#cap[data-cap="CSS"]){
+  --c:#1572B6;
+  border-color:#C2E0FF !important;
+  border-left-color:#1572B6 !important;
+  background:linear-gradient(180deg, #F3F9FF 0%, #FFFFFF 100%) !important;
+}
+.brief:has(#cap[data-cap="JavaScript"]){
+  --c:#CA8A04;
+  border-color:#FEF08A !important;
+  border-left-color:#EAB308 !important;
+  background:linear-gradient(180deg, #FFFEF0 0%, #FFFFFF 100%) !important;
+}
+.brief:has(#cap[data-cap="Reto"]){
+  --c:#0F172A;
+  border-color:#0F172A !important;
+  border-left-color:#0F172A !important;
+}
+.chip{
+  border-width:2px !important;
+  font-weight:800 !important;
+}
+#cap[data-cap="HTML"]{--c:#E34F26; background:#FFF1EF !important; border-color:#E34F26 !important; color:#C2410C !important}
+#cap[data-cap="CSS"]{--c:#1572B6; background:#EFF6FF !important; border-color:#1572B6 !important; color:#1D4ED8 !important}
+#cap[data-cap="JavaScript"]{--c:#EAB308; background:#FEFCE8 !important; border-color:#EAB308 !important; color:#A16207 !important}
+#cap[data-cap="Reto"]{--c:#0F172A; background:#0F172A !important; border-color:#0F172A !important; color:white !important}
+
+.objetivo{
+  border:2px solid var(--borde) !important;
+  border-left:4px solid var(--c, var(--borde)) !important;
+  background:white !important;
+  box-shadow:0 2px 8px rgba(0,0,0,.04) !important;
+}
+.brief:has(#cap[data-cap="HTML"]) .objetivo{border-left-color:#E34F26 !important; background:#FFF8F6 !important}
+.brief:has(#cap[data-cap="CSS"]) .objetivo{border-left-color:#1572B6 !important; background:#F3F9FF !important}
+.brief:has(#cap[data-cap="JavaScript"]) .objetivo{border-left-color:#EAB308 !important; background:#FFFEF0 !important}
+
+/* === SOLAPAS HTML/CSS/JS - DISEÑO NUEVO BORDE FUERTE === */
+.tabs{
+  display:flex !important;
+  gap:12px !important;
+  padding:14px 16px 0 !important;
+  background:#F8FAFC !important;
+  border-bottom:2px solid var(--borde) !important;
+}
+.tabs button{
+  --c:#64748B;
+  background:white !important;
+  color:#64748B !important;
+  border:2px solid var(--borde) !important;
+  border-bottom:0 !important;
+  border-radius:14px 14px 0 0 !important;
+  padding:12px 18px 10px !important;
+  font:800 12.5px "IBM Plex Mono",monospace !important;
+  opacity:1 !important;
+  transition:all .2s cubic-bezier(.22,1,.36,1) !important;
+  position:relative !important;
+  top:2px !important;
+  min-width:110px !important;
+}
+.tabs button:hover{
+  transform:translateY(-2px) !important;
+  box-shadow:0 4px 12px rgba(0,0,0,.08) !important;
+}
+.tabs button.activo{
+  background:white !important;
+  border-width:2.5px !important;
+  border-bottom:2.5px solid white !important;
+  box-shadow:0 -4px 12px rgba(0,0,0,.06) !important;
+  transform:translateY(0) !important;
+}
+/* HTML - Rojo fuerte */
+.tabs button[data-tab="html"]{
+  border-color:#FFCFC5 !important;
+  color:#9CA3AF !important;
+}
+.tabs button[data-tab="html"].activo{
+  border-color:#E34F26 !important;
+  color:#E34F26 !important;
+  background:#FFF8F6 !important;
+  box-shadow:inset 0 3px 0 #E34F26, 0 -4px 16px rgba(227,79,38,.15) !important;
+}
+.tabs button[data-tab="html"] svg{color:#E34F26 !important}
+/* CSS - Azul fuerte */
+.tabs button[data-tab="css"]{
+  border-color:#BFDBFE !important;
+  color:#9CA3AF !important;
+}
+.tabs button[data-tab="css"].activo{
+  border-color:#1572B6 !important;
+  color:#1572B6 !important;
+  background:#F3F9FF !important;
+  box-shadow:inset 0 3px 0 #1572B6, 0 -4px 16px rgba(21,114,182,.15) !important;
+}
+.tabs button[data-tab="css"] svg{color:#1572B6 !important}
+/* JS - Amarillo fuerte */
+.tabs button[data-tab="js"]{
+  border-color:#FEF08A !important;
+  color:#9CA3AF !important;
+}
+.tabs button[data-tab="js"].activo{
+  border-color:#EAB308 !important;
+  color:#A16207 !important;
+  background:#FFFEF0 !important;
+  box-shadow:inset 0 3px 0 #EAB308, 0 -4px 16px rgba(234,179,8,.20) !important;
+}
+.tabs button[data-tab="js"] svg{color:#CA8A04 !important}
+
+/* === FIX DEFINITIVO ICONOS GIGANTES === */
+.tabs button svg,
+#cap svg,
+.chip svg,
+.cap-nombre svg,
+.cap-titulo svg,
+.item svg,
+.num svg,
+.logro svg,
+#resultado svg,
+.aliento svg,
+.objetivo svg,
+.btn svg,
+summary svg{
+  width:16px !important;
+  height:16px !important;
+  max-width:16px !important;
+  max-height:16px !important;
+  flex:none !important;
+  display:inline-block !important;
+  vertical-align:middle;
+}
+.tabs{
+  gap:10px !important;
+  padding:12px 14px 0 !important;
+}
+.tabs button{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  min-width:92px !important;
+  min-height:64px !important;
+  padding:10px 12px 8px !important;
+  border-radius:14px 14px 0 0 !important;
+  font-size:12px !important;
+  line-height:1.2 !important;
+}
+.tabs button svg{
+  width:26px !important;
+  height:26px !important;
+  max-width:26px !important;
+  max-height:26px !important;
+  margin-bottom:2px !important;
+}
+.cap-nombre{display:inline-flex !important; align-items:center !important; gap:8px !important}
+.cap-nombre svg{width:14px !important; height:14px !important}
+.item{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  padding:12px 14px !important;
+}
+.item .num{
+  width:30px !important;
+  height:30px !important;
+  min-width:30px !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:8px !important;
+  background:var(--panel2) !important;
+  border:1px solid var(--borde) !important;
+  font-weight:800 !important;
+  font-size:13px !important;
+  overflow:hidden !important;
+}
+.item .num svg{width:14px !important; height:14px !important}
+.item.hecho .num{background:#DCFCE7 !important; border-color:#BBF7D0 !important; color:#166534 !important}
+.logro{display:flex !important; align-items:center !important; gap:10px !important; padding:10px 12px !important}
+.logro svg{width:18px !important; height:18px !important}
+#resultado svg{width:18px !important; height:18px !important}
+.mapa .panel, .brief .panel{overflow:hidden}
+#caps button{overflow:hidden}
+
+
+/* ===== NUEVA BARRA DE BOTONES ===== */
+.acciones{
+  display:flex !important;
+  align-items:center;
+  gap:12px !important;
+  padding:16px 18px !important;
+  background:#F8FAFC !important;
+  border-top:2px solid #E2E8F0 !important;
+  flex-wrap:wrap;
+}
+.btn{
+  height:44px !important;
+  border-radius:12px !important;
+  font:700 14px "IBM Plex Sans", sans-serif !important;
+  letter-spacing:-.01em !important;
+  padding:0 18px !important;
+  gap:8px !important;
+  transition:all .2s cubic-bezier(.22,1,.36,1) !important;
+}
+.btn#ejecutar{
+  background:#0F172A !important;
+  color:white !important;
+  border:1.5px solid #0F172A !important;
+  box-shadow:0 2px 8px rgba(15,23,42,.18) !important;
+}
+.btn#ejecutar:hover{ transform:translateY(-1px); box-shadow:0 6px 16px rgba(15,23,42,.24) !important; }
+
+.btn#reiniciar{
+  background:white !important;
+  color:#334155 !important;
+  border:1.5px solid #CBD5E1 !important;
+}
+.btn#reiniciar:hover{ border-color:#94A3B8 !important; background:#F8FAFC !important; transform:translateY(-1px); }
+
+.btn#siguiente{
+  background: linear-gradient(135deg, #15803D 0%, #16A34A 100%) !important;
+  color:white !important;
+  border:1.5px solid #15803D !important;
+  box-shadow:0 2px 10px rgba(21,128,61,.28), inset 0 1px 0 rgba(255,255,255,.2) !important;
+  position:relative;
+  overflow:hidden;
+}
+.btn#siguiente:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 18px rgba(21,128,61,.35), inset 0 1px 0 rgba(255,255,255,.25) !important;
+  filter:brightness(1.05);
+}
+.btn#siguiente::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+  transform:translateX(-100%);
+  transition:transform .6s;
+}
+.btn#siguiente:hover::after{ transform:translateX(100%); }
+.btn#siguiente .dot{
+  width:8px;height:8px;border-radius:999px;background:#BBF7D0;
+  box-shadow:0 0 0 4px rgba(187,247,208,.4);
+  animation: pulse-dot 1.8s infinite;
+}
+@keyframes pulse-dot{
+  0%{box-shadow:0 0 0 4px rgba(187,247,208,.4)}
+  50%{box-shadow:0 0 0 7px rgba(187,247,208,.15)}
+  100%{box-shadow:0 0 0 4px rgba(187,247,208,.4)}
+}
+#siguiente[hidden]{display:none !important}
+
+</style>${LOGGER}</head><body>${c.html}<script>${c.js}<\/script>${chk}</body></html>`;
+}
+
+function elegir(id) {
+  estado.id = id; guardar();
+  $('resultado').className = ''; $('resultado').textContent = '';
+  $('aliento').hidden = true;
+  ta.value = cod()[tab];
+  pintar(); render(false);
+  // scroll deshabilitado - pantalla fija
+}
+
+function linea(k, m) {
+  const p = document.createElement('div');
+  p.className = k;
+  p.textContent = (k === 'log' ? '› ' : k === 'warn' ? '⚠ ' : '✖ ') + m;
+  $('consola').appendChild(p);
+}
+
+function aviso(tipo, texto) {
+  const el = $('resultado');
+  el.className = '';
+  void el.offsetWidth;
+  el.innerHTML = tipo === 'ok' ? IC.ok : IC.err;
+  const t = document.createElement('span');
+  t.textContent = texto;
+  el.appendChild(t);
+  el.className = tipo + (tipo === 'ok' ? ' rebote' : ' sacudir');
+  if (tipo === 'err') {
+    const panel = document.querySelector('.vista');
+    panel.classList.remove('fallo'); void panel.offsetWidth; panel.classList.add('fallo');
+  }
+}
+
+function confeti() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = document.createElement('div');
+  c.className = 'confeti';
+  const cols = ['#E34F26', '#1572B6', '#F0DB4F', '#15803D', '#0F172A'];
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('i');
+    p.style.left = (Math.random() * 100) + '%';
+    p.style.background = cols[i % cols.length];
+    p.style.animationDelay = (Math.random() * 0.25) + 's';
+    p.style.setProperty('--dx', (Math.random() * 200 - 100) + 'px');
+    p.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+    c.appendChild(p);
+  }
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 2400);
+}
+
+function aliento(texto) {
+  const el = $('aliento');
+  el.innerHTML = IC.heart;
+  const t = document.createElement('span');
+  t.textContent = texto;
+  el.appendChild(t);
+  el.hidden = false;
+}
+
+function contexto(extra) {
+  const cap = {};
+  CAPS.forEach(k => cap[k] = MISIONES.filter(x => x.cap === k).every(x => estado.done[x.id]));
+  return Object.assign({ hechas: MISIONES.filter(x => estado.done[x.id]).length, cap: cap, ejec: estado.ejec }, extra);
+}
+
+function toast(l) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = IC[l.ic];
+  const s = document.createElement('span');
+  s.textContent = '¡Logro desbloqueado! ' + l.t;
+  t.appendChild(s);
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+function comprobarLogros(extra) {
+  const ctx = contexto(extra || {});
+  let n = 0;
+  LOGROS.forEach(l => {
+    if (estado.logros[l.id] || !l.ok(ctx)) return;
+    estado.logros[l.id] = true;
+    setTimeout(() => toast(l), (n++) * 3300);
+  });
+  guardar();
+  pintar();
+}
+
+function mostrarResultado(r) {
+  if (r) {
+    const f = estado.fallos[estado.id] = (estado.fallos[estado.id] || 0) + 1;
+    guardar();
+    aviso('err', r);
+    if (f === 3) {
+      document.querySelector('.brief details').open = true;
+      aliento('Te he abierto la pista. Pedir ayuda también forma parte de aprender.');
+    } else {
+      aliento(pick(ALIENTO.err));
+    }
+    return;
+  }
+  const nueva = !estado.done[estado.id];
+  const extra = nueva ? { sinFallos: !estado.fallos[estado.id], tresFallos: (estado.fallos[estado.id] || 0) >= 3 } : {};
+  estado.done[estado.id] = true; guardar();
+  const todas = MISIONES.every(x => estado.done[x.id]);
+  aviso('ok', !nueva ? 'Misión superada. ¡Bien hecho!' : todas ? '¡Completaste las 16 misiones! Ya eres un maestro del código.' : '¡Misión completada! +100 NTX');
+  aliento(pick(ALIENTO.ok));
+  if (nueva) confeti();
+  comprobarLogros(extra);
+}
+
+$('caps').onclick = e => { const b = e.target.closest('[data-id]'); if (b) elegir(b.dataset.id); };
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  tab = b.dataset.tab; ta.value = cod()[tab]; pintar();
+});
+ta.oninput = () => { cod()[tab] = ta.value; guardar(); };
+ta.onkeydown = e => {
+  if (e.key === 'Tab') { e.preventDefault(); ta.setRangeText('  ', ta.selectionStart, ta.selectionEnd, 'end'); ta.dispatchEvent(new Event('input')); }
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); render(true); }
+};
+$('ejecutar').onclick = () => render(true);
+$('reiniciar').onclick = () => {
+  if (!confirm('¿Volver al código inicial de esta misión?')) return;
+  estado.codes[estado.id] = { html: M().html, css: M().css, js: M().js };
+  ta.value = cod()[tab]; guardar(); render(false);
+};
+$('siguiente').onclick = () => elegir(MISIONES[MISIONES.indexOf(M()) + 1].id);
+
+addEventListener('message', e => {
+  const d = e.data;
+  if (!d || e.source !== vista.contentWindow) return;
+  if (d.t === 'log') linea(d.k, d.m);
+  if (d.t === 'check' && d.id === runId) mostrarResultado(d.r);
+});
+
+document.querySelectorAll('.tabs button').forEach(b => b.insertAdjacentHTML('afterbegin', IC[{ html: 'HTML', css: 'CSS', js: 'JavaScript' }[b.dataset.tab]]));
+ta.value = cod()[tab];
+comprobarLogros();
+pintar();
+render(false);
+
+// Función para abrir/cerrar los dropdowns del header
+function toggleNavDropdown(type) {
+  const menuSim = $('nav-sim');
+  const menuMenu = $('nav-menu');
+  
+  if (type === 'sim') {
+    menuSim.classList.toggle('show');
+    menuMenu.classList.remove('show'); // Cierra el otro si está abierto
+  } else if (type === 'menu') {
+    menuMenu.classList.toggle('show');
+    menuSim.classList.remove('show'); // Cierra el otro si está abierto
+  }
+}
+
+// Cerrar los menús desplegables si se hace clic fuera de ellos
+window.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-dropdown')) {
+    const menuSim = $('nav-sim');
+    const menuMenu = $('nav-menu');
+    if (menuSim) menuSim.classList.remove('show');
+    if (menuMenu) menuMenu.classList.remove('show');
+  }
+});
+// === LÓGICA FIXED RESOLUCION - ESTILO REFERENCIA ===
+function checkScreenResolutionPc() {
+  const modal = document.getElementById('modalResolution');
+  const resText = document.getElementById('currentResolutionText');
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  
+  if(resText) resText.textContent = `${width} px × ${height} px`;
+  
+  if(localStorage.getItem('ntx_resolution_dismissed') === '1' || window.forcedResolutionDismissedPc === true) {
+    if(modal) modal.classList.remove('show');
+    return;
+  }
+  
+  if(width < 1110 || height < 600) {
+    if(modal) modal.classList.add('show');
+  } else {
+    if(modal) modal.classList.remove('show');
+  }
+}
+
+function dismissResolutionModalPc() {
+  const modal = document.getElementById('modalResolution');
+  if(modal) modal.classList.remove('show');
+  window.forcedResolutionDismissedPc = true;
+  localStorage.setItem('ntx_resolution_dismissed','1');
+}
+
+function cancelResolutionModalPc() {
+  window.location.href = 'index.html';
+}
+
+window.addEventListener('load', checkScreenResolutionPc);
+window.addEventListener('resize', checkScreenResolutionPc);
+
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=24');
+  });
+}
+</script>
+</body>
+</html>

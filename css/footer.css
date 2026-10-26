@@ -1,0 +1,129 @@
+/* FOOTER NTICx - Academia Digital - v1 */
+#footer-placeholder { display:block; width:100%; }
+.site-footer{
+  background:#0a1930;
+  border-top:1px solid rgba(255,255,255,0.06);
+  color:#8ab4d8;
+  font-family:'Inter', sans-serif;
+  margin-top:0;
+  position:relative;
+  overflow:hidden;
+}
+.site-footer::before{
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:1px;
+  background: linear-gradient(90deg, transparent, rgba(46,168,255,0.3), transparent);
+}
+.footer-container{
+  max-width:1400px;
+  margin:0 auto;
+  padding:56px 24px 32px;
+}
+.footer-grid{
+  display:grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.1fr;
+  gap:40px;
+  align-items:start;
+}
+.footer-brand .brand-link{
+  display:flex; align-items:center; gap:12px; text-decoration:none; margin-bottom:16px;
+}
+.footer-brand img{
+  width:52px; height:auto; filter: drop-shadow(0 0 10px rgba(0,213,255,0.5));
+}
+.footer-brand .brand-name{
+  font-size:20px; font-weight:800; color:#fff; line-height:1;
+  letter-spacing:-0.5px;
+}
+.footer-brand .brand-name b{ color:#2ea8ff; }
+.footer-brand .brand-sub{
+  display:block; font-size:12px; font-weight:500; color:#8ab4d8; margin-top:3px; letter-spacing:0.3px;
+}
+.footer-desc{
+  font-size:13.5px; line-height:1.7; color:#7a9cc0; max-width:360px; margin-bottom:20px;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  word-spacing: -0.1px;
+}
+.footer-social{
+  display:flex; gap:10px; margin-top:12px;
+}
+.footer-social a{
+  width:36px; height:36px; border-radius:9px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  display:flex; align-items:center; justify-content:center;
+  color:#8ab4d8; text-decoration:none; font-size:14px;
+  transition: all .22s ease;
+}
+.footer-social a:hover{
+  background:#2ea8ff; color:#fff; border-color:#2ea8ff;
+  transform:translateY(-2px);
+  box-shadow:0 6px 16px rgba(46,168,255,0.3);
+}
+.footer-col h4{
+  font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  color:#e2e8f0; margin-bottom:18px;
+}
+.footer-links{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; }
+.footer-links a{
+  color:#7a9cc0; text-decoration:none; font-size:14px; font-weight:400;
+  display:flex; align-items:center; gap:8px;
+  transition: color .18s ease, transform .18s ease;
+}
+.footer-links a i{ font-size:12px; opacity:0.7; width:16px; }
+.footer-links a:hover{ color:#fff; transform:translateX(3px); }
+.footer-links a:hover i{ color:#2ea8ff; opacity:1; }
+
+.footer-bottom{
+  max-width:1400px; margin:0 auto;
+  padding:18px 24px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  display:flex; justify-content:space-between; align-items:center; gap:16px;
+  flex-wrap:wrap;
+}
+.footer-copy{
+  font-size:12.5px; color:#5f86ad; line-height:1.5;
+}
+.footer-copy strong{ color:#8ab4d8; font-weight:600; }
+.footer-legal{
+  display:flex; gap:18px; flex-wrap:wrap; align-items:center;
+}
+.footer-legal a{
+  font-size:12.5px; color:#5f86ad; text-decoration:none;
+  transition:color .18s;
+}
+.footer-legal a:hover{ color:#fff; }
+.footer-badge{
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2);
+  color:#34d399; font-size:11px; font-weight:600; padding:4px 10px; border-radius:50px;
+  letter-spacing:0.3px;
+}
+.footer-badge .dot{
+  width:6px; height:6px; border-radius:50%; background:#34d399;
+  box-shadow:0 0 8px #34d399; animation:pulseDot 2s infinite;
+}
+@keyframes pulseDot{ 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+/* Responsive */
+@media (max-width: 1100px){
+  .footer-grid{ grid-template-columns: 1fr 1fr; gap:36px 24px; }
+  .footer-brand{ grid-column: span 2; }
+}
+@media (max-width: 640px){
+  .footer-container{ padding:36px 20px 24px; }
+  .footer-grid{ grid-template-columns: 1fr; gap:28px; }
+  .footer-brand{ grid-column: span 1; }
+  .footer-bottom{ flex-direction:column; align-items:flex-start; padding:16px 20px 20px; }
+  .footer-desc{ 
+    max-width:100%; 
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+  }
+}

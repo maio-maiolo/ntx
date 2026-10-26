@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>5-Comunicación | NTX</title>
+<link rel="manifest" href="manifest.json?v=24">
+
+<meta name="theme-color" content="#0a1930">
+
+<!-- Favicon para SOLAPA NAVEGADOR - Libro circular -->
+<link rel="icon" href="/favicon.ico?v=24" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png?v=24">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png?v=24">
+
+<!-- Apple / iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png?v=24">
+
+<!-- PWA / Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192x192.png?v=24">
+<link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512x512.png?v=24">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary-color:#0c2340;--secondary-color:#112334;--accent-blue:#3b82f6;--bg-light:#f4f7fa;--text-main:#333;--text-muted:#666;--white:#fff;--cyan:#06b6d4;--amber:#f59e0b;--violet:#8b5cf6;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{background:var(--white);color:var(--text-main);overflow-x:hidden;line-height:1.6;}
+/* Hero Section */
+        .hero {
+            background: #112334;
+            color: var(--white);
+            padding: 50px 20px;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 30px;
+            text-align: left;
+        }
+
+        .hero img {
+            max-width: 200px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .hero-text h1 {
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero-text p {
+            font-size: 15.5px;
+            color: #d1d5db;
+            line-height: 1.5;
+        }
+
+        /* Main Content Container */
+        .content-container {
+            max-width: 1350px;
+            margin: 40px auto 80px auto;
+            padding: 0 20px;
+        }
+
+        .section-box {
+            background: var(--white);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+        }
+
+        .section-box h2 {
+            font-size: 26px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+        }
+
+        .section-box h2 i {
+            color: var(--accent-blue);
+        }
+
+        .section-box h3 {
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        .section-box p {
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        /* Ciclo de datos / Fases en 3 columnas */
+        .ciclo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .ciclo-item {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--accent-blue);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .ciclo-content {
+            margin-bottom: 15px;
+        }
+
+        .ciclo-item h4 {
+            font-size: 16px;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .ciclo-item p {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .ciclo-img-container {
+            text-align: center;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ciclo-img-container img {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .ejemplo-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            font-size: 14.5px;
+            color: #92400e;
+        }
+
+        .ejemplo-box strong {
+            color: #b45309;
+        }
+
+        .hw-sw-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .perifericos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .card-hs {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-hs h4 {
+            font-size: 17px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-hs p {
+            font-size: 13.5px;
+        }
+
+        .software-img-grande {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .software-img-grande img {
+            max-width: 610px;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .software-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+            min-height: 200px;
+        }
+
+        .software-logos img {
+            max-width: 320px;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .img-tarjeta-grande {
+            max-width: 350px !important;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Evaluacion / Cuestionario interactivo */
+        .quiz-section {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .quiz-header-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 2px solid #dcfce7;
+            padding-bottom: 15px;
+            margin-bottom: 0;
+        }
+
+        .quiz-header-toggle h2 {
+            color: #166534;
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+            font-size: 22px;
+        }
+
+        .quiz-header-toggle h2 i {
+            color: #22c55e;
+        }
+
+        .toggle-icon {
+            font-size: 20px;
+            color: #166534;
+            transition: transform 0.3s ease;
+        }
+
+        .quiz-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.3s ease;
+            padding-top: 0;
+        }
+
+        .quiz-section.open .quiz-body {
+            max-height: 5000px;
+            padding-top: 25px;
+        }
+
+        .quiz-section.open .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .question-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #e5e7eb;
+        }
+
+        .question-card p.q-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .options-list label {
+            background: #f9fafb;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            border: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .options-list label:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+
+        .options-list input[type="radio"] {
+            accent-color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        .question-card.correct {
+            border-color: #22c55e;
+            background-color: #f0fdf4;
+        }
+
+        .question-card.incorrect {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+
+        .feedback-text {
+            margin-top: 12px;
+            font-size: 13.5px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .question-card.correct .feedback-text {
+            display: block;
+            color: #15803d;
+        }
+
+        .question-card.incorrect .feedback-text {
+            display: block;
+            color: #b91c1c;
+        }
+
+        .btn-submit-quiz {
+            display: block;
+            width: 100%;
+            background-color: #166534;
+            color: var(--white);
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(22, 101, 52, 0.2);
+            transition: background 0.2s, transform 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn-submit-quiz:hover {
+            background-color: #14532d;
+            transform: translateY(-2px);
+        }
+
+        .quiz-results {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: none;
+        }
+
+        footer {
+            background-color: var(--bg-light);
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .perifericos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .ciclo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .perifericos-grid,
+            .ciclo-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .hero-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .hero img {
+                max-width: 150px;
+            }
+
+            .hero-text h1 {
+                font-size: 24px;
+                line-height: 1.3;
+            }
+
+            .hero-text p {
+                font-size: 14px;
+            }
+
+            .content-container {
+                padding: 0 12px;
+                margin: 25px auto 50px auto;
+            }
+
+            .section-box {
+                padding: 16px;
+                border-radius: 12px;
+                margin-bottom: 25px;
+            }
+
+            .section-box h2 {
+                font-size: 19px;
+                gap: 8px;
+                padding-bottom: 12px;
+            }
+
+            .section-box h3 {
+                font-size: 17px;
+                margin-top: 20px;
+            }
+
+            .quiz-section {
+                padding: 16px;
+                border-radius: 12px;
+            }
+
+            .quiz-header-toggle h2 {
+                font-size: 16px;
+            }
+
+            .question-card {
+                padding: 16px;
+            }
+
+            .options-list label {
+                padding: 10px 12px;
+                font-size: 13.5px;
+            }
+
+            .btn-flotante-soporte {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        .card-hs {
+            min-height: auto !important;
+            justify-content: flex-start !important;
+            padding: 16px !important;
+            gap: 10px !important;
+        }
+        .software-logos {
+            min-height: auto !important;
+            padding-top: 6px !important;
+            margin-top: 6px !important;
+            border-top: none !important;
+        }
+        .software-logos img {
+            max-width: 100% !important;
+            max-height: 160px !important;
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain !important;
+        }
+        .software-img-grande {
+            min-height: auto !important;
+        }
+        .software-img-grande img.img-tarjeta-grande {
+            max-height: 160px !important;
+            max-width: 100% !important;
+        }
+        .ciclo-img-container {
+            min-height: auto !important;
+            padding-top: 6px !important;
+        }
+        .ciclo-img-container img {
+            max-height: 160px !important;
+        }
+        .perifericos-grid .card-hs {
+            aspect-ratio: auto !important;
+        }
+</style>
+<link rel="stylesheet" href="css/footer.css?v=1">
+<link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/responsive-fix.css">
+<link rel="stylesheet" href="css/fix-autoevaluacion.css?v=1">
+<link rel="stylesheet" href="css/autoevaluacion-uniforme.css?v=1">
+</head>
+<body>
+<div id="header-placeholder"></div>
+<!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container" style="max-width:1200px; margin:0 auto; display:flex; flex-direction:row; align-items:center; gap:30px; text-align:left;">
+            <img src="img/colavorativo.webp" alt="Comunicación y Colaboración ilustrativo" style="max-width:140px; height:auto; object-fit:contain;">
+            <div class="hero-text" style="text-align:left;">
+                <span style="display:inline-flex;align-items:center;gap:6px;background:#1e293b;border:1px solid #334155;color:#93c5fd;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:0.6px;margin-bottom:14px;text-transform:uppercase"><i class="fa-solid fa-book-open"></i> MÓDULO 5 - COLABORATIVO</span>
+                <h1 style="font-size:36px;line-height:1.1;margin:0 0 12px 0;font-weight:800;letter-spacing:-0.5px">Medios Digitales y Colaboración</h1>
+                <p style="font-size:15.5px;color:#cbd5e1;margin-bottom:22px;line-height:1.5;max-width:720px">Modelos comunicativos, trabajo colaborativo en la nube, ciberespacio y periodismo digital.</p>
+                
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;max-width:640px">
+                    <div style="display:flex;gap:10px;align-items:center;background:#1e293b;border:1px solid #334155;padding:10px 16px;border-radius:12px">
+                        <div style="background:transparent;color:#22c55e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1.5px solid #22c55e"><i class="fa-solid fa-check" style="font-size:10px"></i></div>
+                        <div style="font-size:13.5px;line-height:1.4"><strong style="color:#fff;">Modelos de Comunicación:</strong> <span style="color:#94a3b8;">Sincronía, asincronía, emisor/receptor y competencia mediática.</span></div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center;background:#1e293b;border:1px solid #334155;padding:10px 16px;border-radius:12px">
+                        <div style="background:transparent;color:#22c55e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1.5px solid #22c55e"><i class="fa-solid fa-check" style="font-size:10px"></i></div>
+                        <div style="font-size:13.5px;line-height:1.4"><strong style="color:#fff;">Tercer Entorno y Ubicuidad:</strong> <span style="color:#94a3b8;">Ciberespacio, redes sociales, e-learning y netiqueta.</span></div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center;background:#1e293b;border:1px solid #334155;padding:10px 16px;border-radius:12px">
+                        <div style="background:transparent;color:#22c55e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1.5px solid #22c55e"><i class="fa-solid fa-check" style="font-size:10px"></i></div>
+                        <div style="font-size:13.5px;line-height:1.4"><strong style="color:#fff;">Mass Media Digital:</strong> <span style="color:#94a3b8;">Periodismo digital, WebQuest, blogs y mundos virtuales.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="content-container">
+
+        <!-- Sección 1 -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-comments"></i> Metodologías de Interacción Sincrónica y Asincrónica</h2>
+            <p>En los entornos educativos y profesionales conectados, la comunicación se estructura a través de dos modalidades complementarias que optimizan el tiempo, la participación y el flujo de trabajo en equipo.</p>
+            <p>Estas metodologías permiten coordinar equipos distribuidos geográficamente mediante los siguientes enfoques:</p>
+            
+            <div class="ciclo-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="ciclo-item">
+                    <div class="ciclo-content">
+                        <h4>1. Interacción Sincrónica</h4>
+                        <p>Comunicación en tiempo real (videoconferencias, chats en vivo y llamadas). Ideal para debates dinámicos, resolución inmediata de dudas y toma de decisiones ágiles.</p>
+                    </div>
+                    <div class="ciclo-img-container">
+                        <img src="img/interaccion_sincronica.webp" alt="Sincrónico">
+                    </div>
+                </div>
+
+                <div class="ciclo-item">
+                    <div class="ciclo-content">
+                        <h4>2. Interacción Asincrónica</h4>
+                        <p>Comunicación diferida en el tiempo (correos, foros, documentos compartidos). Permite la reflexión profunda, la flexibilidad horaria y la organización autónoma de tareas.</p>
+                    </div>
+                    <div class="ciclo-img-container">
+                        <img src="img/interaccion_asincronica.webp" alt="Asincrónico">
+                    </div>
+                </div>
+            </div>
+
+            <div class="ejemplo-box">
+                <i class="fa-solid fa-lightbulb"></i> <strong>Aplicación práctica:</strong> Un equipo combina sesiones sincrónicas semanales vía videoconferencia para alinear objetivos generales y foros asincrónicos o documentos en la nube para debatir y redactar los informes del proyecto a lo largo de la semana.
+            </div>
+        </div>
+
+        <!-- Sección 2 -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-cloud"></i> Entornos en la Nube: Trabajo Cooperativo y Gestión Documental</h2>
+            <p>La computación en la nube transforma la manera en que los equipos producen contenido, centralizando los archivos y permitiendo la co-creación sin fricciones técnicas:</p>
+            
+            <div class="hw-sw-grid">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-users"></i> Trabajo Cooperativo en Línea</h4>
+                        <p>Edición simultánea de documentos, hojas de cálculo y presentaciones. Permite ver el cursor de los compañeros en tiempo real, dejar comentarios contextuales y mantener un control estricto de cambios e historial de versiones.</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/cooperativo.webp" alt="Trabajo Cooperativo" class="img-tarjeta-grande">
+                    </div>
+                </div>
+
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-folder-tree"></i> Gestión Documental Centralizada</h4>
+                        <p>Organización de repositorios institucionales en la nube (Google Drive, OneDrive). Facilita la asignación de permisos granulares (lector, comentador, editor), evitando la duplicación de archivos y garantizando el acceso seguro desde cualquier dispositivo.</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/documental.webp" alt="Gestión Documental" class="img-tarjeta-grande">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección 3 -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-envelope-open-text"></i> Canales Formales: Correo Electrónico y Foros de Hilos</h2>
+            <p>La formalidad y estructuración de los mensajes institucionales requieren el dominio de herramientas específicas para mantener la trazabilidad y la claridad:</p>
+
+            <div class="hw-sw-grid">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-at"></i> Correo Electrónico Profesional</h4>
+                        <p>Canal formal por excelencia para comunicaciones oficiales, envío de documentación y acuerdos vinculantes. Requiere una estructura clara: asunto descriptivo, saludo institucional, cuerpo conciso, llamada a la acción y firma corporativa.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/correoprofesional.webp" alt="Correo Profesional">
+                    </div>
+                </div>
+
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-comments-dollar"></i> Foros de Hilos (Threaded Forums)</h4>
+                        <p>Espacios de debate académico y profesional organizados por temáticas ramificadas. Permiten estructurar discusiones complejas, mantener el hilo conductor de las respuestas y documentar conocimiento útil para futuras consultas.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/foros.webp" alt="Foros de Hilos">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Autoevaluación 1 -->
+        <div class="quiz-section" id="quizSectionContainer">
+            <div class="quiz-header-toggle" onclick="toggleQuiz()">
+                <h2><i class="fa-solid fa-list-check"></i> Autoevaluación 1: Metodologías y Entornos en la Nube</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon"></i>
+            </div>
+
+            <div class="quiz-body">
+                <p style="margin-bottom: 25px; color: #166534;">Selecciona una opción para cada pregunta y haz clic en "Corregir Cuestionario" al finalizar.</p>
+
+                <form id="quizForm">
+                    <div class="question-card" id="q1" data-correct="b">
+                        <p class="q-title">1. ¿Qué caracteriza principalmente a la interacción asincrónica en entornos conectados?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p1" value="a"> a) Se realiza strictly en tiempo real mediante videollamadas.</label>
+                            <label><input type="radio" name="p1" value="b"> b) Es diferida en el tiempo, permitiendo flexibilidad horaria y reflexión profunda.</label>
+                            <label><input type="radio" name="p1" value="c"> c) Requiere la presencia física simultánea de todos los participantes.</label>
+                            <label><input type="radio" name="p1" value="d"> d) Impide el almacenamiento de mensajes y documentos.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q2" data-correct="c">
+                        <p class="q-title">2. ¿Cuál estila ser una ventaja clave del trabajo cooperativo en la nube sobre documentos compartidos?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p2" value="a"> a) Obliga a descargar copias locales independientes para cada usuario.</label>
+                            <label><input type="radio" name="p2" value="b"> b) Evita por completo el registro de modificaciones previas.</label>
+                            <label><input type="radio" name="p2" value="c"> c) Permite la co-edición simultánea y el control de versiones en tiempo real.</label>
+                            <label><input type="radio" name="p2" value="d"> d) Funciona únicamente sin conexión a internet.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q3" data-correct="a">
+                        <p class="q-title">3. ¿Qué rol cumple la gestión documental centralizada en plataformas cloud?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p3" value="a"> a) Organizar repositorios institucionales con control de permisos y acceso seguro desde cualquier lugar.</label>
+                            <label><input type="radio" name="p3" value="b"> b) Formatear discos duros locales de forma automática.</label>
+                            <label><input type="radio" name="p3" value="c"> c) Bloquear el acceso de colaboradores externos permanentemente.</label>
+                            <label><input type="radio" name="p3" value="d"> d) Eliminar la necesidad de contraseñas de seguridad.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q4" data-correct="b">
+                        <p class="q-title">4. ¿Por qué se considera al correo electrónico profesional un canal de comunicación formal?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p4" value="a"> a) Porque se utiliza únicamente para mensajería instantánea informal de ocio.</label>
+                            <label><input type="radio" name="p4" value="b"> b) Porque permite estructurar mensajes oficiales con trazabilidad, asunto claro y validez institucional.</label>
+                            <label><input type="radio" name="p4" value="c"> c) Porque no requiere ningún tipo de cortesía ni estructura redactada.</label>
+                            <label><input type="radio" name="p4" value="d"> d) Porque es incompatible con archivos adjuntos.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q5" data-correct="c">
+                        <p class="q-title">5. ¿Qué beneficio aportan los foros de hilos (threaded forums) en el ámbito académico?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p5" value="a"> a) Transmitir vídeo en alta definición en directo.</label>
+                            <label><input type="radio" name="p5" value="b"> b) Sustituir por completo las hojas de cálculo financieras.</label>
+                            <label><input type="radio" name="p5" value="c"> c) Organizar debates temáticos ramificados facilitando el seguimiento estructurado de las respuestas.</label>
+                            <label><input type="radio" name="p5" value="d"> d) Enviar notificaciones automáticas por SMS.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm', 1, 5, 'resultadoFinal')">Corregir Cuestionario</button>
+                    <div class="quiz-results" id="resultadoFinal"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sección 4 -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-share-nodes"></i> Redes e Interacción: Uso Pedagógico de Plataformas Sociales y Pizarras</h2>
+            
+            <h3>1. Uso pedagógico de plataformas sociales</h3>
+            <p>Las redes sociales y comunidades virtuales trascienden el ocio para convertirse en entornos de aprendizaje social, curaduría de contenidos y networking académico:</p>
+            
+            <div class="perifericos-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-book-open-reader"></i>Curaduría de Contenidos</h4>
+                        <p>Selección y compartición de recursos educativos relevantes validados por la comunidad académica.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/comentarios.webp" alt="Curaduría">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-graduation-cap"></i>Comunidades de Práctica</h4>
+                        <p>Grupos de estudio y redes profesionales enfocados en resolver problemas y compartir experiencias de aprendizaje.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/sistemas.webp" alt="Comunidades">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-bullhorn"></i>Visibilidad Institucional</h4>
+                        <p>Difusión de proyectos educativos, ponencias y logros colaborativos hacia la sociedad.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/visibilidad.webp" alt="Visibilidad">
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 35px;">Pizarras Digitales Interactivas (Digital Whiteboards)</h3>
+            <p>Herramientas visuales colaborativas (como Miro, Mural o Jamboard) que replican el concepto de un pizarrón físico pero potenciado con recursos digitales ilimitados:</p>
+            
+            <div class="hw-sw-grid">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-brain"></i>Lluvia de Ideas y Mapeo Mental</h4>
+                        <p>Uso de notas adhesivas virtuales, diagramas de flujo y mapas conceptuales para organizar ideas de forma creativa y participativa durante talleres o clases sincrónicas.</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/mental.webp" alt="Lluvia de Ideas">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-puzzle-piece"></i>Facilitación Gráfica y Dinámicas</h4>
+                        <p>Metodologías de cocreación visual que incrementan el engagement, permitiendo agrupar conceptos, votar ideas y estructurar proyectos en tiempo real.</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/facilitacion.webp" alt="Dinámicas Visuales">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Autoevaluación 2 -->
+        <div class="quiz-section" id="quizSectionContainer2" style="background: #eff6ff; border: 1px solid #bfdbfe;">
+            <div class="quiz-header-toggle" onclick="toggleQuiz2()" style="border-bottom: 2px solid #dbeafe;">
+                <h2 style="color: #1e40af;"><i class="fa-solid fa-list-check" style="color: #3b82f6;"></i> Autoevaluación 2: Redes Sociales y Pizarras Digitales</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon" style="color: #1e40af;"></i>
+            </div>
+
+            <div class="quiz-body">
+                <p style="margin-bottom: 25px; color: #1e40af;">Pon a prueba tus conocimientos sobre el uso pedagógico de redes y herramientas de facilitación visual.</p>
+
+                <form id="quizForm2">
+                    <div class="question-card" id="qd1" data-correct="c">
+                        <p class="q-title">1. ¿Qué se entiende por curaduría de contenidos en el contexto educativo digital?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="pd1" value="a"> a) La eliminación masiva de información en internet.</label>
+                            <label><input type="radio" name="pd1" value="b"> b) El diseño de interfaces gráficas tridimensionales.</label>
+                            <label><input type="radio" name="pd1" value="c"> c) La selección, filtrado y compartición de recursos educativos relevantes y de calidad.</label>
+                            <label><input type="radio" name="pd1" value="d"> d) La encriptación de bases de datos institucionales.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="qd2" data-correct="a">
+                        <p class="q-title">2. ¿Cuál es el propósito principal de una comunidad de práctica virtual?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="pd2" value="a"> a) Agrupar a personas con intereses profesionales afines para compartir experiencias y resolver problemas conjuntos.</label>
+                            <label><input type="radio" name="pd2" value="b"> b) Vender productos comerciales de software privativo.</label>
+                            <label><input type="radio" name="pd2" value="c"> c) Controlar el ancho de banda de los usuarios conectados.</label>
+                            <label><input type="radio" name="pd2" value="d"> d) Sustituir por completo las instituciones educativas tradicionales.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="qd3" data-correct="b">
+                        <p class="q-title">3. ¿Qué utilidad principal ofrecen las pizarras digitales interactivas (digital whiteboards)?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="pd3" value="a"> a) Enviar correos masivos de marketing automatizado.</label>
+                            <label><input type="radio" name="pd3" value="b"> b) Facilitar la lluvia de ideas, notas adhesivas y mapas conceptuales colaborativos en tiempo real.</label>
+                            <label><input type="radio" name="pd3" value="c"> c) Programar rutinas de mantenimiento para sistemas operativos.</label>
+                            <label><input type="radio" name="pd3" value="d"> d) Gestionar la contabilidad de una empresa.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="qd4" data-correct="c">
+                        <p class="q-title">4. ¿Cómo benefician las plataformas sociales al ámbito pedagógico cuando se usan adecuadamente?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="pd4" value="a"> a) Generando distracciones constantes durante las clases.</label>
+                            <label><input type="radio" name="pd4" value="b"> b) Aislando al estudiante de fuentes de información externas.</label>
+                            <label><input type="radio" name="pd4" value="c"> c) Fomentando el aprendizaje social, la difusión de proyectos y la interacción más allá del aula física.</label>
+                            <label><input type="radio" name="pd4" value="d"> d) Eliminando la necesidad de interacción humana.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="qd5" data-correct="d">
+                        <p class="q-title">5. ¿Qué recurso visual es característico de las pizarras digitales para agrupar ideas por categorías?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="pd5" value="a"> a) Líneas de comandos de terminal.</label>
+                            <label><input type="radio" name="pd5" value="b"> b) Párrafos extensos de texto plano sin formato.</label>
+                            <label><input type="radio" name="pd5" value="c"> c) Tablas de bases de datos relacionales SQL.</label>
+                            <label><input type="radio" name="pd5" value="d"> d) Notas adhesivas virtuales (stickers) y diagramas interactivos.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm2', 1, 5, 'resultadoFinal2', 'qd')">Corregir Cuestionario 2</button>
+                    <div class="quiz-results" id="resultadoFinal2"></div>
+                </form>
+            </div>
+        </div>
+    
+        <!-- Sección 5 -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-shield-heart"></i> Netiqueta y Ciudadanía Digital Responsable</h2>
+            <p>Internet no es tierra de nadie. Así como en el aula hay normas para convivir, en la red también. A eso le llamamos <strong>netiqueta</strong> y es clave para que el trabajo colaborativo funcione sin conflictos.</p>
+            <p>Para alumnos de secundario, entender esto te salva de malentendidos en grupos de WhatsApp, Classroom y Discord.</p>
+            
+            <div class="ciclo-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="ciclo-item" style="border-left-color: #06b6d4;">
+                    <div class="ciclo-content">
+                        <h4><i class="fa-solid fa-clock" style="color: #06b6d4;"></i> 1. Respetá el tiempo</h4>
+                        <p>No mandes 15 audios seguidos de 2 minutos. Sé claro. Si es trabajo grupal, no escribas a las 2 AM. Poné: qué hiciste, qué falta y cuándo entregan.</p>
+                    </div>
+                    <div class="ciclo-img-container" style="min-height: 180px;">
+                        <img src="img/netiqueta_tiempo.webp" alt="Respeto del tiempo" style="max-width:280px;">
+                    </div>
+                </div>
+                <div class="ciclo-item" style="border-left-color: #f59e0b;">
+                    <div class="ciclo-content">
+                        <h4><i class="fa-solid fa-lock" style="color: #f59e0b;"></i> 2. Cuidá la privacidad</h4>
+                        <p>Antes de compartir foto, captura o datos de un compañero, pedí permiso. Lo que se sube, queda. Nunca compartas contraseñas ni ubicación en tiempo real.</p>
+                    </div>
+                    <div class="ciclo-img-container" style="min-height: 180px;">
+                        <img src="img/netiqueta_privacidad.webp" alt="Privacidad" style="max-width:280px;">
+                    </div>
+                </div>
+                <div class="ciclo-item" style="border-left-color: #8b5cf6;">
+                    <div class="ciclo-content">
+                        <h4><i class="fa-solid fa-triangle-exclamation" style="color: #8b5cf6;"></i> 3. Pensá antes de publicar</h4>
+                        <p>Regla de 3 filtros: ¿Es verdadero? ¿Es necesario? ¿Es amable? Si falla uno, no lo publiques. Así frenás fake news y ciberbullying.</p>
+                    </div>
+                    <div class="ciclo-img-container" style="min-height: 180px;">
+                        <img src="img/netiqueta_pensar.webp" alt="Pensar antes de publicar" style="max-width:280px;">
+                    </div>
+                </div>
+                <div class="ciclo-item" style="border-left-color: #3b82f6;">
+                    <div class="ciclo-content">
+                        <h4><i class="fa-solid fa-heart" style="color: #3b82f6;"></i> 4. Empatía digital</h4>
+                        <p>Detrás de cada perfil hay una persona. Evitá escribir TODO EN MAYÚSCULAS (parece que gritás). Debatí ideas, no ataques personas. Un "porfa" y "gracias" suma.</p>
+                    </div>
+                    <div class="ciclo-img-container" style="min-height: 180px;">
+                        <img src="img/netiqueta_empatia.webp" alt="Empatía" style="max-width:280px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="ejemplo-box">
+                <i class="fa-solid fa-lightbulb"></i> <strong>Ejemplo para tu curso:</strong><br>
+                En vez de: "CHE NADIE HIZO NADA?? HAGAN ALGO!!!"<br>
+                Mejor: "¡Hola equipo! ¿Cómo vienen? Yo terminé la intro. ¿Necesitan ayuda? Entregamos mañana a las 18hs :)"<br>
+                El segundo mensaje genera colaboración, no conflicto.
+            </div>
+
+            <h3>Tu huella digital</h3>
+            <p>Todo like, comentario y publicación forma tu identidad digital. Universidades y futuros trabajos pueden verla. Verificá fuentes (buscá noticia + "verificación") y citá autores cuando uses imágenes para tareas. No es copiar y pegar.</p>
+        </div>
+
+        <!-- Sección 6 -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-diagram-project"></i> Gestión de Proyectos y Trabajo en Equipo que sí funciona</h2>
+            <p>¿Te pasó el grupo donde uno hace todo la noche anterior? Eso pasa por falta de gestión. Un proyecto no es solo el trabajo final, es <strong>cómo te organizás para llegar</strong>.</p>
+            
+            <h3>El método Kanban (el que usan Google y la NASA)</h3>
+            <p>Dividí una pizarra (física o en Trello / Notion) en 3 columnas:</p>
+
+            <div class="perifericos-grid">
+                <div class="card-hs" style="border-left:4px solid #f59e0b;">
+                    <div>
+                        <h4><i class="fa-solid fa-list-check"></i> POR HACER</h4>
+                        <p>Todas las tareas como tarjetitas: "Buscar info", "Hacer slides", "Crear video". Todo empieza acá.</p>
+                    </div>
+                </div>
+                <div class="card-hs" style="border-left:4px solid #3b82f6;">
+                    <div>
+                        <h4><i class="fa-solid fa-spinner"></i> EN PROCESO</h4>
+                        <p>Lo que YA estás haciendo. Regla: máximo 2 tareas por persona a la vez. Así no te mareás.</p>
+                    </div>
+                </div>
+                <div class="card-hs" style="border-left:4px solid #22c55e;">
+                    <div>
+                        <h4><i class="fa-solid fa-circle-check"></i> HECHO</h4>
+                        <p>¡La mejor columna! Mover tarjetas acá motiva un montón. El avance se ve y todos saben quién hizo qué.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hw-sw-grid">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-users-gear"></i> Roles que salvan grupos (asignar día 1)</h4>
+                        <p><strong>Coordinador:</strong> no manda, organiza. Lleva calendario y convoca reuniones.<br>
+                        <strong>Investigador:</strong> busca info confiable y la guarda ordenada en Drive.<br>
+                        <strong>Diseñador:</strong> hace que se vea prolijo.<br>
+                        <strong>Editor:</strong> revisa ortografía y unifica estilo.</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/gestion_roles.webp" alt="Roles de equipo" class="img-tarjeta-grande">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-toolbox"></i> Herramientas GRATIS para mañana</h4>
+                        <p><strong>Trello:</strong> tu tablero Kanban online.<br>
+                        <strong>Google Drive / Docs:</strong> todos escriben a la vez y queda historial.<br>
+                        <strong>Meet / Calendar:</strong> 15 min de reunión para alinear.<br><br>
+                        <strong>Regla de oro:</strong> Si no está en el tablero ni en el calendario, ¡no existe!</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/gestion_kanban.webp" alt="Tablero Kanban" class="img-tarjeta-grande">
+                    </div>
+                </div>
+            </div>
+
+            <div class="ejemplo-box" style="background:#eff6ff; border-color:#bfdbfe; color:#1e40af;">
+                <strong style="color:#1e3a8a;"><i class="fa-solid fa-rocket"></i> Mini reto para tu clase:</strong> En tu próximo trabajo, creen un tablero en Trello, asignen roles y pongan fecha límite real 2 días antes de la entrega oficial. Van a ver cómo bajan el estrés y sube la nota.
+            </div>
+        </div>
+
+        <!-- Autoevaluación 3 -->
+        <div class="quiz-section" id="quizSectionContainer3" style="background: #fefce8; border: 1px solid #fde68a;">
+            <div class="quiz-header-toggle" onclick="toggleQuiz3()" style="border-bottom: 2px solid #fef3c7;">
+                <h2 style="color: #92400e;"><i class="fa-solid fa-list-check" style="color: #f59e0b;"></i> Autoevaluación 3: Netiqueta y Gestión de Proyectos</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon" style="color: #92400e;"></i>
+            </div>
+            <div class="quiz-body">
+                <p style="margin-bottom: 25px; color: #92400e;">Repasemos lo que aprendiste pensando en tus trabajos del colegio.</p>
+                <form id="quizForm3">
+                    <div class="question-card" id="q3_1" data-correct="c">
+                        <p class="q-title">1. ¿Por qué no conviene escribir TODO EN MAYÚSCULAS en un grupo de trabajo?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p3_1" value="a"> a) Porque el teclado se rompe.</label>
+                            <label><input type="radio" name="p3_1" value="b"> b) Porque se ve más formal.</label>
+                            <label><input type="radio" name="p3_1" value="c"> c) Porque se interpreta como que estás gritando y suena agresivo.</label>
+                            <label><input type="radio" name="p3_1" value="d"> d) Porque no se puede leer.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+                    <div class="question-card" id="q3_2" data-correct="b">
+                        <p class="q-title">2. Antes de compartir una foto de un compañero, ¿qué debés hacer?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p3_2" value="a"> a) Subirla con un filtro gracioso directamente.</label>
+                            <label><input type="radio" name="p3_2" value="b"> b) Pedirle permiso, es su privacidad.</label>
+                            <label><input type="radio" name="p3_2" value="c"> c) Compartirla solo en privado sin avisar.</label>
+                            <label><input type="radio" name="p3_2" value="d"> d) Etiquetarlo sin preguntar.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+                    <div class="question-card" id="q3_3" data-correct="a">
+                        <p class="q-title">3. ¿Cuál es la regla de oro antes de compartir una noticia viral?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p3_3" value="a"> a) Pausar, verificar si es verdadera y recién después compartir.</label>
+                            <label><input type="radio" name="p3_3" value="b"> b) Compartirla rápido para ser el primero.</label>
+                            <label><input type="radio" name="p3_3" value="c"> c) Compartirla si tiene muchos likes.</label>
+                            <label><input type="radio" name="p3_3" value="d"> d) Creer que todo en internet es verdad.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+                    <div class="question-card" id="q3_4" data-correct="d">
+                        <p class="q-title">4. ¿Qué beneficio principal tiene usar un tablero Kanban en el colegio?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p3_4" value="a"> a) Hace que el trabajo se haga solo.</label>
+                            <label><input type="radio" name="p3_4" value="b"> b) Sirve solo para dibujar.</label>
+                            <label><input type="radio" name="p3_4" value="c"> c) Obliga a que uno solo haga todo.</label>
+                            <label><input type="radio" name="p3_4" value="d"> d) Hace visible el avance, organiza tareas y evita dejar todo para el final.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+                    <div class="question-card" id="q3_5" data-correct="b">
+                        <p class="q-title">5. ¿Qué rol se encarga de revisar ortografía y unificar el estilo final?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p3_5" value="a"> a) El investigador.</label>
+                            <label><input type="radio" name="p3_5" value="b"> b) El editor / portavoz.</label>
+                            <label><input type="radio" name="p3_5" value="c"> c) El diseñador.</label>
+                            <label><input type="radio" name="p3_5" value="d"> d) Nadie, se entrega como salga.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+                    <button type="button" class="btn-submit-quiz" style="background:#92400e;" onclick="corregirQuiz('quizForm3', 1, 5, 'resultadoFinal3', 'q3_')">Corregir Cuestionario 3</button>
+                    <div class="quiz-results" id="resultadoFinal3"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- NUEVA SECCIÓN 7: Teoría de la Comunicación Digital, el Tercer Entorno y la Ubicuidad -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-network-wired"></i> 7. Teoría de la Comunicación Digital, el Tercer Entorno y la Ubicuidad</h2>
+            <p>La digitalización ha transformado el esquema comunicativo tradicional. Vivimos en una sociedad en red donde la tecnología redefine cómo se transmiten los mensajes, creando un <strong>Tercer Entorno</strong> telemático donde las barreras de espacio y tiempo desaparecen.</p>
+            
+            <h3>1. Componentes del Proceso Comunicativo Digital</h3>
+            <p>En el ciberespacio, el modelo clásico se vuelve interactivo y dinámico:</p>
+            
+            <div class="hw-sw-grid" style="margin-top: 20px;">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-tower-cell"></i> Elementos del Modelo Digital</h4>
+                        <p><strong>Emisor y Receptor (Prosumidores):</strong> El usuario no solo consume información, sino que la crea.<br>
+                        <strong>Código y Canal:</strong> Lenguajes hipermediales (texto, audio, video) transmitidos por fibra óptica o señal satelital.<br>
+                        <strong>Retroalimentación (Feedback):</strong> Respuesta instantánea en tiempo real.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/modelo_comunicativo.webp" alt="Modelo Comunicativo Digital" style="max-width:280px;">
+                    </div>
+                </div>
+
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-earth-americas"></i> Tercer Entorno y Ubicuidad</h4>
+                        <p><strong>Tercer Entorno:</strong> Nuevo espacio social telemático diferente del espacio natural (primer entorno) y urbano (segundo entorno).<br>
+                        <strong>Ubicuidad:</strong> Posibilidad de estar conectado, aprender y colaborar desde cualquier lugar y en todo momento gracias a dispositivos móviles.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/Tercer_Entorno.webp" alt="Tercer Entorno y Ubicuidad" style="max-width:280px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NUEVA Autoevaluación 4: Teoría de la Comunicación Digital -->
+        <div class="quiz-section" id="quizSectionContainer4" style="background: #faf5ff; border: 1px solid #e9d5ff;">
+            <div class="quiz-header-toggle" onclick="toggleQuiz4()" style="border-bottom: 2px solid #f3e8ff;">
+                <h2 style="color: #6b21a8;"><i class="fa-solid fa-list-check" style="color: #9333ea;"></i> Autoevaluación 4: Proceso Comunicativo y Tercer Entorno</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon" style="color: #6b21a8;"></i>
+            </div>
+
+            <div class="quiz-body">
+                <p style="margin-bottom: 25px; color: #6b21a8;">Evalúa tus conocimientos sobre los componentes de la comunicación digital, ubicuidad y el Tercer Entorno.</p>
+
+                <form id="quizForm4">
+                    <div class="question-card" id="q4_1" data-correct="b">
+                        <p class="q-title">1. ¿Qué define al concepto de "Ubicuidad" en la comunicación digital moderna?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p4_1" value="a"> a) La obligación de conectarse únicamente desde una computadora de escritorio.</label>
+                            <label><input type="radio" name="p4_1" value="b"> b) La capacidad de acceder a la información e interactuar en red desde cualquier lugar y momento.</label>
+                            <label><input type="radio" name="p4_1" value="c"> c) La lentitud en la transmisión de datos a través de cables de red.</label>
+                            <label><input type="radio" name="p4_1" value="d"> d) El uso exclusivo de medios impresos en formato papel.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q4_2" data-correct="c">
+                        <p class="q-title">2. ¿A qué se refiere el concepto de "Tercer Entorno" acuñado en la teoría comunicativa?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p4_2" value="a"> a) Al entorno natural compuesto por zonas rurales.</label>
+                            <label><input type="radio" name="p4_2" value="b"> b) A los edificios escolares y aulas físicas tradicionales.</label>
+                            <label><input type="radio" name="p4_2" value="c"> c) Al nuevo espacio social virtual y telemático generado por las tecnologías de conectividad.</label>
+                            <label><input type="radio" name="p4_2" value="d"> d) Al almacenamiento en discos de vinilo y cassettes.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q4_3" data-correct="a">
+                        <p class="q-title">3. ¿Qué caracteriza a un "Prosumidor" en los medios digitales de comunicación?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p4_3" value="a"> a) Es un usuario que consume contenidos y al mismo tiempo produce e interactúa activamente en la red.</label>
+                            <label><input type="radio" name="p4_3" value="b"> b) Es un técnico encargado de reparar servidores locales.</label>
+                            <label><input type="radio" name="p4_3" value="c"> c) Es un espectador pasivo que solo mira televisión tradicional.</label>
+                            <label><input type="radio" name="p4_3" value="d"> d) Es un programa informático diseñado para eliminar virus.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q4_4" data-correct="d">
+                        <p class="q-title">4. ¿Qué rol cumple la retroalimentación (feedback) en el proceso comunicativo digital?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p4_4" value="a"> a) Bloquear los comentarios de los usuarios.</label>
+                            <label><input type="radio" name="p4_4" value="b"> b) Aumentar el consumo de energía del dispositivo.</label>
+                            <label><input type="radio" name="p4_4" value="c"> c) Desconectar la señal Wi-Fi de forma programada.</label>
+                            <label><input type="radio" name="p4_4" value="d"> d) Garantizar la respuesta e interacción bidireccional entre los participantes del mensaje.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q4_5" data-correct="b">
+                        <p class="q-title">5. ¿Qué beneficio aporta la competencia comunicativa digital en proyectos colaborativos?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p4_5" value="a"> a) Memorizar comandos del sistema operativo.</label>
+                            <label><input type="radio" name="p4_5" value="b"> b) Seleccionar el canal, código y tono adecuados según el propósito institucional o académico.</label>
+                            <label><input type="radio" name="p4_5" value="c"> c) Reemplazar la necesidad de trabajar en equipo.</label>
+                            <label><input type="radio" name="p4_5" value="d"> d) Aumentar la resolución técnica de las fotos.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm4', 1, 5, 'resultadoFinal4', 'q4_')" style="background-color: #7e22ce;">Corregir Cuestionario 4</button>
+                    <div class="quiz-results" id="resultadoFinal4"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- NUEVA SECCIÓN 8: Ecosistema de Medios Digitales, Periodismo y Mass Media -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-newspaper"></i> 8. Ecosistema de Medios Digitales, Periodismo y Mass Media</h2>
+            <p>Los medios masivos de comunicación (Mass Media) se han integrado en el ecosistema digital. Comprender su funcionamiento exige evaluar sus códigos, intencionalidades mediáticas y explorar nuevas metodologías colaborativas de investigación.</p>
+
+            <div class="perifericos-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 25px;">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-newspaper"></i> Periodismo Digital</h4>
+                        <p>Inmediatez, hipertextualidad y actualización continua. Exige al lector un análisis crítico frente a las fuentes de información y la intencionalidad editorial de las noticias.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/Periodismo Digital.webp" alt="Periodismo Digital" style="max-width:280px;">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-magnifying-glass-chart"></i> WebQuest</h4>
+                        <p>Estrategia didáctica de búsqueda de información orientada en la web. Promueve el aprendizaje activo, la indagación colaborativa y el procesamiento crítico de datos.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/WebQuest.webp" alt="WebQuest" style="max-width:280px;">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-vr-cardboard"></i> Mundos Virtuales y IRC</h4>
+                        <p>Entornos gráficos tridimensionales interactivos y plataformas sincrónicas de chat en tiempo real para simulación de escenarios pedagógicos y trabajo remoto.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/Mundos Virtuales.webp" alt="Mundos Virtuales" style="max-width:280px;">
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Cultura Blog y Software Social</h3>
+            <p>El auge de la escritura colaborativa dio origen a la <strong>blogosfera</strong> y expresiones como <i>edublogs</i> (blogs educativos), <i>blogonautas</i> y <i>blogofolios</i> (portafolios digitales de aprendizaje), consolidando la comunicación de pares en la red.</p>
+        </div>
+
+        <!-- NUEVA Autoevaluación 5: Periodismo Digital y Medios -->
+        <div class="quiz-section" id="quizSectionContainer5" style="background: #fff7ed; border: 1px solid #ffedd5;">
+            <div class="quiz-header-toggle" onclick="toggleQuiz5()" style="border-bottom: 2px solid #fed7aa;">
+                <h2 style="color: #9a3412;"><i class="fa-solid fa-list-check" style="color: #ea580c;"></i> Autoevaluación 5: Ecosistema de Medios y Mass Media Digital</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon" style="color: #9a3412;"></i>
+            </div>
+
+            <div class="quiz-body">
+                <p style="margin-bottom: 25px; color: #9a3412;">Pon a prueba tus conocimientos sobre periodismo digital, WebQuest y medios masivos de comunicación.</p>
+
+                <form id="quizForm5">
+                    <div class="question-card" id="q5_1" data-correct="c">
+                        <p class="q-title">1. ¿Qué distingue al Periodismo Digital del periodismo tradicional en papel?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p5_1" value="a"> a) La imposibilidad de incluir fotografías o videos.</label>
+                            <label><input type="radio" name="p5_1" value="b"> b) La publicación exclusiva una sola vez a la semana.</label>
+                            <label><input type="radio" name="p5_1" value="c"> c) La inmediatez, la hipertextualidad y la actualización en tiempo real.</label>
+                            <label><input type="radio" name="p5_1" value="d"> d) El uso obligatorio de impresoras offset.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q5_2" data-correct="a">
+                        <p class="q-title">2. ¿En qué consiste una WebQuest dentro del ámbito educativo?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p5_2" value="a"> a) En una actividad orientada de investigación guiada donde los alumnos procesan información de la web.</label>
+                            <label><input type="radio" name="p5_2" value="b"> b) En un examen escrito a libro cerrado sin acceso a computadoras.</label>
+                            <label><input type="radio" name="p5_2" value="c"> c) En un programa para reparar sectores defectuosos del disco rígido.</label>
+                            <label><input type="radio" name="p5_2" value="d"> d) En un servidor exclusivo para enviar correos masivos.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q5_3" data-correct="d">
+                        <p class="q-title">3. ¿Qué término define al conjunto global de blogs conectados en internet?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p5_3" value="a"> a) Intranet local.</label>
+                            <label><input type="radio" name="p5_3" value="b"> b) Base de datos SQL.</label>
+                            <label><input type="radio" name="p5_3" value="c"> c) Servidor FTP.</label>
+                            <label><input type="radio" name="p5_3" value="d"> d) Blogosfera.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q5_4" data-correct="b">
+                        <p class="q-title">4. ¿Qué representan los Mundos Virtuales en las NTICX?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p5_4" value="a"> a) Archivos comprimidos de texto plano.</label>
+                            <label><input type="radio" name="p5_4" value="b"> b) Entornos gráficos tridimensionales donde se simulan escenarios e interacciones reales mediante avatares.</label>
+                            <label><input type="radio" name="p5_4" value="c"> c) Documentos de hojas de cálculo compartidas.</label>
+                            <label><input type="radio" name="p5_4" value="d"> d) Antivirus instalados en el sistema operativo.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q5_5" data-correct="c">
+                        <p class="q-title">5. ¿Por qué es fundamental analizar la intencionalidad mediática en los Mass Media digitales?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p5_5" value="a"> a) Para acelerar la velocidad del modem Wi-Fi.</label>
+                            <label><input type="radio" name="p5_5" value="b"> b) Para cambiar la tipografía del navegador.</label>
+                            <label><input type="radio" name="p5_5" value="c"> c) Para reconocer valores, sesgos e intenciones detrás de la noticia construida por el medio.</label>
+                            <label><input type="radio" name="p5_5" value="d"> d) Para evitar que los archivos PDF se descarguen solos.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm5', 1, 5, 'resultadoFinal5', 'q5_')" style="background-color: #c2410c;">Corregir Cuestionario 5</button>
+                    <div class="quiz-results" id="resultadoFinal5"></div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Botón Flotante para Recibir Apoyo -->
+    <a href="contacto.html" class="btn-flotante-soporte" title="Contacto">
+        <i class="fa-solid fa-headset"></i>
+    </a>
+    <div class="modal-overlay" id="supportModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <button class="modal-close-btn" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+                <div class="modal-heart-icon">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <div class="modal-title-box">
+                    <h3>¡Gracias por usar Academia Digital!</h3>
+                    <p>Tu apoyo mantiene el proyecto vivo</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Academia Digital es gratuito y sin publicidad. Si te ahorra tiempo y te ayuda en tus estudios, podés invitarme un cafecito con Mercado Pago. Cada colaboración suma muchísimo.</p>
+                <div class="modal-link-box">
+                    <div class="modal-link-info">
+                        <i class="fa-solid fa-wallet"></i>
+                        <div>
+                            <span>Link de Mercado Pago</span>
+                            <p id="mpLinkText">https://link.mercadopago.com.ar/academiadigital2026</p>
+                        </div>
+                    </div>
+                    <button class="btn-copiar" id="copyLinkBtn">Copiar</button>
+                </div>
+                <a href="https://link.mercadopago.com.ar/academiadigital2026" target="_blank" class="btn-mp-primary">
+                    <i class="fa-solid fa-heart" style="color: #ef4444;"></i> Quiero Colaborar <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <span class="modal-footer-text">100% seguro &bull; Mercado Pago &bull; Podés poner el monto que quieras</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Ventana Modal de Ledger Digital -->
+    <div class="modal-overlay" id="ledgerModal">
+        <div class="modal-card">
+            <div class="modal-header-ledger">
+                <button class="modal-close-btn" id="closeLedgerModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            
+                <div class="modal-ledger-logo-box">
+                    <img style="max-width:56px;width:56px;height:auto;object-fit:contain;" src="icon/logo-icon-512.png" alt="Logo Ledger Digital">
+                </div>
+                <div class="modal-title-box">
+                    <h3>LEDGER</h3>
+                    <p>Tus cuentas, al día.</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Mantén tus cuentas al día de forma inteligente. LEDGER, Funciona como un <strong>libro diario de consumos</strong> para registrar y organizar con precisión tus gastos fijos, compras en cuotas, consumos únicos y mucho más.</p>
+                <div class="modal-link-box">
+                    <div class="modal-link-info">
+                        <i class="fa-solid fa-globe" style="color: #000000;"></i>
+                        <div>
+                            <span>Sitio Web Oficial</span>
+                            <p id="ledgerLinkText">https://ledgerdigital.netlify.app/</p>
+                        </div>
+                    </div>
+                    <button class="btn-copiar" id="copyLedgerLinkBtn">Copiar</button>
+                </div>
+                <a href="https://ledgerdigital.netlify.app/" target="_blank" class="btn-ledger-primary">
+                    <i class="fa-solid fa-external-link-alt"></i> Ir a LEDGER <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <span class="modal-footer-text" style="display: block; margin-top: 15px;">Controla tus finanzas personales &bull; Simple y Accesible</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Ventana Modal de Evaluacion -->
+    <div class="modal-overlay" id="evaluacionModal">
+        <div class="modal-card">
+            <div class="modal-header-evaluacion">
+                <button class="modal-close-btn" id="closeEvaluacionModalBtn"><i class="fa-solid fa-xmark"></i></button>
+                
+                <div class="modal-evaluacion-icon">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <div class="modal-title-box">
+                    <h3>Evaluación General</h3>
+                    <p>Todos los programas incluidos</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Estás por iniciar la <strong>evaluación integradora</strong> sobre todos los programas de NTX | Academia Digital: Informática, Redes, Ofimática, Diseño, Comunicación, Multimedia y Seguridad.</p>
+                
+                <div class="modal-eval-info-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div>
+                        <span>¿Qué incluye?</span>
+                        <p>Preguntas de los 7 módulos del programa de formación. Podrás ver tu puntaje al finalizar y repasar tus respuestas.</p>
+                    </div>
+                </div>
+                <button id="confirmEvaluacionBtn" class="btn-evaluacion-primary">
+                    <i class="fa-solid fa-play"></i> Sí, iniciar evaluación <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button id="cancelEvaluacionBtn" class="btn-evaluacion-secondary">
+                    Seguir explorando
+                </button>
+                <span class="modal-footer-text" style="display: block; margin-top: 15px;">La evaluación es sin tiempo límite &bull; Podés intentarlo las veces que quieras</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="footer-placeholder"></div>
+
+<script src="js/header.js"></script>
+<script src="js/footer.js?v=1"></script>
+<script>
+function toggleQuiz(){ let c=document.getElementById('quizSectionContainer'); if(c) c.classList.toggle('open'); }
+function toggleQuiz2(){ let c=document.getElementById('quizSectionContainer2'); if(c) c.classList.toggle('open'); }
+function toggleQuiz3(){ let c=document.getElementById('quizSectionContainer3'); if(c) c.classList.toggle('open'); }
+function toggleQuiz4(){ let c=document.getElementById('quizSectionContainer4'); if(c) c.classList.toggle('open'); }
+function toggleQuiz5(){ let c=document.getElementById('quizSectionContainer5'); if(c) c.classList.toggle('open'); }
+
+function corregirQuiz(formId, inicio, fin, resultadoId, prefix){ 
+  prefix = prefix || 'q';
+  let aciertos=0;
+  for(let i=inicio;i<=fin;i++){
+    let card=document.getElementById(prefix+i); if(!card) continue;
+    let correcta=card.getAttribute('data-correct');
+    let selName = (prefix==='qd'?'pd':(prefix==='q3_'?'p3_':(prefix==='q4_'?'p4_':(prefix==='q5_'?'p5_':'p')))) + i;
+    let sel=document.querySelector('input[name="'+selName+'"]:checked');
+    let fb=card.querySelector('.feedback-text'); if(!fb) continue;
+    card.classList.remove('correct','incorrect');
+    if(sel){ if(sel.value===correcta){ card.classList.add('correct'); fb.textContent="¡Respuesta correcta!"; aciertos++; } else { card.classList.add('incorrect'); fb.textContent="Incorrecta. Era '"+correcta.toUpperCase()+"'."; } } else { card.classList.add('incorrect'); fb.textContent="No seleccionaste opción."; }
+  }
+  let r=document.getElementById(resultadoId); if(r){ r.style.display='block'; r.innerHTML="Obtuviste "+aciertos+" de "+(fin-inicio+1)+" correctas ("+Math.round((aciertos/(fin-inicio+1))*100)+"%)."; r.scrollIntoView({behavior:'smooth'}); }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  let copyBtn=document.getElementById('copyLinkBtn');
+  let txt=document.getElementById('mpLinkText');
+  if(copyBtn&&txt){ copyBtn.addEventListener('click', function(){ navigator.clipboard.writeText(txt.innerText).then(function(){ let o=copyBtn.innerText; copyBtn.innerText='¡Copiado!'; setTimeout(function(){ copyBtn.innerText=o; },2000); }); }); }
+  let closeBtn=document.getElementById('closeModalBtn');
+  let modal=document.getElementById('supportModal');
+  if(closeBtn&&modal){ closeBtn.addEventListener('click', function(){ modal.style.display='none'; }); }
+  if(modal){ modal.addEventListener('click', function(e){ if(e.target===modal) modal.style.display='none'; }); }
+});
+
+  // Ledger modal
+  let ledgerModal=document.getElementById('ledgerModal');
+  let openLedgerBtn=document.getElementById('openLedgerModalBtn');
+  let closeLedgerBtn=document.getElementById('closeLedgerModalBtn');
+  let copyLedgerBtn=document.getElementById('copyLedgerLinkBtn');
+  let ledgerLinkEl=document.getElementById('ledgerLinkText');
+  if(openLedgerBtn && ledgerModal) openLedgerBtn.addEventListener('click', (e)=>{ e.preventDefault(); ledgerModal.style.display='flex'; });
+  if(closeLedgerBtn && ledgerModal) closeLedgerBtn.addEventListener('click', ()=> ledgerModal.style.display='none');
+  if(ledgerModal) ledgerModal.addEventListener('click', (e)=>{ if(e.target===ledgerModal) ledgerModal.style.display='none'; });
+  if(copyLedgerBtn && ledgerLinkEl){
+    copyLedgerBtn.addEventListener('click', ()=>{
+      navigator.clipboard.writeText(ledgerLinkEl.innerText).then(()=>{
+        let o=copyLedgerBtn.innerText; copyLedgerBtn.innerText='¡Copiado!'; setTimeout(()=> copyLedgerBtn.innerText=o, 2000);
+      });
+    });
+  }
+
+  // Evaluacion modal
+  let evalModal=document.getElementById('evaluacionModal');
+  let openEval=document.getElementById('openEvaluacionModalBtn');
+  let closeEval=document.getElementById('closeEvaluacionModalBtn');
+  let cancelEval=document.getElementById('cancelEvaluacionBtn');
+  let confirmEval=document.getElementById('confirmEvaluacionBtn');
+  if(openEval && evalModal) openEval.addEventListener('click', (e)=>{ e.preventDefault(); evalModal.style.display='flex'; });
+  if(closeEval && evalModal) closeEval.addEventListener('click', ()=> evalModal.style.display='none');
+  if(cancelEval && evalModal) cancelEval.addEventListener('click', ()=> evalModal.style.display='none');
+  if(confirmEval) confirmEval.addEventListener('click', ()=> window.location.href='examen.html');
+  if(evalModal) evalModal.addEventListener('click', (e)=>{ if(e.target===evalModal) evalModal.style.display='none'; });
+  if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=24');
+  });
+}
+</script>
+</body>
+</html>

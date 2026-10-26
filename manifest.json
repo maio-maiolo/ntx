@@ -1,0 +1,31 @@
+{
+  "name": "NTX - Academia Digital",
+  "short_name": "NTX",
+  "description": "NTX Academia Digital - Lo aprendés en la escuela, lo repasás acá.",
+  "start_url": "/index.html?v=24",
+  "display": "standalone",
+  "background_color": "#0a1930",
+  "theme_color": "#0a1930",
+  "orientation": "any",
+  "icons": [
+    { "src": "icon/icon-72x72.png?v=24", "sizes": "72x72", "type": "image/png", "purpose": "any" },
+    { "src": "icon/icon-96x96.png?v=24", "sizes": "96x96", "type": "image/png", "purpose": "any" },
+    { "src": "icon/icon-128x128.png?v=24", "sizes": "128x128", "type": "image/png", "purpose": "any" },
+    { "src": "icon/icon-144x144.png?v=24", "sizes": "144x144", "type": "image/png", "purpose": "any" },
+    { "src": "icon/icon-152x152.png?v=24", "sizes": "152x152", "type": "image/png", "purpose": "any" },
+    { "src": "icon/icon-192x192.png?v=24", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon/icon-384x384.png?v=24", "sizes": "384x384", "type": "image/png", "purpose": "any" },
+    { "src": "icon/icon-512x512.png?v=24", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon/maskable-192x192.png?v=24", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon/maskable-512x512.png?v=24", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    {
+      "src": "icon/banner-ntx.png?v=24",
+      "sizes": "1280x640",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "NTX Academia Digital"
+    }
+  ]
+}

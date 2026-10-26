@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desarrollo Web | NTX </title>
+<link rel="manifest" href="manifest.json?v=24">
+
+<meta name="theme-color" content="#0a1930">
+
+<!-- Favicon para SOLAPA NAVEGADOR - Libro circular -->
+<link rel="icon" href="/favicon.ico?v=24" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png?v=24">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png?v=24">
+
+<!-- Apple / iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png?v=24">
+
+<!-- PWA / Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192x192.png?v=24">
+<link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512x512.png?v=24">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+        :root {
+            --primary-color: #0c2340;
+            --secondary-color: #112334;
+            --accent-blue: #3b82f6;
+            --bg-light: #f4f7fa;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --white: #ffffff;
+            --cyan: #06b6d4;
+            --amber: #f59e0b;
+            --violet: #8b5cf6;
+            --code-bg: #1e293b;
+            --html-color: #e34f26;
+            --css-color: #1572b6;
+            --js-color: #f7df1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Header & Navbar */
+        header {
+            background-color: #113868;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        body { padding-top: 84px; }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 80px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.1;
+        }
+
+        .logo-text span {
+            display: block;
+            font-size: 16px;
+            letter-spacing: 2px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-menu > li > a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-menu > li > a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2.5px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--accent-blue);
+            transition: width 0.3s ease-in-out;
+            border-radius: 2px;
+        }
+
+        .nav-menu > li > a:hover::after, 
+        .nav-menu > li > a.active::after {
+            width: 100%;
+        }
+
+        .nav-menu > li > a:hover, 
+        .nav-menu > li > a.active {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .btn-aula {
+            background-color: var(--secondary-color);
+            color: var(--white) !important;
+            padding: 14px 26px !important;
+            border-radius: 10px !important;
+            font-weight: 600 !important;
+            font-size: 15px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important;
+            text-decoration: none !important;
+            transition: opacity 0.3s;
+        }
+
+        .btn-aula:hover { opacity: 0.9; }
+        .btn-aula::after { display: none !important; }
+
+        .nav-menu .dropdown {
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: -10px;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--white);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            list-style: none;
+            padding: 10px 0;
+            min-width: 220px;
+            display: none;
+            z-index: 1100;
+            border: 1px solid #e2e8f0;
+        }
+
+        .nav-menu .dropdown:hover .dropdown-menu { display: block; }
+
+        .dropdown-menu li a {
+            text-decoration: none;
+            padding: 12px 18px;
+            color: var(--text-main) !important;
+            font-weight: 500 !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: var(--bg-light);
+            color: var(--secondary-color) !important;
+        }
+
+        .btn-apoyar-nav {
+            background-color: rgba(239, 68, 68, 0.15);
+            border: 1.5px solid #ef4444;
+            color: var(--white) !important;
+            padding: 10px 14px !important;
+            border-radius: 50rem !important;
+            font-weight: 600 !important;
+            font-size: 15px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+        }
+
+        .btn-apoyar-nav:hover {
+            background-color: #ef4444 !important;
+            color: var(--white) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-apoyar-nav::after { display: none !important; }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0c2340 0%, #113868 100%);
+            color: var(--white);
+            padding: 60px 20px;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 40px;
+            text-align: left;
+        }
+
+        .hero-icon-group {
+            display: flex;
+            gap: 15px;
+            font-size: 65px;
+        }
+
+        .hero-text h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-text p {
+            font-size: 16px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        /* Content Container */
+        .content-container {
+            max-width: 1350px;
+            margin: 40px auto 80px auto;
+            padding: 0 20px;
+        }
+
+        .section-box {
+            background: var(--white);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+        }
+
+        .section-box h2 {
+            font-size: 26px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+        }
+
+        .section-box h2 i { color: var(--accent-blue); }
+
+        .section-box h3 {
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        /* 3 Pilares Grid */
+        .web-pilares-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .pilar-card {
+            border-radius: 14px;
+            padding: 28px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease;
+        }
+
+        .pilar-card:hover { transform: translateY(-5px); }
+
+        .pilar-html { border-top: 5px solid var(--html-color); }
+        .pilar-css { border-top: 5px solid var(--css-color); }
+        .pilar-js { border-top: 5px solid var(--js-color); }
+
+        .pilar-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        /* Code Blocks & Interactive Previews */
+        .code-container {
+            background: var(--code-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .code-header {
+            background: #0f172a;
+            padding: 10px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #94a3b8;
+            font-size: 13px;
+            font-family: 'Fira Code', monospace;
+            border-bottom: 1px solid #334155;
+        }
+
+        .code-block {
+            padding: 20px;
+            color: #f8fafc;
+            font-family: 'Fira Code', monospace;
+            font-size: 13.5px;
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .tag { color: #f43f5e; }
+        .attr { color: #38bdf8; }
+        .val { color: #facc15; }
+        .comment { color: #64748b; font-style: italic; }
+        .css-prop { color: #a78bfa; }
+        .css-val { color: #4ade80; }
+        .js-kw { color: #f472b6; }
+        .js-fn { color: #60a5fa; }
+
+        /* Interactive Playground */
+        .demo-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 25px;
+            background: #f8fafc;
+            margin-top: 15px;
+        }
+
+        .interactive-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-card.styled {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+            transform: scale(1.03);
+        }
+
+        /* SVG Illustrative Cards */
+        .concept-illustration {
+            width: 100%;
+            max-height: 220px;
+            object-fit: contain;
+            margin: 15px 0;
+        }
+
+        /* Quiz Section Styles */
+        .quiz-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 40px;
+        }
+
+        .quiz-header-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .quiz-header-toggle h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toggle-icon {
+            font-size: 16px;
+            color: #64748b;
+            background: var(--white);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.4s ease;
+        }
+
+        .quiz-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+            padding-top: 0;
+        }
+
+        .quiz-section.open .quiz-body {
+            max-height: 4000px;
+            padding-top: 30px;
+        }
+
+        .quiz-section.open .toggle-icon { transform: rotate(180deg); }
+
+        .question-card {
+            background: var(--white);
+            border-radius: 14px;
+            padding: 22px 25px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-card p.q-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 15px;
+            font-size: 14.5px;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .options-list label {
+            background: #f8fafc;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .options-list label:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .btn-submit-quiz {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: var(--white);
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            transition: all 0.2s ease;
+            margin-top: 25px;
+        }
+
+        .btn-submit-quiz:hover { opacity: 0.95; transform: translateY(-2px); }
+
+        .quiz-results {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            padding: 15px;
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        /* Modal Overlay Support */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 450px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .modal-header {
+            background-color: #ef4444;
+            padding: 25px 20px;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none; color: var(--white);
+            width: 30px; height: 30px;
+            border-radius: 50%; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .btn-flotante-soporte {
+            position: fixed;
+            bottom: 30px; right: 10px !important;
+            background-color: #25d366;
+            color: var(--white);
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            text-decoration: none;
+        }
+
+        footer {
+            background-color: var(--bg-light);
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 900px) {
+            .web-pilares-grid { grid-template-columns: 1fr; }
+            .hero-container { flex-direction: column; text-align: center; }
+            .hero-icon-group { justify-content: center; }
+        }
+</style>
+<link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/responsive-fix.css">
+<link rel="stylesheet" href="css/footer.css?v=1">
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<!-- Hero Section - Diseño unificado con Informática, NTICx e IA -->
+    <section class="hero">
+        <div class="hero-container" style="max-width:1200px; margin:0 auto; display:flex; flex-direction:row; align-items:center; gap:30px; text-align:left;">
+            <div class="hero-icon-group" style="font-size:55px; display:flex; gap:12px;">
+                <i class="fa-brands fa-html5" style="color: var(--html-color);"></i>
+                <i class="fa-brands fa-css3-alt" style="color: var(--css-color);"></i>
+                <i class="fa-brands fa-js" style="color: var(--js-color);"></i>
+            </div>
+            <div class="hero-text" style="text-align:left;">
+                <span style="display:inline-flex;align-items:center;gap:6px;background:#1e293b;border:1px solid #334155;color:#93c5fd;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:0.6px;margin-bottom:14px;text-transform:uppercase"><i class="fa-solid fa-code"></i> MÓDULO EXTRA - DESARROLLO WEB</span>
+                <h1 style="font-size:36px;line-height:1.1;margin:0 0 12px 0;font-weight:800;letter-spacing:-0.5px">Desarrollo Web: HTML, CSS y JS</h1>
+                <p style="font-size:15.5px;color:#cbd5e1;margin-bottom:22px;line-height:1.5;max-width:720px">Fundamentos esenciales para crear sitios web modernos, desde la estructura hasta la interactividad.</p>
+                
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;max-width:640px">
+                    <div style="display:flex;gap:10px;align-items:center;background:#1e293b;border:1px solid #334155;padding:10px 16px;border-radius:12px">
+                        <div style="background:transparent;color:#22c55e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1.5px solid #22c55e"><i class="fa-solid fa-check" style="font-size:10px"></i></div>
+                        <div style="font-size:13.5px;line-height:1.4"><strong style="color:#fff;">HTML:</strong> <span style="color:#94a3b8;">Estructura semántica, formularios, tablas y etiquetas esenciales.</span></div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center;background:#1e293b;border:1px solid #334155;padding:10px 16px;border-radius:12px">
+                        <div style="background:transparent;color:#22c55e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1.5px solid #22c55e"><i class="fa-solid fa-check" style="font-size:10px"></i></div>
+                        <div style="font-size:13.5px;line-height:1.4"><strong style="color:#fff;">CSS:</strong> <span style="color:#94a3b8;">Selectores, Flexbox, Grid, responsive design y animaciones.</span></div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center;background:#1e293b;border:1px solid #334155;padding:10px 16px;border-radius:12px">
+                        <div style="background:transparent;color:#22c55e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1.5px solid #22c55e"><i class="fa-solid fa-check" style="font-size:10px"></i></div>
+                        <div style="font-size:13.5px;line-height:1.4"><strong style="color:#fff;">JavaScript:</strong> <span style="color:#94a3b8;">Manipulación del DOM, eventos, funciones y consumo de APIs.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Main Content -->
+<div class="content-container">
+
+    <!-- Section 1: La analogia de la web -->
+    <div class="section-box">
+        <h2><i class="fa-solid fa-layer-group"></i> 1. Trilogía Web: Estructura, Estilo e Interacción</h2>
+        <p>Una página web se construye combinando tres tecnologías principales que trabajan juntas de forma coordinada. Podemos entenderlas fácilmente usando la analogía del cuerpo humano o de un edificio:</p>
+
+        <div class="web-pilares-grid">
+            <div class="pilar-card pilar-html">
+                <div class="pilar-icon" style="color: var(--html-color);"><i class="fa-brands fa-html5"></i></div>
+                <h3 style="margin-top:0;">HTML5</h3>
+                <p><strong>El Esqueleto:</strong> Define la estructura y el contenido de la página mediante etiquetas (textos, imágenes, enlaces, formularios).</p>
+            </div>
+            <div class="pilar-card pilar-css">
+                <div class="pilar-icon" style="color: var(--css-color);"><i class="fa-brands fa-css3-alt"></i></div>
+                <h3 style="margin-top:0;">CSS3</h3>
+                <p><strong>La Apariencia:</strong> Aporta diseño, colores, tipografía, disposición gráfica y adaptabilidad a dispositivos móviles (Responsive Design).</p>
+            </div>
+            <div class="pilar-card pilar-js">
+                <div class="pilar-icon" style="color: #ca8a04;"><i class="fa-brands fa-square-js"></i></div>
+                <h3 style="margin-top:0;">JavaScript</h3>
+                <p><strong>El Sistema Nervioso:</strong> Añade interactividad, lógica, comportamiento dinámico y respuesta inmediata a las acciones del usuario.</p>
+            </div>
+        </div>
+
+        <!-- SVG Visual Diagram -->
+        <div style="text-align: center; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <svg viewBox="0 0 800 200" width="100%" height="auto" style="max-width:700px;">
+                <g transform="translate(50, 20)">
+                    <!-- HTML Box -->
+                    <rect x="0" y="20" width="200" height="120" rx="10" fill="#fff" stroke="#e34f26" stroke-width="3"/>
+                    <text x="100" y="60" text-anchor="middle" fill="#e34f26" font-weight="bold" font-size="18">HTML</text>
+                    <text x="100" y="90" text-anchor="middle" fill="#64748b" font-size="12">&lt;Estructura&gt;</text>
+                    <text x="100" y="110" text-anchor="middle" fill="#64748b" font-size="12">Contenido Puro</text>
+
+                    <!-- Connector 1 -->
+                    <path d="M 205 80 L 295 80" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="5,5"/>
+
+                    <!-- CSS Box -->
+                    <rect x="300" y="20" width="200" height="120" rx="10" fill="#fff" stroke="#1572b6" stroke-width="3"/>
+                    <text x="400" y="60" text-anchor="middle" fill="#1572b6" font-weight="bold" font-size="18">CSS</text>
+                    <text x="400" y="90" text-anchor="middle" fill="#64748b" font-size="12">Estilos Visuales</text>
+                    <text x="400" y="110" text-anchor="middle" fill="#64748b" font-size="12">Diseño y Layout</text>
+
+                    <!-- Connector 2 -->
+                    <path d="M 505 80 L 595 80" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="5,5"/>
+
+                    <!-- JS Box -->
+                    <rect x="600" y="20" width="200" height="120" rx="10" fill="#fff" stroke="#f7df1e" stroke-width="3"/>
+                    <text x="700" y="60" text-anchor="middle" fill="#ca8a04" font-weight="bold" font-size="18">JS</text>
+                    <text x="700" y="90" text-anchor="middle" fill="#64748b" font-size="12">Dinamismo</text>
+                    <text x="700" y="110" text-anchor="middle" fill="#64748b" font-size="12">Interactividad</text>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Section 2: HTML -->
+    <div class="section-box" id="sec-html">
+        <h2><i class="fa-brands fa-html5" style="color: var(--html-color);"></i> 2. HTML5: HyperText Markup Language</h2>
+        <p>HTML utiliza <strong>etiquetas</strong> para delimitar los diferentes elementos del documento. Casi todas las etiquetas constan de una apertura (<code>&lt;etiqueta&gt;</code>) y un cierre (<code>&lt;/etiqueta&gt;</code>).</p>
+
+        <h3>Estructura básica de un documento HTML5</h3>
+        <div class="code-container">
+            <div class="code-header">
+                <span><i class="fa-regular fa-file-code"></i> index.html</span>
+                <span>HTML5</span>
+            </div>
+            <div class="code-block"><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang=</span><span class="val">"es"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset=</span><span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Mi Primera Página Web<span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+    <span class="tag">&lt;h1&gt;</span>¡Hola Mundo!<span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;p&gt;</span>Este es un párrafo de texto explicativo.<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;a</span> <span class="attr">href=</span><span class="val">"https://google.com"</span><span class="tag">&gt;</span>Visitar Google<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></div>
+        </div>
+
+        <h3>Principales Etiquetas Semánticas</h3>
+        <ul style="margin-left: 20px; line-height: 1.8;">
+            <li><code>&lt;header&gt;</code>: Encabezado principal de la web o de una sección.</li>
+            <li><code>&lt;nav&gt;</code>: Contenedor para enlaces de navegación.</li>
+            <li><code>&lt;main&gt;</code>: Contenido principal e indispensable del documento.</li>
+            <li><code>&lt;section&gt;</code> y <code>&lt;article&gt;</code>: Bloques temáticos o artículos autónomos.</li>
+            <li><code>&lt;footer&gt;</code>: Pie de página con derechos, enlaces o contacto.</li>
+        </ul>
+    </div>
+
+    <!-- Section 3: CSS -->
+    <div class="section-box" id="sec-css">
+        <h2><i class="fa-brands fa-css3-alt" style="color: var(--css-color);"></i> 3. CSS3: Cascading Style Sheets</h2>
+        <p>CSS describe cómo se deben mostrar los elementos HTML en la pantalla. Funciona seleccionando elementos e indicando reglas de diseño formadas por <strong>propiedades</strong> y <strong>valores</strong>.</p>
+
+        <div class="code-container">
+            <div class="code-header">
+                <span><i class="fa-regular fa-file-code"></i> styles.css</span>
+                <span>CSS3</span>
+            </div>
+            <div class="code-block"><span class="comment">/* Selector que aplica estilos al contenedor */</span>
+<span class="tag">.tarjeta</span> {
+    <span class="css-prop">background-color</span>: <span class="css-val">#ffffff</span>;
+    <span class="css-prop">border-radius</span>: <span class="css-val">12px</span>;
+    <span class="css-prop">padding</span>: <span class="css-val">20px</span>;
+    <span class="css-prop">box-shadow</span>: <span class="css-val">0 4px 10px rgba(0,0,0,0.1)</span>;
+    <span class="css-prop">transition</span>: <span class="css-val">all 0.3s ease</span>;
+}
+
+<span class="tag">.tarjeta:hover</span> {
+    <span class="css-prop">transform</span>: <span class="css-val">translateY(-5px)</span>;
+}</div>
+        </div>
+    </div>
+
+    <!-- Section 4: JavaScript -->
+    <div class="section-box" id="sec-js">
+        <h2><i class="fa-brands fa-js" style="color: #ca8a04;"></i> 4. JavaScript: Dinamismo y Lógica</h2>
+        <p>JavaScript permite manipular el documento HTML en tiempo real mediante el <strong>DOM (Document Object Model)</strong>, respondiendo a los eventos del usuario como clics, desplazamientos o ingresos de texto.</p>
+
+        <h3>Laboratorio Interactivo Didáctico</h3>
+        <p>Prueba cómo funciona la interacción en vivo modificando el diseño con un solo clic:</p>
+
+        <div class="demo-box">
+            <div id="miTarjetaDemo" class="interactive-card">
+                <i class="fa-solid fa-cube" style="font-size: 30px; margin-bottom: 10px;"></i>
+                <h4>Tarjeta de Ejemplo</h4>
+                <p style="font-size: 13px;">Haz clic abajo para transformar este elemento dinámicamente con JavaScript.</p>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button onclick="transformarTarjeta()" style="background: var(--accent-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Ejecutar JavaScript
+                </button>
+            </div>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">
+                <span><i class="fa-regular fa-file-code"></i> script.js</span>
+                <span>JavaScript</span>
+            </div>
+            <div class="code-block"><span class="js-kw">function</span> <span class="js-fn">transformarTarjeta</span>() {
+    <span class="js-kw">const</span> tarjeta = document.<span class="js-fn">getElementById</span>(<span class="val">'miTarjetaDemo'</span>);
+    tarjeta.classList.<span class="js-fn">toggle</span>(<span class="val">'styled'</span>);
+}</div>
+        </div>
+    </div>
+
+    <!-- Quiz Interactive -->
+    <div class="quiz-section" id="quizWebSection">
+        <div class="quiz-header-toggle" onclick="toggleQuizWeb()">
+            <h2><i class="fa-solid fa-list-check" style="color: var(--accent-blue);"></i> Autoevaluación: Desarrollo Web</h2>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        </div>
+
+        <div class="quiz-body">
+            <p style="margin-bottom: 25px; color: var(--text-muted);">Evalúa tus conocimientos sobre los conceptos básicos de HTML, CSS y JS.</p>
+
+            <form id="quizWebForm">
+                <div class="question-card" id="qw1" data-correct="b">
+                    <p class="q-title">1. ¿Qué tecnología se encarga principalmente del diseño visual y estilos de una web?</p>
+                    <div class="options-list">
+                        <label><input type="radio" name="pw1" value="a"> a) HTML5</label>
+                        <label><input type="radio" name="pw1" value="b"> b) CSS3</label>
+                        <label><input type="radio" name="pw1" value="c"> c) JavaScript</label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qw2" data-correct="a">
+                    <p class="q-title">2. ¿Cuál es el objeto de HTML que contiene todos los elementos estructurados del documento?</p>
+                    <div class="options-list">
+                        <label><input type="radio" name="pw2" value="a"> a) DOM (Document Object Model)</label>
+                        <label><input type="radio" name="pw2" value="b"> b) CPU</label>
+                        <label><input type="radio" name="pw2" value="c"> c) RAM</label>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-submit-quiz" onclick="corregirQuizWeb()">Corregir Evaluación Web</button>
+                <div class="quiz-results" id="resultadoQuizWeb"></div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal Apoyo / Colaborar (Preservado) -->
+<div class="modal-overlay" id="supportModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div class="modal-heart-icon"><i class="fa-solid fa-heart"></i></div>
+            <div class="modal-title-box">
+                <h3>Colabora con el Proyecto</h3>
+                <p>Tu ayuda contribuye a mantener los servidores activos.</p>
+            </div>
+            <button class="modal-close-btn" onclick="cerrarModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div style="padding: 25px; text-align: center;">
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 20px;">
+                Si este contenido educativo te resultó útil, puedes realizar un aporte voluntario.
+            </p>
+            <a href="#" class="btn-mp-primary" style="background:#111827; color:white; padding:12px; border-radius:8px; text-decoration:none; display:block;">
+                <i class="fa-solid fa-coffee"></i> Apoyar el proyecto
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Botón Flotante Soporte -->
+<a href="https://wa.me/" class="btn-flotante-soporte" target="_blank" title="Contacto por Whatsapp">
+    <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- Footer -->
+<div id="footer-placeholder"></div>
+
+<!-- JS de Header, Footer y Navegación Dinámica -->
+<script src="js/header.js"></script>
+<script src="js/footer.js"></script>
+
+<script>
+    // Lógica Interactiva Didáctica
+    function transformarTarjeta() {
+        const tarjeta = document.getElementById('miTarjetaDemo');
+        tarjeta.classList.toggle('styled');
+    }
+
+    // Toggle Quiz Desplegable
+    function toggleQuizWeb() {
+        const quizSection = document.getElementById('quizWebSection');
+        quizSection.classList.toggle('open');
+    }
+
+    // Corrección del Cuestionario
+    function corregirQuizWeb() {
+        const form = document.getElementById('quizWebForm');
+        let correctas = 0;
+        const total = 2;
+
+        for(let i = 1; i <= total; i++) {
+            const qCard = document.getElementById('qw' + i);
+            const respuestaCorrecta = qCard.getAttribute('data-correct');
+            const opciones = form.elements['pw' + i];
+            let seleccion = '';
+
+            for(let opt of opciones) {
+                if(opt.checked) seleccion = opt.value;
+            }
+
+            if(seleccion === respuestaCorrecta) {
+                correctas++;
+                qCard.style.borderColor = '#22c55e';
+                qCard.style.backgroundColor = '#f0fdf4';
+            } else {
+                qCard.style.borderColor = '#ef4444';
+                qCard.style.backgroundColor = '#fef2f2';
+            }
+        }
+
+        const resDiv = document.getElementById('resultadoQuizWeb');
+        resDiv.style.display = 'block';
+        resDiv.innerHTML = `Puntuación: ${correctas} / ${total} correctas (${(correctas/total)*100}%)`;
+    }
+
+    // Modales
+    function abrirModalSoporte() {
+        document.getElementById('supportModal').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('supportModal').style.display = 'none';
+    }
+
+    if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=24');
+  });
+}
+</script>
+</body>
+</html>

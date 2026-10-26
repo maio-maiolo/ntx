@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de E/S/M | NTX</title>
+<link rel="manifest" href="manifest.json?v=24">
+
+<meta name="theme-color" content="#0a1930">
+
+<!-- Favicon para SOLAPA NAVEGADOR - Libro circular -->
+<link rel="icon" href="/favicon.ico?v=24" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png?v=24">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png?v=24">
+
+<!-- Apple / iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png?v=24">
+
+<!-- PWA / Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192x192.png?v=24">
+<link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512x512.png?v=24">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--bg:#0a1020;--panel:#1a233aee;--border:#2a3a5a;--cyan:#22d3ee;--violet:#a78bfa;--emerald:#10b981;--amber:#fbbf24;--rose:#f43f5e;--text:#e2e8f0;--muted:#94a3b8}
+*{box-sizing:border-box}
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: radial-gradient(1200px 600px at 20% -10%, rgba(34,211,238,.15), transparent), radial-gradient(900px 500px at 90% 10%, rgba(167,139,250,.18), transparent), var(--bg);
+    color: var(--text);
+}
+.grid-bg{position:fixed;inset:0;pointer-events:none;opacity:.04;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:40px 40px}
+
+.floating-nav {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.float-btn {
+    background: rgba(26, 35, 58, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
+}
+
+.float-btn:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(34,211,238,0.2);
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 110%;
+    background: rgba(26, 35, 58, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    width: 200px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: none;
+    z-index: 1001;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.dropdown-menu li a:hover {
+    background: rgba(34, 211, 238, 0.15);
+    color: var(--cyan);
+    box-shadow: inset 3px 0 0 var(--cyan), 0 0 12px rgba(34, 211, 238, 0.25);
+    padding-left: 20px;
+}
+header {
+    text-align: center;
+    padding: 4px 320px;
+    height: 60px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+header h1 {
+    margin: 0;
+    font-size: 25px;
+    font-weight: 900;
+    background: linear-gradient(90deg,#22d3ee,#a78bfa,#f472b6,#22d3ee);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: grad 6s linear infinite;
+}
+@keyframes grad { to { background-position: 200% center } }
+
+.layout {
+    width: 100vw;
+    height: calc(100vh - 55px - 35px);
+    margin: 0;
+    padding: 0 8px 8px;
+    display: grid;
+    grid-template-columns: 160px 1fr 310px;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+@media(max-width:1100px){.layout{grid-template-columns:1fr}}
+
+.panel {
+    background: var(--panel);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.shelf {
+    padding: 6px;
+    gap: 6px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.shelf::-webkit-scrollbar { width: 4px; }
+.shelf::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.shelf h3 { margin: 2px 4px 6px; font-size: 9px; letter-spacing: .08em; color: var(--cyan); text-align: center; }
+
+.comp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 4px;
+    gap: 4px;
+    border-radius: 8px;
+    background: linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+    border: 1px solid rgba(255,255,255,.08);
+    cursor: grab;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    flex-shrink: 0;
+    width: 100%;
+    height: 120px;
+}
+.comp:hover { transform: translateY(-1px) scale(1.02); border-color: var(--cyan); box-shadow: 0 0 10px rgba(34,211,238,.25); }
+.comp.dragging { opacity: .4; }
+
+.comp-img-container {
+    width: 100%;
+    height: 68px;
+    flex-shrink: 0;
+    background: rgba(34, 211, 238, 0.15);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+.comp img { width: 100%; height: 100%; object-fit: contain; }
+
+.comp-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.1;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+}
+
+.comp.used { 
+    max-height: 0 !important;
+    opacity: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-width: 0 !important;
+    pointer-events: none;
+    transform: scale(0.9);
+}
+
+.board-wrap {
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
+    background: rgba(10, 16, 32, 0.7);
+}
+
+.categories-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.category-dropzone {
+    background: rgba(14, 23, 44, 0.85);
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.category-header {
+    padding: 8px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.cat-entrada { background: rgba(34, 211, 238, 0.08); color: var(--cyan); border-color: rgba(34,211,238,0.3); }
+.cat-salida { background: rgba(167, 139, 250, 0.08); color: var(--violet); border-color: rgba(167,139,250,0.3); }
+.cat-mixto { background: rgba(16, 185, 129, 0.08); color: var(--emerald); border-color: rgba(16,185,129,0.3); }
+
+.category-slots {
+    flex: 1;
+    padding: 6px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-content: start;
+}
+.category-slots::-webkit-scrollbar { width: 4px; }
+.category-slots::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.category-dropzone.drag-over {
+    border-style: solid;
+    transform: scale(1.01);
+    box-shadow: 0 0 15px currentColor;
+}
+.category-dropzone.cat-entrada.drag-over { border-color: var(--cyan); background: rgba(34, 211, 238, 0.15); }
+.category-dropzone.cat-salida.drag-over { border-color: var(--violet); background: rgba(167, 139, 250, 0.15); }
+.category-dropzone.cat-mixto.drag-over { border-color: var(--emerald); background: rgba(16, 185, 129, 0.15); }
+
+.slot-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+.slot-item.filled {
+    border-style: solid;
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    justify-content: flex-start;
+    gap: 8px;
+    height: 60px;
+    padding: 3px 6px;
+}
+.slot-item.cat-entrada.filled { border-color: rgba(34, 211, 238, 0.4); background: rgba(34, 211, 238, 0.08); }
+.slot-item.cat-salida.filled { border-color: rgba(167, 139, 250, 0.4); background: rgba(167, 139, 250, 0.08); }
+.slot-item.cat-mixto.filled { border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08); }
+
+.slot-item img {
+    width: 100px;
+    height: 100%;
+    object-fit: contain;
+    background: rgba(0,0,0,0.4);
+    border-radius: 6px;
+    padding: 2px;
+    flex-shrink: 0;
+}
+.slot-item.filled span {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: var(--text);
+    line-height: 1.2;
+    white-space: normal;
+    overflow: hidden;
+}
+.status { 
+    padding: 8px; 
+    gap: 8px; 
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+.status::-webkit-scrollbar { width: 4px; }
+.status::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.progress { height: 8px; background: #0f1a33; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); flex-shrink: 0; }
+.progress i { display: block; height: 100%; background: linear-gradient(90deg,var(--cyan),var(--violet)); width: 0%; transition: .5s; }
+
+.status-top { flex-shrink: 0; }
+.check-container { flex: 1 1 0; min-height: 0; height: 50%; overflow-y: auto; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 4px; background: rgba(0,0,0,0.15); }
+.check-container::-webkit-scrollbar, .info-box::-webkit-scrollbar { width: 4px; }
+.check-container::-webkit-scrollbar-thumb, .info-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.check { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.check li { display: flex; gap: 8px; align-items: center; font-size: 12px; font-family: monospace; font-weight: 700; padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02); flex-shrink: 0; transition: all 0.3s ease; animation: slideIn 0.3s ease; } @keyframes slideIn { from { opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
+.check li.ok { border-color: rgba(16,185,129,.3); background: rgba(16,185,129,.08); color: #a7f3d0; }
+
+.info-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
+    height: 50%;
+    gap: 4px;
+    overflow: hidden;
+}
+.info-box {
+    scroll-behavior: smooth;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    font-size: 14px;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.info-item {
+    background: rgba(255,255,255,0.02);
+    border-left: 3px solid var(--cyan);
+    padding: 4px 6px;
+    border-radius: 0 4px 4px 0;
+    line-height: 1.2;
+}
+.info-item.nuevo{outline:1px solid var(--cyan); box-shadow:0 0 10px rgba(34,211,238,.3);}
+.info-item b { color: var(--cyan); font-size: 12px; }
+
+.controls-bar {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    height: 28px;
+    flex-shrink: 0;
+}
+button { height: 26px; padding: 0 10px; border-radius: 6px; border: 1px solid transparent; font-weight: 800; font-size: 10px; cursor: pointer; transition: .2s; }
+.btn-finish { background: var(--emerald); color: #001a0e; box-shadow: 0 0 10px rgba(16,185,129,.3); }
+.btn-finish:hover { transform: scale(1.02); }
+.btn-reset { background: #1e293b; color: var(--text); border-color: var(--border); }
+.btn-reset:hover { background: #ef4444; border-color: #ef4444; color: white; }
+
+footer {
+    height: 35px;
+    background: rgba(15, 23, 42, 0.9);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--muted);
+    position: relative;
+    z-index: 10;
+}
+
+.toast { position: fixed; left: 50%; bottom: 45px; transform: translateX(-50%) translateY(20px); background: #0f172a; border: 1px solid var(--border); padding: 5px 12px; border-radius: 999px; font-family: monospace; font-size: 11px; opacity: 0; transition: .3s; z-index: 100; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.modal { position: fixed; inset: 0; z-index: 80; display: none; align-items: center; justify-content: center; padding: 16px; }
+.modal.show { display: flex; }
+.modal-bg { position: absolute; inset: 0; background: rgba(2,6,15,.85); backdrop-filter: blur(12px); }
+.modal-box { position: relative; width: 100%; max-width: 450px; border-radius: 14px; background: linear-gradient(180deg,#16213e,#0e172c); border: 1px solid rgba(255,255,255,.1); padding: 16px; }
+
+.success-animation {
+    margin: 15px auto 20px auto;
+    width: 60px;
+    height: 60px;
+}
+.checkmark {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 3;
+    stroke: #10b981;
+    stroke-miterlimit: 10;
+    box-shadow: inset 0px 0px 0px #10b981;
+    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+.checkmark__circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 3;
+    stroke-miterlimit: 10;
+    stroke: #10b981;
+    fill: rgba(16, 185, 129, 0.1);
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.checkmark__check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+@keyframes stroke {
+    100% { stroke-dashoffset: 0; }
+}
+@keyframes scale {
+    0%, 100% { transform: none; }
+    50% { transform: scale3d(1.1, 1.1, 1); }
+}
+@keyframes fill {
+    100% { box-shadow: inset 0px 0px 0px 30px rgba(16, 185, 129, 0.2); }
+}
+
+/* === EFECTOS FINALIZAR === */
+.slot-item.result-correct {
+  border-color: #10b981 !important;
+  background: rgba(16,185,129,0.25) !important;
+  box-shadow: 0 0 18px rgba(16,185,129,0.7), inset 0 0 12px rgba(16,185,129,0.3) !important;
+  animation: pulseGreen 0.8s ease infinite alternate;
+}
+.slot-item.result-error {
+  border-color: #f43f5e !important;
+  background: rgba(244,63,94,0.25) !important;
+  box-shadow: 0 0 18px rgba(244,63,94,0.7), inset 0 0 12px rgba(244,63,94,0.3) !important;
+  animation: shakeRed 0.5s ease;
+}
+.check li.result-correct {
+  border-color: rgba(16,185,129,.6) !important;
+  background: rgba(16,185,129,.25) !important;
+  color: #ecfdf5 !important;
+  box-shadow: 0 0 12px rgba(16,185,129,.4);
+}
+.check li.result-error {
+  border-color: rgba(244,63,94,.6) !important;
+  background: rgba(244,63,94,.25) !important;
+  color: #ffe4e6 !important;
+  box-shadow: 0 0 12px rgba(244,63,94,.4);
+}
+@keyframes pulseGreen {
+  from { box-shadow: 0 0 10px rgba(16,185,129,0.5), inset 0 0 8px rgba(16,185,129,0.2); transform: scale(1); }
+  to { box-shadow: 0 0 22px rgba(16,185,129,0.9), inset 0 0 14px rgba(16,185,129,0.4); transform: scale(1.02); }
+}
+@keyframes shakeRed {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-5px); }
+  40%,80% { transform: translateX(5px); }
+}
+#fireworks-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* === MODAL DE ADVERTENCIA DE RESOLUCIÓN MÍNIMA === */
+.modal-resolution {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(2, 6, 15, 0.95);
+    backdrop-filter: blur(16px);
+    text-align: center;
+}
+.modal-resolution.show {
+    display: flex;
+}
+.modal-resolution-content {
+    background: linear-gradient(180deg, #16213e, #0e172c);
+    border: 2px solid var(--cyan);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 460px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.3), 0 20px 40px rgba(0,0,0,0.8);
+    animation: modalPulse 3s ease-in-out infinite;
+}
+@keyframes modalPulse {
+    0%, 100% { border-color: var(--cyan); box-shadow: 0 0 25px rgba(34, 211, 238, 0.25); }
+    50% { border-color: var(--violet); box-shadow: 0 0 35px rgba(167, 139, 250, 0.4); }
+}
+.modal-resolution-icon {
+    font-size: 48px;
+    color: var(--cyan);
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 10px rgba(34,211,238,0.5));
+}
+.modal-resolution-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+}
+.modal-resolution-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+.modal-resolution-desc b {
+    color: var(--cyan);
+    font-family: monospace;
+}
+.resolution-badge {
+    display: inline-block;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--cyan);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+.modal-resolution-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+.modal-resolution-btn {
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    color: #001020;
+    border: none;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(34,211,238,0.4);
+    transition: all 0.2s ease;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 44px;
+    padding: 0 10px;
+    margin: 0;
+}
+.modal-resolution-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34,211,238,0.6);
+}
+.modal-resolution-btn-cancel {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: none;
+}
+.modal-resolution-btn-cancel:hover {
+    background: rgba(244, 63, 94, 0.15);
+    border-color: #f43f5e;
+    color: #f43f5e;
+    box-shadow: 0 4px 15px rgba(244,63,94,0.2);
+}
+
+/* --- MODO RESPONSIVE MOBILE (Dispositivos) --- */
+@media (max-width: 768px) {
+  html, body {
+    height: auto;
+    overflow-y: auto;
+  }
+  
+  header {
+    padding: 10px;
+    height: auto;
+  }
+
+  header h1 {
+    font-size: 18px;
+  }
+
+  .floating-nav {
+    top: 10px;
+    right: 10px;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+    padding: 4px;
+    gap: 12px;
+  }
+
+  .panel {
+    max-height: none !important;
+    height: auto !important;
+  }
+
+  .shelf {
+    max-height: 220px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .comp {
+    height: 110px;
+  }
+
+  .categories-container {
+    display: flex;
+    flex-direction: column;
+    height: auto !important;
+    overflow: visible;
+    gap: 12px;
+  }
+
+  .category-dropzone {
+    height: 280px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- MODAL DE ADVERTENCIA DE RESOLUCIÓN MÍNIMA -->
+<div class="modal-resolution" id="modalResolution">
+  <div class="modal-resolution-content">
+    <div class="modal-resolution-icon">
+      <i class="fa-solid fa-desktop"></i>
+    </div>
+    <div class="modal-resolution-title">INFORMACION IMPORTANTE</div>
+    <div class="modal-resolution-desc">
+      Este simulador de DISPOSITIVOS E/S requiere un espacio de trabajo amplio para una correcta experiencia educativa y técnica.<br><br>
+      Resolución detectada:
+    </div>
+    <div class="resolution-badge" id="currentResolutionText">1024 x 768 px</div>
+    <div class="modal-resolution-desc" style="font-size: 12px; margin-bottom: 16px;">
+      Por favor, ingresa desde una computadora o dispositivo con al menos <b>1110px de ancho por 600px de alto</b>
+    </div>
+    <div class="modal-resolution-buttons">
+      <button class="modal-resolution-btn modal-resolution-btn-cancel" id="cancelResolutionBtn" onclick="cancelResolutionModalDispositivos()"><i></i> Cancelar</button>
+      <button class="modal-resolution-btn" id="dismissResolutionBtn" onclick="dismissResolutionModalDispositivos()">Continuar</button>
+    </div>
+  </div>
+</div>
+
+<div class="floating-nav">
+    <a href="index.html" class="float-btn" title="Volver al Inicio"><i class="fa-solid fa-house"></i> Inicio</a>
+    
+    <!-- Menú Desplegable de Simuladores -->
+    <div class="dropdown">
+        <button class="float-btn dropdown-toggle" title="Simuladores"><i class="fa-solid fa-gamepad"></i> Simulador <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i></button>
+        <ul class="dropdown-menu">
+            <li><a href="simulador-pc.html"><i class="fa-solid fa-computer" style="color:#06b6d4;"></i> Ensamblar PC</a></li>
+                        <li><a href="simulador-red.html"><i class="fa-solid fa-network-wired" style="color:#8b5cf6;"></i>Conectar Redes</a></li>
+                        <li><a href="simulador-web.html"><i class="fa-solid fa-laptop-code" style="color:#ec4899;"></i> Desarollador Web</a></li>
+                      
+        </ul>
+    </div>
+        
+    <div class="dropdown">
+        <button class="float-btn dropdown-toggle" title="Menú Principal"><i class="fa-solid fa-bars"></i> Menú <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i></button>
+        <ul class="dropdown-menu">
+            <li><a href="informatica.html"><i class="fa-solid fa-microchip" style="color: #3b82f6;"></i> Informática</a></li>
+            <li><a href="redes.html"><i class="fa-solid fa-network-wired" style="color: #f59e0b;"></i> Redes</a></li>
+            <li><a href="ofimatica.html"><i class="fa-solid fa-database" style="color: #10b981;"></i> Ofimática</a></li>
+            <li><a href="diseño.html"><i class="fa-solid fa-image" style="color: #8b5cf6;"></i> Diseño</a></li>
+            <li><a href="colaborativo.html"><i class="fa-solid fa-comments" style="color: #f97316;"></i> Colaborativo</a></li>
+            <li><a href="multimedia.html"><i class="fa-solid fa-video" style="color: #ef4444;"></i> Multimedia</a></li>
+            <li><a href="seguridad.html"><i class="fa-solid fa-shield-halved" style="color: #0284c7;"></i> Seguridad</a></li>
+            <li><a href="nticx.html"><i class="fa-solid fa-graduation-cap" style="color: #06b6d4;"></i> NTICx</a></li>
+            <li><a href="ia.html"><i class="fa-solid fa-brain" style="color: #d406b5;"></i>Inteligencia Artificial</a></li>
+            
+        </ul>
+    </div>
+
+    <a href="contacto.html" class="float-btn" title="Contacto"><i class="fa-solid fa-envelope"></i> Contacto</a>
+</div>
+
+<div class="grid-bg"></div>
+<header>
+    <h1>Dispositivos E/S y Mixtos</h1>
+</header>
+
+<div class="layout">
+  <div class="panel shelf" id="shelf">
+    <h3>📦 DISPOSITIVOS</h3>
+  </div>
+
+  <div class="panel board-wrap">
+    <div class="categories-container">
+      
+      <!-- ZONA ENTRADA -->
+      <div class="category-dropzone cat-entrada" id="zone-entrada" data-category="entrada">
+        <div class="category-header cat-entrada">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i> ENTRADA
+        </div>
+        <div class="category-slots" id="slots-entrada"></div>
+      </div>
+
+      <!-- ZONA SALIDA -->
+      <div class="category-dropzone cat-salida" id="zone-salida" data-category="salida">
+        <div class="category-header cat-salida">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> SALIDA
+        </div>
+        <div class="category-slots" id="slots-salida"></div>
+      </div>
+
+      <!-- ZONA MIXTOS -->
+      <div class="category-dropzone cat-mixto" id="zone-mixto" data-category="mixto">
+        <div class="category-header cat-mixto">
+          <i class="fa-solid fa-right-left"></i> MIXTOS (E/S)
+        </div>
+        <div class="category-slots" id="slots-mixto"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="panel status">
+    <div class="status-top">
+      <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:10px;font-weight:800">PROGRESO</span><span id="progressText" style="font-family:monospace;font-size:10px;color:#94a3b8">0%</span></div>
+      <div class="progress"><i id="progressBar"></i></div>
+    </div>
+    
+    <div class="check-container">
+      <ul class="check" id="checklist"></ul>
+    </div>
+
+    <div class="info-wrapper">
+      <span style="font-size:10px;font-weight:800">INFORMACIÓN DE DISPOSITIVOS</span>
+      <div class="info-box" id="infoBox">
+        <span style="color:var(--muted)">Arrastra dispositivos a sus categorías correspondientes...</span>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <button class="btn-finish" id="btnFinish">Finalizar</button>
+      <button class="btn-reset" id="btnReset">Reiniciar</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+    &copy; 2026 NTX Academia Digital - Formación en Informática y NTICs &bull; By Mario Maiolo
+</footer>
+
+<div class="modal" id="modalIncomplete">
+  <div class="modal-bg"></div>
+  <div class="modal-box">
+    <h3>⚠️ ¡Atención!</h3>
+    <div id="missingList" style="margin-top:12px;max-height:150px;overflow-y:auto;font-family:monospace;font-size:14px;"></div>
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button id="closeIncomplete" style="flex:1;background:#1e293b;color:white;border:1px solid #334155;height:28px">ENTENDIDO</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modalSuccess">
+  <div class="modal-bg"></div>
+  <div class="modal-box" style="max-width:420px;border-color:rgba(16,185,129,.4);text-align:center;padding:26px 20px;box-shadow:0 20px 60px rgba(16,185,129,0.25);">
+    
+    <div class="success-animation">
+      <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+      </svg>
+    </div>
+
+    <h3 style="font-size:22px;font-weight:900;margin:0 0 6px 0;color:#10b981;letter-spacing:0.02em;">¡FELICITACIONES! 🎉</h3>
+    <p id="successCount" style="font-size:13px;color:var(--text);margin-bottom:8px;font-weight:700;"></p>
+    <p id="fraseAlentadora" style="font-size:13px;color:#a7f3d0;margin-bottom:8px;font-weight:600;font-style:italic;background:rgba(16,185,129,0.1);padding:8px 12px;border-radius:8px;border:1px dashed rgba(16,185,129,0.3);">¡Sos un genio!</p>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:20px;">Dominas por completo el concepto de periféricos de entrada, salida y mixtos. ¡Seguí así, vas por un gran camino!</p>
+    
+    <div style="display:flex;gap:10px;">
+      <button id="closeSuccess" style="flex:1;background:#1e293b;border:1px solid #334155;color:white;height:34px;font-size:11px;font-weight:800;border-radius:8px;">Cerrar</button>
+      <button id="newBuild" style="flex:1;background:#10b981;color:#001a0e;height:34px;font-size:11px;font-weight:800;border-radius:8px;box-shadow:0 0 15px rgba(16,185,129,0.4);">Reiniciar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DEVICES = [
+  // ENTRADA
+  { id:"teclado", type:"entrada", name:"Teclado", short:"Teclado", img:"img/teclado.webp", tip:"Periférico de entrada", desc:"Permite al usuario ingresar texto y comandos mediante la pulsación de teclas." },
+  { id:"mouse", type:"entrada", name:"Mouse / Ratón", short:"Mouse", img:"img/mouse.webp", tip:"Periférico de entrada", desc:"Dispositivo apuntador utilizado para facilitar el manejo de entorno gráfico en el computador." },
+  { id:"mic", type:"entrada", name:"Micrófono", short:"Micrófono", img:"img/mic.webp", tip:"Periférico de entrada", desc:"Captura ondas sonoras y las convierte en señales eléctricas para su procesamiento o grabación." },
+  { id:"webcam", type:"entrada", name:"Webcam", short:"Webcam", img:"img/webcam.webp", tip:"Periférico de entrada", desc:"Cámara digital conectada al ordenador que captura imágenes y videos en tiempo real." },
+  { id:"scanner", type:"entrada", name:"Escáner", short:"Escáner", img:"img/scanner.webp", tip:"Periférico de entrada", desc:"Convierte documentos físicos o fotografías en imágenes digitales legibles por el sistema." },
+
+  // SALIDA
+  { id:"monitor", type:"salida", name:"Monitor", short:"Monitor", img:"img/monitor.webp", tip:"Periférico de salida", desc:"Muestra visualmente la información, interfaz gráfica y resultados procesados por el equipo." },
+  { id:"impresora", type:"salida", name:"Impresora", short:"Impresora", img:"img/impresora.webp", tip:"Periférico de salida", desc:"Plasma en papel o soportes físicos documentos y gráficos generados digitalmente." },
+  { id:"parlantes", type:"salida", name:"Parlantes / Auriculares", short:"Parlantes", img:"img/parlantes.webp", tip:"Periférico de salida", desc:"Reproducen señales de audio y sonido procedentes del sistema informático." },
+  { id:"proyector", type:"salida", name:"Proyector / Cañón", short:"Proyector", img:"img/proyector.webp", tip:"Periférico de salida", desc:"Proyecta imágenes y video de gran formato sobre superficies claras o pantallas dedicadas." },
+  { id:"plotter", type:"salida", name:"Plotter", short:"Plotter", img:"img/plotter.webp", tip:"Periférico de salida", desc:"Impresora de gran formato utilizada en diseño, arquitectura e ingeniería para planos y cartelería." },
+
+  // MIXTOS
+  { id:"touchscreen", type:"mixto", name:"Pantalla Táctil", short:"Pantalla Táctil", img:"img/touchscreen.webp", tip:"Dispositivo Mixto", desc:"Funciona como pantalla de salida visual y al mismo tiempo recibe comandos táctiles de entrada." },
+  { id:"multifuncion", type:"mixto", name:"Impresora Multifunción", short:"Multifunción", img:"img/multifuncion.webp", tip:"Dispositivo Mixto", desc:"Integra funciones de impresión (salida) y escaneo o copiado de documentos (entrada)." },
+  { id:"headset", type:"mixto", name:"Cascos / Headset VR", short:"Headset VR", img:"img/headset.webp", tip:"Dispositivo Mixto", desc:"Combina auriculares y micrófono integrado para interacción de audio bidireccional y realidad virtual." },
+  { id:"discoext", type:"mixto", name:"Pendrive", short:"USB", img:"img/discoext.webp", tip:"Dispositivo Mixto", desc:"Almacenamiento secundario que permite tanto la lectura (salida) como la escritura (entrada) de datos." },
+  { id:"capturadora", type:"mixto", name:"Capturadora de Video", short:"Capturadora de Video", img:"img/capturadora.webp", tip:"Dispositivo Mixto", desc:"Recibe señal de video externa (entrada) para procesarla y enviarla a la PC o transmitirla (salida)." }
+];
+let placed = {}; 
+let draggedId = null; let selectedId = null;
+const shelfEl = document.getElementById('shelf');
+const checkEl = document.getElementById('checklist'); const progressEl = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText'); const toastEl = document.getElementById('toast');
+const infoBoxEl = document.getElementById('infoBox');
+
+function renderShelf(){
+  shelfEl.querySelectorAll('.comp').forEach(e=>e.remove());
+  DEVICES.forEach(d=>{
+    const isPlaced = placed[d.id] !== undefined;
+    const div = document.createElement('div'); 
+    div.className = 'comp' + (isPlaced ? ' used' : ''); 
+    div.draggable = !isPlaced; 
+    div.dataset.id = d.id;
+    
+    div.innerHTML = `
+      <div class="comp-img-container">
+        <img src="${d.img}" alt="${d.name}" onerror="this.style.display='none'">
+      </div>
+      <div class="comp-name">${d.short}</div>
+    `;
+    div.title = d.name;
+    
+    div.addEventListener('dragstart', e => {
+      draggedId = d.id;
+      div.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', d.id);
+    });
+    div.addEventListener('dragend', () => {
+      div.classList.remove('dragging');
+      draggedId = null;
+    });
+    div.addEventListener('click', () => {
+      if(isPlaced) return;
+      selectedId = d.id;
+      document.querySelectorAll('.comp').forEach(x => x.style.outline = '');
+      div.style.outline = '2px solid var(--cyan)';
+      showToast(`Seleccionado: ${d.name} → haz click en su categoría`);
+    });
+    shelfEl.appendChild(div);
+  });
+}
+
+function renderDropZones(){
+  ['entrada', 'salida', 'mixto'].forEach(cat => {
+    const slotsContainer = document.getElementById(`slots-${cat}`);
+    slotsContainer.innerHTML = '';
+    
+    const devicesInThisColumn = Object.entries(placed)
+      .filter(([id, placedCat]) => placedCat === cat)
+      .map(([id]) => DEVICES.find(d => d.id === id))
+      .filter(Boolean);
+
+    devicesInThisColumn.forEach(d => {
+      const slotItem = document.createElement('div');
+      slotItem.className = `slot-item cat-${cat} filled`;
+      slotItem.dataset.id = d.id;
+      slotItem.dataset.realType = d.type;
+      slotItem.innerHTML = `
+        <img src="${d.img}" alt="${d.name}" onerror="this.style.display='none'">
+        <span style="font-size:12px;font-weight:700;">${d.short}</span>
+      `;
+      slotItem.addEventListener('click', (e) => {
+        e.stopPropagation();
+        delete placed[d.id];
+        yaFinalizo = false;
+        document.querySelectorAll(".slot-item").forEach(el=>el.classList.remove("result-correct","result-error"));
+        document.querySelectorAll(".check li").forEach(el=>el.classList.remove("result-correct","result-error"));
+        renderAll();
+        showToast(`↩️ ${d.name} devuelto a la estantería`);
+      });
+      slotItem.title = `${d.name} (Tipo real: ${d.type.toUpperCase()} | Click para quitar)`;
+      slotsContainer.appendChild(slotItem);
+    });
+
+    const emptySlot = document.createElement('div');
+    emptySlot.className = `slot-item cat-${cat}`;
+    emptySlot.innerHTML = `<i class="fa-solid fa-plus" style="font-size:12px;opacity:0.3;"></i><span style="font-size:9px;opacity:0.4;margin-left:4px;">Soltar aquí</span>`;
+    slotsContainer.appendChild(emptySlot);
+  });
+
+  ['entrada', 'salida', 'mixto'].forEach(cat => {
+    const zone = document.getElementById(`zone-${cat}`);
+    
+    zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('drag-over'); };
+    zone.ondragleave = () => { zone.classList.remove('drag-over'); };
+    zone.ondrop = (e) => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('text/plain') || draggedId || selectedId;
+      if(id) placeDevice(id, cat);
+    };
+    zone.onclick = () => {
+      if(selectedId) {
+        placeDevice(selectedId, cat);
+      }
+    };
+  });
+}
+
+function showToast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  setTimeout(() => toastEl.classList.remove('show'), 2000);
+}
+
+function scrollToBottom(cat) {
+  const slotsContainer = document.getElementById(`slots-${cat}`);
+  if (slotsContainer) {
+    slotsContainer.scrollTop = slotsContainer.scrollHeight;
+  }
+}
+
+function placeDevice(deviceId, targetCat){
+  const device = DEVICES.find(d => d.id === deviceId);
+  if(!device) return;
+
+  placed[deviceId] = targetCat;
+  selectedId = null;
+  renderAll();
+  scrollToBottom(targetCat);
+  
+  if(device.type === targetCat){
+    showToast(`✓ ${device.name} ubicado correctamente`);
+  } else {
+    showToast(`⚠️ ${device.name} no pertenece a esta categoría`);
+  }
+}
+
+let yaFinalizo = false;
+const FRASES_ALENTADORAS = [
+  "¡Increíble! Dominás los periféricos como un profesional.",
+  "¡Sos un crack de la informática! Seguí así.",
+  "¡Excelente lógica! Tu futuro en sistemas es brillante.",
+  "¡Perfecto! Ya podés enseñarle esto a cualquiera.",
+  "¡Impresionante! Ningún dispositivo se te escapa.",
+  "¡Nivel experto desbloqueado! Sos un genio del hardware.",
+  "¡Lo lograste! La constancia es tu mejor periférico.",
+  "¡Brillante trabajo! Cada clic te acerca a ser un pro."
+];
+
+function renderCheck(){
+  checkEl.innerHTML = '';
+  let correctCount = 0;
+
+  DEVICES.forEach(d => {
+    const assignedCat = placed[d.id];
+    const isCorrect = assignedCat === d.type;
+    if(isCorrect) correctCount++;
+
+    const li = document.createElement('li');
+    if(yaFinalizo){
+      li.className = isCorrect ? 'ok' : '';
+    }
+    
+    let statusIcon = '⬜';
+    let statusText = 'Sin colocar';
+    if(assignedCat){
+      if(yaFinalizo){
+        if(isCorrect){
+          statusIcon = '✅';
+          statusText = 'Correcto';
+        } else {
+          statusIcon = '❌';
+          statusText = 'Error';
+        }
+      } else {
+        statusIcon = '📍';
+        statusText = 'Colocado';
+      }
+    }
+
+    let color = 'var(--muted)';
+    if(assignedCat){
+      color = yaFinalizo ? (isCorrect ? '#10b981' : '#f43f5e') : 'var(--cyan)';
+    }
+
+    li.innerHTML = `<span>${statusIcon}</span> <span style="flex:1">${d.name}</span> <span style="font-size:10px;color:${color}">${statusText}</span>`;
+    checkEl.appendChild(li);
+  });
+
+  const pct = Math.round((correctCount / DEVICES.length) * 100);
+  progressEl.style.width = pct + '%';
+  progressText.textContent = `${pct}% • ${correctCount}/${DEVICES.length} correctos`;
+
+  infoBoxEl.innerHTML = '';
+  const placedIds = Object.keys(placed);
+  if(placedIds.length === 0){
+    infoBoxEl.innerHTML = '<span style="color:var(--muted)">Arrastra dispositivos a sus categorías correspondientes... Podés ponerlos donde quieras, al finalizar te digo si están bien.</span>';
+  } else {
+    placedIds.forEach(id => {
+      const dev = DEVICES.find(d => d.id === id);
+      if(dev){
+        const div = document.createElement('div');
+        div.className = 'info-item';
+        if(id === placedIds[placedIds.length-1]) div.classList.add('nuevo');
+        setTimeout(()=>div.classList.remove('nuevo'), 1000);
+        div.innerHTML = `<b>${dev.name}:</b> ${dev.desc}`;
+        infoBoxEl.appendChild(div);
+      }
+    });
+    requestAnimationFrame(() => {
+      infoBoxEl.scrollTo({ top: infoBoxEl.scrollHeight, behavior: 'smooth' });
+      const last = infoBoxEl.lastElementChild;
+      if(last) last.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    });
+  }
+}
+
+function renderAll(){
+  renderShelf();
+  renderDropZones();
+  renderCheck();
+}
+
+function aplicarEfectoFinalizar(){
+  document.querySelectorAll('.slot-item').forEach(el=>{
+    el.classList.remove('result-correct','result-error');
+  });
+  document.querySelectorAll('.check li').forEach(el=>{
+    el.classList.remove('result-correct','result-error');
+  });
+
+  const checkItems = document.querySelectorAll('.check li');
+  DEVICES.forEach((d, idx)=>{
+    const assigned = placed[d.id];
+    const isCorrect = assigned === d.type;
+    let targetSlot = null;
+    if(assigned){
+      const container = document.getElementById(`slots-${assigned}`);
+      if(container){
+        container.querySelectorAll('.slot-item.filled').forEach(slotEl=>{
+          if(slotEl.dataset.id === d.id) targetSlot = slotEl;
+        });
+      }
+    }
+    if(targetSlot){
+      targetSlot.classList.add(isCorrect ? 'result-correct' : 'result-error');
+    }
+    if(checkItems[idx] && assigned){
+      checkItems[idx].classList.add(isCorrect ? 'result-correct' : 'result-error');
+    }
+  });
+}
+
+let fireworksActive = false;
+function launchFireworks(){
+  if(fireworksActive) return;
+  fireworksActive = true;
+  const canvas = document.getElementById('fireworks-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = 'block';
+  let particles = [];
+  let hue = 120;
+  let startTime = Date.now();
+  const duration = 4200;
+
+  function createFirework(x,y){
+    const count = 80;
+    for(let i=0;i<count;i++){
+      const angle = Math.random()*Math.PI*2;
+      const speed = Math.random()*6+2;
+      particles.push({
+        x:x, y:y,
+        vx: Math.cos(angle)*speed,
+        vy: Math.sin(angle)*speed,
+        life: 1,
+        decay: Math.random()*0.015+0.008,
+        color: `hsl(${hue + Math.random()*60 - 30},100%,60%)`,
+        size: Math.random()*3+1
+      });
+    }
+  }
+
+  function loop(){
+    const elapsed = Date.now()-startTime;
+    ctx.fillStyle = 'rgba(10,16,32,0.18)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    if(Math.random()<0.12){
+      createFirework(Math.random()*canvas.width*0.8+canvas.width*0.1, Math.random()*canvas.height*0.4+50);
+      hue = (hue + 30) % 360;
+    }
+    particles.forEach((p,i)=>{
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.06; p.vx*=0.99; p.life-=p.decay;
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+      ctx.fill();
+    });
+    particles = particles.filter(p=>p.life>0);
+    ctx.globalAlpha = 1;
+    if(elapsed < duration){
+      requestAnimationFrame(loop);
+    } else {
+      let fade = 1;
+      const fadeLoop = ()=>{
+        fade-=0.08;
+        ctx.fillStyle = `rgba(10,16,32,${0.18*fade})`;
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        if(fade>0) requestAnimationFrame(fadeLoop);
+        else { canvas.width=0; canvas.height=0; canvas.style.display='none'; particles=[]; fireworksActive=false; }
+      };
+      fadeLoop();
+    }
+  }
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  createFirework(canvas.width*0.5, canvas.height*0.35);
+  createFirework(canvas.width*0.25, canvas.height*0.3);
+  createFirework(canvas.width*0.75, canvas.height*0.3);
+  loop();
+}
+
+function finalizarClasificacion(){
+  let errors = 0;
+  let missing = 0;
+
+  DEVICES.forEach(d => {
+    const assigned = placed[d.id];
+    if(!assigned) missing++;
+    else if(assigned !== d.type) errors++;
+  });
+
+  yaFinalizo = true;
+  renderAll();
+  aplicarEfectoFinalizar();
+
+  if(missing > 0 || errors > 0){
+    if(navigator.vibrate) navigator.vibrate([80,40,80]);
+    setTimeout(()=>{
+      document.getElementById('modalIncomplete').classList.add('show');
+      const list = document.getElementById('missingList');
+      list.innerHTML = '';
+      
+      if(missing > 0){
+        const div = document.createElement('div');
+        div.style.cssText = 'padding:4px 0; color:#fbbf24; font-weight:700;';
+        div.textContent = `• Faltan ${missing} dispositivos por colocar en el tablero.`;
+        list.appendChild(div);
+      }
+      if(errors > 0){
+        const div = document.createElement('div');
+        div.style.cssText = 'padding:4px 0; color:#f43f5e; font-weight:700;';
+        div.textContent = `• Hay ${errors} dispositivos en categoría incorrecta. ¡Podés corregirlos sin reiniciar. Dale un click a la imagen!`;
+        list.appendChild(div);
+      }
+      const corrects = DEVICES.length - missing - errors;
+      if(corrects > 0){
+        const div = document.createElement('div');
+        div.style.cssText = 'padding:6px 0 0; color:#10b981; font-weight:700;';
+        div.textContent = `✓ Tenés ${corrects} correctos.`;
+        list.appendChild(div);
+      }
+    }, 600);
+    return;
+  }
+
+  if(navigator.vibrate) navigator.vibrate([100,50,150,50,200]);
+  const frase = FRASES_ALENTADORAS[Math.floor(Math.random() * FRASES_ALENTADORAS.length)];
+  document.getElementById('fraseAlentadora').textContent = frase;
+  document.getElementById('successCount').textContent = `¡Clasificaste los ${DEVICES.length} dispositivos perfectamente!`;
+  
+  launchFireworks();
+  setTimeout(()=>{
+    document.getElementById('modalSuccess').classList.add('show');
+  }, 400);
+}
+
+function reiniciarSimulador(){
+  document.querySelectorAll(".slot-item").forEach(el=>el.classList.remove("result-correct","result-error"));
+  document.querySelectorAll(".check li").forEach(el=>el.classList.remove("result-correct","result-error"));
+  const fw = document.getElementById("fireworks-canvas"); if(fw){ fw.width=0; fw.height=0; fw.style.display='none'; }
+  fireworksActive=false;
+  yaFinalizo = false;
+
+  placed = {};
+  selectedId = null;
+  draggedId = null;
+  document.getElementById('modalIncomplete').classList.remove('show');
+  document.getElementById('modalSuccess').classList.remove('show');
+  renderAll();
+  showToast('Simulador reiniciado');
+}
+
+document.getElementById('btnFinish').addEventListener('click', finalizarClasificacion);
+document.getElementById('btnReset').addEventListener('click', reiniciarSimulador);
+document.getElementById('closeIncomplete').addEventListener('click', () => document.getElementById('modalIncomplete').classList.remove('show'));
+document.getElementById('closeSuccess').addEventListener('click', () => document.getElementById('modalSuccess').classList.remove('show'));
+document.getElementById('newBuild').addEventListener('click', () => { document.getElementById('modalSuccess').classList.remove('show'); reiniciarSimulador(); });
+
+renderAll();
+
+// === LÓGICA AISLADA DE COMPROBACIÓN DE RESOLUCIÓN PARA DISPOSITIVOS ===
+function checkScreenResolutionDispositivos() {
+  const modal = document.getElementById('modalResolution');
+  const resText = document.getElementById('currentResolutionText');
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  
+  if(resText) {
+    resText.textContent = `${width} px × ${height} px`;
+  }
+  
+  if(window.forcedResolutionDismissedDispositivos === true) {
+    if(modal) modal.classList.remove('show');
+    return;
+  }
+  
+  if(width < 1110 || height < 600) {
+    if(modal) modal.classList.add('show');
+  } else {
+    if(modal) modal.classList.remove('show');
+  }
+}
+
+function dismissResolutionModalDispositivos() {
+  const modal = document.getElementById('modalResolution');
+  if(modal) modal.classList.remove('show');
+  window.forcedResolutionDismissedDispositivos = true;
+}
+
+function cancelResolutionModalDispositivos() {
+  // Redirige al inicio (index.html) o a la página anterior
+  window.location.href = 'index.html';
+}
+
+window.addEventListener('load', checkScreenResolutionDispositivos);
+window.addEventListener('resize', checkScreenResolutionDispositivos);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=24');
+  });
+}
+</script>
+<canvas id="fireworks-canvas"></canvas>
+</body>
+</html>

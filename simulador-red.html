@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de RED | NTX</title>
+<link rel="manifest" href="manifest.json?v=24">
+
+<meta name="theme-color" content="#0a1930">
+
+<!-- Favicon para SOLAPA NAVEGADOR - Libro circular -->
+<link rel="icon" href="/favicon.ico?v=24" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png?v=24">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png?v=24">
+
+<!-- Apple / iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png?v=24">
+
+<!-- PWA / Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192x192.png?v=24">
+<link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512x512.png?v=24">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--bg:#0a1020;--panel:#1a233aee;--border:#2a3a5a;--cyan:#22d3ee;--violet:#a78bfa;--emerald:#10b981;--amber:#fbbf24;--text:#e2e8f0;--muted:#94a3b8}
+*{box-sizing:border-box}
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: radial-gradient(1200px 600px at 20% -10%, rgba(34,211,238,.15), transparent), radial-gradient(900px 500px at 90% 10%, rgba(167,139,250,.18), transparent), var(--bg);
+    color: var(--text);
+}
+.grid-bg{position:fixed;inset:0;pointer-events:none;opacity:.04;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:40px 40px}
+
+
+.floating-nav-left {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+}
+.sim-msg {
+    background: rgba(0,0,0,0.75);
+    border: 1px dashed #fbbf24;
+    color: #fde68a;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 8px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+    max-width: 260px;
+}
+.sim-msg.ready {
+    background: rgba(16,185,129,0.15);
+    border: 1px solid #10b981;
+    color: #6ee7b7;
+    border-style: solid;
+}
+.sim-msg.hidden {
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+}
+/* contenedor del board ahora es el ancla del botón */
+.board-wrap {
+    position: relative;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+.board-wrap .floating-nav-left {
+    position: absolute;
+    bottom: 18px;
+    left: 18px;
+    z-index: 10;
+}
+.board-wrap .float-btn-primary {
+    font-size: 12px;
+    padding: 9px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+.float-btn-primary {
+    position: relative;
+    background: linear-gradient(135deg, #0f172aee, #1a233aee);
+    border: 1px solid rgba(52,211,153,0.35);
+    color: #e2e8f0;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: .02em;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    box-shadow: 0 0 0 1px rgba(16,185,129,0.15) inset, 0 4px 18px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.3);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    overflow: hidden;
+    isolation: isolate;
+}
+.float-btn-primary .fa-network-wired {
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+    background: rgba(16,185,129,0.15);
+    border: 1px solid rgba(52,211,153,0.3);
+    border-radius: 999px;
+    font-size: 10px;
+    transition: all .3s ease;
+}
+.float-btn-primary::before {
+    content: ''; position: absolute; inset: -1px; border-radius: 999px; z-index: -1; opacity: 0;
+    background: conic-gradient(from 180deg, #22d3ee, #10b981, #a78bfa, #22d3ee);
+    filter: blur(8px); transition: opacity .4s ease;
+}
+.float-btn-primary::after {
+    content: ''; position: absolute; inset: 0; border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), transparent);
+    pointer-events: none;
+}
+.float-btn-primary:hover {
+    transform: translateY(-1.5px);
+    border-color: rgba(52,211,153,0.65);
+    background: linear-gradient(135deg, #1a233aee, #1e293bfa);
+    box-shadow: 0 0 0 1px rgba(16,185,129,0.3) inset, 0 8px 24px rgba(16,185,129,0.25), 0 4px 12px rgba(0,0,0,0.4);
+    color: #fff;
+}
+.float-btn-primary:hover .fa-network-wired {
+    background: rgba(16,185,129,0.25);
+    transform: rotate(15deg) scale(1.05);
+}
+.float-btn-primary:hover::before { opacity: .35; }
+.float-btn-primary:active { transform: translateY(0) scale(.98); }
+
+/* ESTADO BLOQUEADO - cuando faltan conexiones */
+.float-btn-primary.locked {
+    opacity: 0.55;
+    filter: grayscale(0.6);
+    cursor: not-allowed;
+    border-style: dashed;
+    border-color: rgba(251,191,36,0.35);
+    background: linear-gradient(135deg, rgba(15,23,42,0.8), rgba(26,35,58,0.8));
+}
+.float-btn-primary.locked .fa-network-wired {
+    background: rgba(251,191,36,0.12);
+    border-color: rgba(251,191,36,0.25);
+    color: #fbbf24;
+}
+
+/* ESTADO LISTO - pulso suave */
+.float-btn-primary.ready {
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-color: #34d399;
+    color: #fff;
+    box-shadow: 0 0 0 1px rgba(52,211,153,0.5) inset, 0 0 18px rgba(16,185,129,0.5), 0 6px 20px rgba(16,185,129,0.4);
+    animation: readyPulse 2s ease-in-out infinite;
+}
+.float-btn-primary.ready .fa-network-wired {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.35);
+    color: #fff;
+}
+@keyframes readyPulse {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(52,211,153,0.5) inset, 0 0 18px rgba(16,185,129,0.5), 0 6px 20px rgba(16,185,129,0.4); }
+    50% { box-shadow: 0 0 0 1px rgba(52,211,153,0.7) inset, 0 0 26px rgba(16,185,129,0.7), 0 8px 28px rgba(16,185,129,0.5); }
+}
+
+.float-btn-primary.simulating {
+    background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+    border-color: #7dd3fc;
+    box-shadow: 0 0 0 1px #7dd3fc, 0 0 28px rgba(34,211,238,.65), 0 6px 20px rgba(14,165,233,.5);
+    pointer-events: none;
+    animation: btnShake 0.45s ease-in-out infinite alternate;
+}
+.float-btn-primary.simulating::before { opacity: 1; animation: rotateGlow 1.8s linear infinite; }
+.float-btn-primary.simulating::after { animation: pulseRing 1.1s cubic-bezier(0.4,0,0.6,1) infinite; }
+.float-btn-primary.success {
+    background: linear-gradient(135deg, #10b981, #34d399);
+    animation: successPop 0.6s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes pulseRing { 0%{transform:scale(1);opacity:.7} 100%{transform:scale(1.55);opacity:0} }
+@keyframes rotateGlow { to{transform:rotate(360deg)} }
+@keyframes btnShake { 0%{transform:translateY(-1px) rotate(-0.4deg)} 100%{transform:translateY(-2px) rotate(0.4deg)} }
+@keyframes successPop { 0%{transform:scale(1)} 50%{transform:scale(1.12)} 100%{transform:scale(1)} }
+@keyframes flow { to { stroke-dashoffset: -28; } }
+@keyframes glowPulse { 0%{filter: drop-shadow(0 0 2px currentColor)} 100%{filter: drop-shadow(0 0 4px currentColor) drop-shadow(0 0 6px currentColor)} }
+
+
+.floating-nav { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 1000; }
+
+.float-btn {
+    background: rgba(26, 35, 58, 0.9); backdrop-filter: blur(10px); border: 1px solid var(--border);
+    color: var(--text); padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 700;
+    cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s ease;
+}
+.float-btn:hover { border-color: var(--cyan); color: var(--cyan); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(34,211,238,0.2); }
+.dropdown { position: relative; display: inline-block; }
+.dropdown-menu {
+    position: absolute; right: 0; top: 110%; background: rgba(26, 35, 58, 0.98); backdrop-filter: blur(12px);
+    border: 1px solid var(--border); border-radius: 12px; list-style: none; padding: 8px 0; margin: 0; width: 220px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; z-index: 1001;
+}
+.dropdown:hover .dropdown-menu { display: block; }
+.dropdown-menu li a {
+    display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: var(--text); text-decoration: none;
+    font-size: 12px; font-weight: 600; transition: all 0.2s ease;
+}
+.dropdown-menu li a:hover { background: rgba(34, 211, 238, 0.15); color: var(--cyan); box-shadow: inset 3px 0 0 var(--cyan), 0 0 12px rgba(34, 211, 238, 0.25); padding-left: 20px; }
+
+header {
+    text-align: center; padding: 4px 320px; height: 60px; position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+}
+header h1 {
+    margin: 0; font-size: 25px; font-weight: 900;
+    background: linear-gradient(90deg,#22d3ee,#a78bfa,#f472b6,#22d3ee); background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent; animation: grad 6s linear infinite;
+}
+header p{margin:2px 0 0;color:var(--muted);font-family:monospace;font-size:10px; letter-spacing:.06em}
+@keyframes grad { to { background-position: 200% center } }
+
+.layout {
+    width: 100vw; height: calc(100vh - 55px - 35px); margin: 0; padding: 0 8px 8px;
+    display: grid; grid-template-columns: 240px 1fr 310px; gap: 8px; position: relative; z-index: 1; overflow: hidden;
+}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}}
+
+.panel {
+    background: var(--panel); backdrop-filter: blur(14px); border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4); display: flex; flex-direction: column; min-height: 0; max-height: 100%; overflow: hidden;
+}
+.shelf { padding: 6px; gap: 5px; overflow-y: auto; display: flex; flex-direction: column; }
+.shelf::-webkit-scrollbar { width: 4px; } .shelf::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.shelf h3 { margin: 2px 4px 4px; font-size: 10px; letter-spacing: .08em; color: var(--cyan); font-weight:800 }
+
+
+/* ===== EFECTO FINO MODIFICADO ===== */
+#connections path.laser-animado {
+    fill: none; stroke-width: 1.6; stroke-linecap: round;
+    stroke-dasharray: 200; stroke-dashoffset: 200;
+    animation: drawLaser 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+#connections path.laser-animado.transmitting {
+    stroke-dasharray: 4 10; stroke-dashoffset: 0;
+    stroke-width: 1.2 !important;
+    stroke-opacity: 0.85;
+    animation: flow 1.4s linear infinite, glowPulse 1.8s ease-in-out infinite alternate;
+}
+.slot.active-node { box-shadow: 0 0 10px rgba(34,211,238,.4), inset 0 0 8px rgba(34,211,238,.15); border-color: var(--cyan) !important; transform: scale(1.02); transition: all .25s; }
+.particle.trail { position: absolute; }
+
+#connections path.laser-beam {
+    fill: none;
+    stroke: #38bdf8;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: drawLaser 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    filter: drop-shadow(0 0 3px #22d3ee) drop-shadow(0 0 6px #38bdf8);
+}
+@keyframes drawLaser {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes drawStroke {
+    from {
+        stroke-dashoffset: 300;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+.animated-line {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: drawStroke 0.5s ease-out forwards;
+}
+.comp {
+    display: flex; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 6px;
+    background: linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)); border: 1px solid rgba(255,255,255,.08);
+    cursor: grab; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; flex-shrink: 0; max-height: 120px; overflow: hidden;
+}
+.comp:hover { transform: translateY(-1px) scale(1.01); border-color: var(--cyan); box-shadow: 0 0 10px rgba(34,211,238,.25); }
+.comp.dragging { opacity: .4; }
+.comp .icon{
+    font-size:22px; width:100px; height:80px; display:flex; align-items:center; justify-content:center; 
+    background:rgba(255, 255, 255, 0.314); border-radius:6px; flex-shrink:0; overflow:hidden; position:relative;
+}
+.comp .icon img { width: 100%; height: 100%; object-fit: contain; }
+.comp .meta { flex: 1; min-width: 0; }
+.comp .name { font-size: 11px; font-weight: 800; line-height: 1.1; }
+.comp .sub { font-family: monospace; font-size: 9px; color: var(--muted); margin-top: 1px; }
+.comp.selected{border-color:var(--violet); box-shadow:0 0 0 1px var(--violet), 0 0 14px rgba(167,139,250,.35)}
+.comp.used { max-height: 0 !important; opacity: 0 !important; margin: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; border-width: 0 !important; pointer-events: none; transform: scale(0.9); }
+
+.board-wrap { padding: 6px; display: flex; align-items: center; justify-content: center; overflow: visible; position:relative; }
+.board {
+    position: relative; width: 100%; height: 100%; border-radius: 10px; background: #0e172c; border: 1px solid var(--border);
+    overflow: hidden;
+    background: url('assets/redes.webp') center/cover no-repeat;
+}
+
+.board::after{
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(800px 500px at 50% 40%, rgba(34,211,238,.10), transparent 70%),
+                linear-gradient(180deg, rgba(10,16,32,.15), rgba(10,16,32,.25));
+    pointer-events:none; z-index:1;
+}
+
+.slot{
+    position:absolute; width:160px; height:80px;
+    border:2px dashed rgba(34,211,238,.55);
+    border-radius:12px; background:rgba(14,23,44,.82);
+    backdrop-filter: blur(6px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; cursor:pointer; transition:.25s;
+    z-index:3;
+    box-shadow: 0 0 0 1px rgba(34,211,238,.08) inset, 0 4px 12px rgba(0,0,0,.4);
+}
+.slot:hover{border-color:var(--cyan); background:rgba(34,211,238,.18); transform:scale(1.04); box-shadow:0 0 18px rgba(34,211,238,.35)}
+.slot.drag-over{border-color:var(--emerald); background:rgba(16,185,129,.25); transform:scale(1.07)}
+.slot.filled{
+    border-style:solid; border-color:var(--emerald); 
+    background:rgba(16,185,129,.22);
+    box-shadow:0 0 0 1px rgba(16,185,129,.4) inset, 0 0 20px rgba(16,185,129,.35), 0 4px 12px rgba(0,0,0,.5);
+}
+.slot.filled:hover{border-color:#34d399; box-shadow:0 0 0 1px #34d399 inset, 0 0 26px rgba(16,185,129,.5)}
+.slot span.label{font-size:10px; font-weight:900; color:var(--cyan); letter-spacing:.03em; text-transform:uppercase}
+.slot.filled span.label{color:#6ee7b7}
+.slot span.desc{font-size:8px; color:var(--muted); margin-top:2px; font-family:monospace}
+.slot.filled span.desc{color:#a7f3d0}
+.slot .icon-placed{
+    font-size: 20px; margin-bottom:1px; width:100px; height:100px; 
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.slot .icon-placed img { width: 100%; height: 100%; object-fit: contain; }
+
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.shake{animation:shake .35s}
+
+#connections{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:2}
+/* GLOW FINO */
+#connections path.glow{
+    fill:none; stroke:rgba(16,185,129,.18); stroke-width:6; stroke-linecap:round; filter:blur(3px); opacity:.7;
+}
+#connections path.active{
+    fill:none; stroke:#10b981; stroke-width:1.4; stroke-linecap:round; opacity:.85;
+    filter:drop-shadow(0 0 3px rgba(16,185,129,.7)) drop-shadow(0 0 6px rgba(16,185,129,.4));
+    stroke-dasharray: 4 10; animation: flow 1.6s linear infinite;
+}
+#connections path.active.inner{
+    stroke:#6ee7b7; stroke-width:0.8; opacity:.75; stroke-dasharray:none; filter:drop-shadow(0 0 2px #10b981);
+}
+#connections path.waiting{
+    fill:none; stroke:rgba(148,163,184,.25); stroke-width:1.2; stroke-dasharray:4 8; opacity:.5
+}
+@keyframes flow{to{stroke-dashoffset:-50}}
+
+.laser-animado {
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    transition: stroke-dashoffset 0.5s ease-out;
+}
+.particle{position:absolute; width:6px; height:6px; border-radius:50%; z-index:4; pointer-events:none; opacity:0; transform: translate(-50%, -50%);}
+.particle.verde{background:radial-gradient(circle, #6ee7b7, #10b981); box-shadow:0 0 6px #10b981, 0 0 10px #10b981}
+.particle.celeste{background:var(--cyan); box-shadow:0 0 6px var(--cyan), 0 0 10px var(--cyan)}
+.particle.moving{opacity:1; transition: all .9s cubic-bezier(.4,0,.2,1)}
+
+.right-panel{display:flex; flex-direction:column; gap:0; padding:10px; overflow:hidden; background:#121a32ee}
+.prog-header{display:flex; justify-content:space-between; align-items:center; padding:0 2px 6px}
+.prog-header h3{margin:0; font-size:12px; letter-spacing:.06em; color:#e2e8f0; font-weight:800; font-family:'Inter',sans-serif}
+.prog-header span{font-family:monospace; font-size:12px; color:#94a3b8; font-weight:600}
+.progress{height:10px; background:#0a1020; border-radius:99px; overflow:hidden; margin:0 0 10px; border:1px solid rgba(255,255,255,.08)}
+.progress i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#38bdf8,#a78bfa); transition:width .5s ease; border-radius:99px; box-shadow:0 0 10px rgba(56,189,248,.5)}
+
+.check{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; overflow-y:auto; flex:1; scrollbar-width:thin}
+.check::-webkit-scrollbar{width:4px} .check::-webkit-scrollbar-thumb{background:#2a3a5a; border-radius:4px}
+.check li{display:flex; gap:10px; align-items:center; padding:10px 12px; border-radius:10px; background:#1a2340; border:1px solid rgba(255,255,255,.06); font-size:13px; font-weight:700; color:#cbd5e1; letter-spacing:.02em; transition:.2s}
+.check li::before{content:''; width:16px; height:16px; border-radius:4px; background:#d8b4fe55; border:1px solid #d8b4fe88; flex-shrink:0; box-shadow:inset 0 1px 2px rgba(0,0,0,.3)}
+.check li.ok{color:#e2e8f0; background:#1e2a4a; border-color:rgba(16,185,129,.3)}
+.check li.ok::before{background:#10b981; border-color:#10b981; box-shadow:0 0 8px rgba(16,185,129,.6), inset 0 0 0 2px #0f172a; content:'✓'; display:flex; align-items:center; justify-content:center; font-size:10px; color:white; font-weight:900}
+.check li.ok span:last-child{color:#34d399}
+
+.info-box{margin-top:auto; display:flex; flex-direction:column; gap:0}
+.info-box h3{margin:14px 2px 8px; font-size:11px; letter-spacing:.08em; color:#e2e8f0; font-weight:800; font-family:'Inter',sans-serif}
+.log{background:#0d1229; border:1px solid #1e293b; border-radius:12px; padding:8px; height:210px; overflow:auto; font-family:'Inter',system-ui,sans-serif; font-size:11px; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:6px}
+.log::-webkit-scrollbar{width:4px} .log::-webkit-scrollbar-thumb{background:#2a3a5a; border-radius:4px}
+.log .info-item{background:#151d36; border:1px solid rgba(255,255,255,.04); border-radius:8px; padding:8px 10px; border-left:3px solid #22d3ee}
+.log .info-item .label{color:#22d3ee; font-weight:800; font-size:11px; letter-spacing:.02em}
+.log .info-item div{color:#cbd5e1; font-size:11px; margin-top:2px; line-height:1.4}
+.log .label{color:var(--cyan)} .log .ok{color:var(--emerald)} .log .warn{color:var(--amber)}
+
+.actions{display:flex; gap:10px; justify-content:center; padding:12px 0 2px; margin-top:8px}
+.btn{border:1px solid var(--border); background:#1e293b; color:#e2e8f0; padding:9px 18px; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer; transition:.2s; min-width:90px; display:flex; align-items:center; justify-content:center; gap:6px}
+.btn:hover{transform:translateY(-1px); border-color:#475569; background:#263449}
+.btn.primary{background:#10b981; color:#052e1c; border-color:#10b981; box-shadow:0 4px 12px rgba(16,185,129,.3)}
+.btn.primary:hover{background:#0ec78e; box-shadow:0 6px 16px rgba(16,185,129,.4); color:#022c1c}
+
+.toast{position:fixed; left:50%; bottom:90px; transform:translateX(-50%) translateY(20px); background:#0f1a33ee; border:1px solid var(--border); color:var(--text); padding:10px 16px; border-radius:10px; font-size:12px; font-weight:700; opacity:0; pointer-events:none; transition:.3s; z-index:2000; backdrop-filter:blur(8px)}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+.modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.6); backdrop-filter:blur(6px); z-index:1500}
+.modal.show{display:flex}
+.card{width:min(420px,92vw); background:linear-gradient(180deg,#1b2542,#121a30); border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 20px 60px rgba(0,0,0,.6); text-align:center}
+.card h2{margin:0 0 8px; font-size:16px}
+.card p{margin:0 0 14px; color:var(--muted); font-size:12px; line-height:1.5}
+footer{height:32px; display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--muted); border-top:1px solid rgba(255,255,255,.06); background:rgba(10,16,32,.6); backdrop-filter:blur(6px); position:relative; z-index:1}
+/* --- MODO RESPONSIVE MOBILE (Redes) --- */
+@media (max-width: 768px) {
+  html, body {
+    height: auto;
+    overflow-y: auto;
+  }
+
+  header {
+    padding: 10px;
+    height: auto;
+  }
+
+  header h1 {
+    font-size: 18px;
+  }
+
+  .floating-nav {
+    top: 10px;
+    right: 10px;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+    padding: 6px;
+    gap: 12px;
+  }
+
+  .panel {
+    max-height: none !important;
+    height: auto !important;
+  }
+
+  .shelf {
+    max-height: 220px;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .board-wrap {
+    height: 420px;
+    width: 100%;
+  }
+  
+  .board-wrap .floating-nav-left {
+    bottom: 10px;
+    left: 10px;
+  }
+}
+
+/* === MODAL DE ADVERTENCIA DE RESOLUCIÓN MÍNIMA === */
+.modal-resolution {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(2, 6, 15, 0.95);
+    backdrop-filter: blur(16px);
+    text-align: center;
+}
+.modal-resolution.show {
+    display: flex;
+}
+.modal-resolution-content {
+    background: linear-gradient(180deg, #16213e, #0e172c);
+    border: 2px solid var(--cyan);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 460px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.3), 0 20px 40px rgba(0,0,0,0.8);
+    animation: modalPulse 3s ease-in-out infinite;
+}
+@keyframes modalPulse {
+    0%, 100% { border-color: var(--cyan); box-shadow: 0 0 25px rgba(34, 211, 238, 0.25); }
+    50% { border-color: var(--violet); box-shadow: 0 0 35px rgba(167, 139, 250, 0.4); }
+}
+.modal-resolution-icon {
+    font-size: 48px;
+    color: var(--cyan);
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 10px rgba(34,211,238,0.5));
+}
+.modal-resolution-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+}
+.modal-resolution-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+.modal-resolution-desc b {
+    color: var(--cyan);
+    font-family: monospace;
+}
+.resolution-badge {
+    display: inline-block;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--cyan);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+.modal-resolution-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+.modal-resolution-btn {
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    color: #001020;
+    border: none;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(34,211,238,0.4);
+    transition: all 0.2s ease;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 44px;
+    padding: 0 10px;
+    margin: 0;
+}
+.modal-resolution-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34,211,238,0.6);
+}
+.modal-resolution-btn-cancel {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: none;
+}
+.modal-resolution-btn-cancel:hover {
+    background: rgba(244, 63, 94, 0.15);
+    border-color: #f43f5e;
+    color: #f43f5e;
+    box-shadow: 0 4px 15px rgba(244,63,94,0.2);
+}
+</style>
+</head>
+<body>
+
+<!-- MODAL DE ADVERTENCIA DE RESOLUCIÓN MÍNIMA -->
+<div class="modal-resolution" id="modalResolution">
+  <div class="modal-resolution-content">
+    <div class="modal-resolution-icon">
+      <i class="fa-solid fa-desktop"></i>
+    </div>
+    <div class="modal-resolution-title">INFORMACION IMPORTANTE</div>
+    <div class="modal-resolution-desc">
+      Este simulador de RED requiere un espacio de trabajo amplio para una correcta experiencia educativa.<br><br>
+      Resolución detectada:
+    </div>
+    <div class="resolution-badge" id="currentResolutionText">1024 x 768 px</div>
+    <div class="modal-resolution-desc" style="font-size: 12px; margin-bottom: 16px;">
+      Por favor, ingresa desde una computadora o dispositivo con al menos <b>1280px de ancho por 600px de alto</b>
+    </div>
+    <div class="modal-resolution-buttons">
+      <button class="modal-resolution-btn modal-resolution-btn-cancel" id="cancelResolutionBtn" onclick="cancelResolutionModalRed()"><i></i> Cancelar</button>
+      <button class="modal-resolution-btn" id="dismissResolutionBtn" onclick="dismissResolutionModalRed()">Continuar</button>
+    </div>
+  </div>
+</div>
+
+<div class="grid-bg"></div>
+
+<div class="floating-nav">
+    <a href="index.html" class="float-btn" title="Volver al Inicio"><i class="fa-solid fa-house"></i> Inicio</a>
+    
+    <!-- Menú Desplegable de Simuladores -->
+    <div class="dropdown">
+        <button class="float-btn dropdown-toggle" title="Simuladores"><i class="fa-solid fa-gamepad"></i> Simulador <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i></button>
+        <ul class="dropdown-menu">
+                        <li><a href="simulador-pc.html"><i class="fa-solid fa-computer" style="color:#06b6d4;"></i> Ensamblar PC</a></li>
+                        <li><a href="simulador-web.html"><i class="fa-solid fa-laptop-code" style="color:#ec4899;"></i> Desarollador Web</a></li>
+                        <li><a href="simulador-dispositivos.html"><i class="fa-solid fa-keyboard" style="color:#f59e0b;"></i> Dispositivos E/S/M</a></li>
+        </ul>
+    </div>
+
+    <div class="dropdown">
+        <button class="float-btn dropdown-toggle" title="Menú Principal"><i class="fa-solid fa-bars"></i> Menú <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i></button>
+        <ul class="dropdown-menu">
+            <li><a href="informatica.html"><i class="fa-solid fa-microchip" style="color: #3b82f6;"></i> Informática</a></li>
+            <li><a href="redes.html"><i class="fa-solid fa-network-wired" style="color: #f59e0b;"></i> Redes</a></li>
+            <li><a href="ofimatica.html"><i class="fa-solid fa-database" style="color: #10b981;"></i> Ofimática</a></li>
+            <li><a href="diseño.html"><i class="fa-solid fa-image" style="color: #8b5cf6;"></i> Diseño</a></li>
+            <li><a href="colaborativo.html"><i class="fa-solid fa-comments" style="color: #f97316;"></i> Colaborativo</a></li>
+            <li><a href="multimedia.html"><i class="fa-solid fa-video" style="color: #ef4444;"></i> Multimedia</a></li>
+            <li><a href="seguridad.html"><i class="fa-solid fa-shield-halved" style="color: #0284c7;"></i> Seguridad</a></li>
+            <li><a href="nticx.html"><i class="fa-solid fa-graduation-cap" style="color: #06b6d4;"></i> NTICx</a></li>
+            <li><a href="ia.html"><i class="fa-solid fa-brain" style="color: #d406b5;"></i>Inteligencia Artificial</a></li>
+        </ul>
+    </div>
+
+    <a href="contacto.html" class="float-btn" title="Contacto"><i class="fa-solid fa-envelope"></i> Contacto</a>
+</div>
+<header>
+  <h1>Simulador de Conectividad de una RED</h1>
+</header>
+
+<div class="layout">
+  <div class="panel">
+    <div class="shelf" id="shelf"><h3>📦 COMPONENTES</h3></div>
+  </div>
+  <div class="panel board-wrap">
+    <div class="board" id="board">
+      <svg id="connections" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+      <div id="particle" class="particle verde"></div>
+    </div>
+    <div class="floating-nav-left">
+      <div class="sim-msg" id="simMsg">
+        <i class="fa-solid fa-lock"></i> Completa las conexiones para poder simular
+      </div>
+      <button class="float-btn-primary" id="btnSimularRed">
+        <i class="fa-solid fa-network-wired"></i> Simular Tráfico de Red
+      </button>
+    </div>
+  </div>
+  <div class="panel right-panel">
+    <div class="prog-header"><h3>PROGRESO</h3><span id="progressText">0% • 0/8</span></div>
+    <div class="progress"><i id="progress"></i></div>
+    <ul class="check" id="check"></ul>
+    
+    <div class="info-box">
+      <h3>INFORMACIÓN DE COMPONENTES</h3>
+      <div class="log" id="consoleLog">
+        <div>> Sistema reiniciado. Arquitectura limpia. Selecciona un componente para ver su info.</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="btnFinish">Finalizar</button>
+      <button class="btn" id="btnReset">Reiniciar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="modalSuccess"><div class="card"><h2 style="color:var(--emerald)">¡RED CONECTADA! 🌐</h2><p>Todos los dispositivos están enlazados. Flujo WAN → LAN → WiFi operativo con efectos de conexión activos.</p><div class="actions" style="justify-content:center"><button class="btn" id="closeSuccess">Seguir editando</button><button class="btn primary" onclick="location.reload()">Nueva red</button></div></div></div>
+<footer>
+    &copy; 2026 NTX Academia Digital - Formación en Informática y NTICs &bull; By Mario Maiolo
+</footer>
+
+<script>
+const COMPONENTS=[
+  {id:'pc', type:'pc', name:'PC ESCRITORIO', sub:'Host cableado', emoji:'💻', img:'assets/pc.webp', info:'Cliente de red por cable UTP'},
+  {id:'phone', type:'phone', name:'CELULAR', sub:'Móvil', emoji:'📱', img:'assets/phone.webp', info:'Cliente inalámbrico WiFi'},
+  {id:'ap_wifi', type:'ap_wifi', name:'WIFI', sub:'Repetidor', emoji:'🛜', img:'assets/ap_wifi.webp', info:'Extiemde cobertura inalambrica por wifi'},
+  {id:'ap', type:'ap', name:'ACCESS POINT', sub:'Conexion por cable.', emoji:'📶', img:'assets/ap.webp', info:'Acceso a internet por cable '},
+  {id:'switch', type:'switch', name:'MODEM LAN', sub:'Puertos Ethernet', emoji:'🔀', img:'assets/switch.webp', info:'Distribuye conexión LAN a múltiples dispositivos'},
+  {id:'router', type:'router', name:'ROUTER CORE', sub:'Enrutamiento IP', emoji:'🛰', img:'assets/router.webp', info:'Enruta tráfico entre WAN y LAN, gestiona DHCP'},
+  {id:'modem', type:'modem', name:'MÓDEM WAN', sub:'Traduce señal', emoji:'📡', img:'assets/modem.webp', info:'Convierte la señal del ISP a Ethernet'},
+  {id:'isp', type:'isp', name:'PROVEEDOR DE INTERNET', sub:'Movistar/Telecentro/Personal', emoji:'☁', img:'assets/isp.webp', info:'Proveedor de internet local - entrada WAN principal'},
+];
+const SLOTS=[
+  {id:'slot_isp', label:'PROVEEDOR DE INTERNET', desc:'Proveedor de internet local', x:48, y:5, accept:['isp']},
+  {id:'slot_router', label:'ROUTER CORE', desc:'Poste - Antena', x:2, y:42, accept:['router']},
+  {id:'slot_modem', label:'MODEM WAN', desc:'Entrada', x:10, y:62, accept:['modem']},
+  {id:'slot_switch', label:'MODEM LAN', desc:'SWITCH Central', x:28, y:72, accept:['switch']},
+  {id:'slot_ap', label:'ACCESS POINT', desc:'Conexión por cable', x:31, y:35, accept:['ap']},
+  {id:'slot_ap_wifi', label:'WIFI', desc:'Repetidor', x:58, y:35, accept:['ap_wifi']},
+  {id:'slot_pc', label:'PC ESCRITORIO', desc:'UTP', x:58, y:82, accept:['pc']},
+  {id:'slot_phone', label:'Celular', desc:'Móvil WiFi', x:80, y:86, accept:['phone']},
+];
+let installed={slot_isp:null, slot_modem:null, slot_router:null, slot_switch:null, slot_pc:null, slot_ap:null, slot_ap_wifi:null, slot_phone:null};
+let selectedId=null; let draggedId=null;
+let redSincronizada = false;
+let isSimulating = false;
+const shelfEl=document.getElementById('shelf');
+const boardEl=document.getElementById('board');
+const checkEl=document.getElementById('check');
+const progressEl=document.getElementById('progress');
+const progressText=document.getElementById('progressText');
+const consoleLog=document.getElementById('consoleLog');
+const toastEl=document.getElementById('toast');
+
+function showToast(msg){toastEl.textContent=msg; toastEl.classList.add('show'); setTimeout(()=>toastEl.classList.remove('show'),2200);}
+function logContext(htmlMsg){const d=document.createElement('div'); d.innerHTML=htmlMsg; if(!htmlMsg.includes('info-item')){d.className='info-item';} consoleLog.appendChild(d); consoleLog.scrollTop=consoleLog.scrollHeight;}
+
+function renderShelf(){
+  const h3=shelfEl.querySelector('h3'); shelfEl.innerHTML=''; shelfEl.appendChild(h3);
+  COMPONENTS.forEach(c=>{
+    const isUsed=Object.values(installed).includes(c.id);
+    const div=document.createElement('div'); div.className='comp'+(selectedId===c.id?' selected':'')+(isUsed?' used':''); div.draggable=!isUsed;
+    const iconContent = c.img ? `<img src="${c.img}" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span style="display:none">${c.emoji}</span>` : c.emoji;
+    div.innerHTML=`<div class="icon">${iconContent}</div><div class="meta"><div class="name">${c.name}</div><div class="sub">${c.sub}</div></div>`;
+    div.addEventListener('click',()=>{if(isUsed) return; selectedId=selectedId===c.id?null:c.id; renderShelf(); logContext(`<div class="info-item"><span class="label">${c.name}:</span><div>${c.info}</div></div>`);});
+    div.addEventListener('dragstart',e=>{draggedId=c.id; div.classList.add('dragging'); e.dataTransfer.effectAllowed='move';});
+    div.addEventListener('dragend',()=>{draggedId=null; div.classList.remove('dragging');});
+    shelfEl.appendChild(div);
+  });
+}
+
+function renderSlots(){
+  boardEl.querySelectorAll('.slot').forEach(n=>n.remove());
+  SLOTS.forEach(s=>{
+    const div=document.createElement('div'); div.className='slot'+(installed[s.id]?' filled':''); div.style.left=s.x+'%'; div.style.top=s.y+'%';
+    const f=installed[s.id];
+    if(f){
+      const comp=COMPONENTS.find(c=>c.id===f);
+      const iconContent = comp.img ? `<img src="${comp.img}" alt="${comp.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span style="display:none">${comp.emoji}</span>` : comp.emoji;
+      div.innerHTML=`<div class="icon-placed">${iconContent}</div><span class="label">${comp.name}</span><span class="desc">1/1 conectado</span>`;
+    } else {
+      div.innerHTML=`<span class="label">${s.label}</span><span class="desc">${s.desc}</span>`;
+    }
+    div.addEventListener('dragover',e=>{e.preventDefault(); div.classList.add('drag-over');});
+    div.addEventListener('dragleave',()=>div.classList.remove('drag-over'));
+    div.addEventListener('drop',e=>{e.preventDefault(); div.classList.remove('drag-over'); const id=draggedId||selectedId; if(id) installComponent(s.id,id);});
+    div.addEventListener('click',()=>{
+      if(selectedId){ installComponent(s.id,selectedId); }
+      else if(installed[s.id]){
+        const comp=COMPONENTS.find(c=>c.id===installed[s.id]); installed[s.id]=null; selectedId=null; redSincronizada=false; renderAll();
+        logContext(`> Removido: <span style="color:#ef4444">${comp.name}</span> de [${s.label}]`);
+        showToast("Dispositivo removido");
+      }
+    });
+    boardEl.appendChild(div);
+  });
+}
+
+function installComponent(slotId, compId){
+  const slot=SLOTS.find(s=>s.id===slotId); const comp=COMPONENTS.find(c=>c.id===compId);
+  if(!slot.accept.includes(comp.type)){ showToast(`❌ ${slot.label} no compatible con ${comp.name}`); const el=[...boardEl.querySelectorAll('.slot')].find(e=>e.style.left===slot.x+'%'); if(el){el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'),400);} return; }
+  
+  // Validar Dependencias Estrictas de Conexión Real:
+  if(!installed.slot_isp && slotId !== 'slot_isp'){
+    showToast(`⚠️ Primero debes conectar el Proveedor de Internet (ISP)`);
+    logContext(`<span class="warn">> Orden requerido: La red inicia obligatoriamente desde el PROVEEDOR DE INTERNET (ISP).</span>`);
+    const el = [...boardEl.querySelectorAll('.slot')].find(e => e.style.left === slot.x + '%');
+    if (el) { el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 400); }
+    return;
+  }
+
+  if((slotId === 'slot_modem' || slotId === 'slot_router') && !installed.slot_isp){
+    showToast(`⚠️ Necesitas conectar primero el Proveedor de Internet (ISP)`);
+    return;
+  }
+
+  if(slotId === 'slot_switch' && !installed.slot_router && !installed.slot_modem){
+    showToast(`⚠️ Conecta primero el Router Core o Módem WAN antes del Switch`);
+    logContext(`<span class="warn">> Orden requerido: El Switch LAN se alimenta de la red troncal (Router/Módem).</span>`);
+    const el = [...boardEl.querySelectorAll('.slot')].find(e => e.style.left === slot.x + '%');
+    if (el) { el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 400); }
+    return;
+  }
+
+  if((slotId === 'slot_ap' || slotId === 'slot_ap_wifi') && !installed.slot_router && !installed.slot_switch){
+    showToast(`⚠️ Se requiere infraestructura previa (Router/Switch) para ubicar un Access Point`);
+    logContext(`<span class="warn">> Orden requerido: Los puntos de acceso WiFi requieren distribución de red cableada previa.</span>`);
+    const el = [...boardEl.querySelectorAll('.slot')].find(e => e.style.left === slot.x + '%');
+    if (el) { el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 400); }
+    return;
+  }
+
+  if(slotId === 'slot_pc' && !installed.slot_switch && !installed.slot_router){
+    showToast(`⚠️ La PC cableada requiere un Switch o Router activo`);
+    logContext(`<span class="warn">> Orden requerido: Conecta el Switch o Router antes de cablear estaciones de trabajo.</span>`);
+    const el = [...boardEl.querySelectorAll('.slot')].find(e => e.style.left === slot.x + '%');
+    if (el) { el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 400); }
+    return;
+  }
+
+  if(slotId === 'slot_phone' && !installed.slot_ap_wifi && !installed.slot_ap){
+    showToast(`⚠️ No hay cobertura WiFi: Instala un Access Point WiFi primero`);
+    logContext(`<span class="warn">> Orden requerido: No se puede conectar el Smartphone sin un punto de acceso inalámbrico activo.</span>`);
+    const el = [...boardEl.querySelectorAll('.slot')].find(e => e.style.left === slot.x + '%');
+    if (el) { el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 400); }
+    return;
+  }
+
+  installed[slotId]=compId; selectedId=null; 
+  redSincronizada = false;
+  renderAll(); logContext(`> Instalado <span class="label">${comp.name}</span> en [${slot.label}]: ${comp.info}`); showToast(`✓ ${comp.name} instalado`);
+}
+
+function updateConnections(){
+  const svg=document.getElementById('connections'); if(!svg) return; svg.innerHTML='';
+  const links=[
+    {from:'slot_isp', to:'slot_router', type:'wan'},
+    {from:'slot_isp', to:'slot_modem', type:'wan'},
+    {from:'slot_modem', to:'slot_router', type:'wan'},
+    {from:'slot_router', to:'slot_switch', type:'fiber'},
+    {from:'slot_router', to:'slot_ap', type:'fiber'},
+    {from:'slot_switch', to:'slot_ap_wifi', type:'lan'},
+    {from:'slot_switch', to:'slot_pc', type:'lan'},
+    {from:'slot_ap_wifi', to:'slot_phone', type:'wifi'},
+    {from:'slot_ap_wifi', to:'slot_pc', type:'wifi'},
+  ];
+  links.forEach(link=>{
+    const s1=SLOTS.find(s=>s.id===link.from); const s2=SLOTS.find(s=>s.id===link.to);
+    if(!s1||!s2) return;
+    const a=installed[link.from]; const b=installed[link.to];
+    if(!a && !b) return;
+    const x1=s1.x+7, y1=s1.y+3.5, x2=s2.x+7, y2=s2.y+3.5;
+    const mx=(x1+x2)/2, my=(y1+y2)/2;
+    const dx=x2-x1, dy=y2-y1;
+    const cx=mx - dy*0.12; const cy=my + dx*0.12;
+
+    if(!redSincronizada){
+      if(a && b){
+        const w=document.createElementNS('http://www.w3.org/2000/svg','path');
+        w.setAttribute('d',`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`);
+        w.setAttribute('class','waiting'); 
+        svg.appendChild(w);
+      } else if(a || b){
+        const w=document.createElementNS('http://www.w3.org/2000/svg','path');
+        w.setAttribute('d',`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`);
+        w.setAttribute('class','waiting'); 
+        svg.appendChild(w);
+      }
+      return;
+    }
+
+    if(a && b){
+      const glow=document.createElementNS('http://www.w3.org/2000/svg','path');
+      glow.setAttribute('d',`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`);
+      glow.setAttribute('class','glow'); svg.appendChild(glow);
+      const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d',`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`);
+      p.setAttribute('class','active'); svg.appendChild(p);
+      const inner=document.createElementNS('http://www.w3.org/2000/svg','path');
+      inner.setAttribute('d',`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`);
+      inner.setAttribute('class','active inner'); svg.appendChild(inner);
+    } else {
+      const w=document.createElementNS('http://www.w3.org/2000/svg','path');
+      w.setAttribute('d',`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`);
+      w.setAttribute('class','waiting'); svg.appendChild(w);
+    }
+  });
+}
+
+function spawnParticle(fromSlot,toSlot,color='verde'){
+  const s1=SLOTS.find(s=>s.id===fromSlot); const s2=SLOTS.find(s=>s.id===toSlot); if(!s1||!s2) return;
+  const p=document.getElementById('particle'); if(!p) return;
+  p.className='particle '+color; p.style.left=s1.x+7+'%'; p.style.top=s1.y+3.5+'%';
+  p.classList.remove('moving'); void p.offsetWidth; p.classList.add('moving');
+  setTimeout(()=>{ p.style.left=s2.x+7+'%'; p.style.top=s2.y+3.5+'%'; },50);
+  setTimeout(()=>p.classList.remove('moving'),900);
+}
+
+function renderCheck(){
+  checkEl.innerHTML=''; let c=0;
+  SLOTS.forEach(s=>{ const ok=installed[s.id]!==null; if(ok) c++; const li=document.createElement('li'); li.className=ok?'ok':''; li.innerHTML=`<span>${ok?'✅':'⬜'}</span><span style="flex:1">${s.label}</span>${ok?'<span style="color:var(--emerald)">OK</span>':''}`; checkEl.appendChild(li); });
+  const pct=Math.round(c/SLOTS.length*100); progressEl.style.width=pct+'%'; progressText.textContent=`${pct}% • ${c}/${SLOTS.length}`;
+
+  const simMsg = document.getElementById('simMsg');
+  const simBtn = document.getElementById('btnSimularRed');
+  if(simMsg){
+    if(redSincronizada){
+      simMsg.innerHTML = `<i class="fa-solid fa-check"></i> Red sincronizada correctamente`;
+      simMsg.className = 'sim-msg ready';
+      if(simBtn){ simBtn.classList.remove('locked','ready'); simBtn.classList.add('success'); }
+    } else if(c === SLOTS.length){
+      simMsg.innerHTML = `<i class="fa-solid fa-bolt"></i> ¡Listo para simular!`;
+      simMsg.className = 'sim-msg ready';
+      if(simBtn){ simBtn.classList.remove('locked','success'); simBtn.classList.add('ready'); }
+    } else {
+      const faltan = SLOTS.length - c;
+      simMsg.innerHTML = `<i class="fa-solid fa-lock"></i> Completa las conexiones para poder simular (${faltan} faltan)`;
+      simMsg.className = 'sim-msg';
+      if(simBtn){ simBtn.classList.remove('ready','success'); simBtn.classList.add('locked'); }
+    }
+  }
+}
+
+function renderAll(){ renderShelf(); renderSlots(); renderCheck(); updateConnections(); }
+
+document.getElementById('btnFinish').addEventListener('click',()=>{
+  const tot=Object.values(installed).filter(v=>v!==null).length;
+  if(tot<SLOTS.length){ showToast("⚠️ Faltan componentes"); logContext(`<span class="warn">> Aviso: La red está incompleta. Faltan nodos por enlazar.</span>`); return; }
+  logContext(`<span class="ok">> ¡Éxito! Todos los paquetes se enrutan correctamente de LAN a WAN. Efectos de conexión activos.</span>`);
+  document.getElementById('modalSuccess').classList.add('show');
+});
+
+document.getElementById('btnReset').addEventListener('click',()=>{
+  installed={slot_isp:null, slot_modem:null, slot_router:null, slot_switch:null, slot_pc:null, slot_ap:null, slot_ap_wifi:null, slot_phone:null};
+  selectedId=null; draggedId=null; redSincronizada=false; renderAll(); consoleLog.innerHTML=`<div>> Sistema reiniciado. Arquitectura limpia.</div>`; showToast("Simulador reiniciado");
+});
+
+document.getElementById('closeSuccess').addEventListener('click',()=>document.getElementById('modalSuccess').classList.remove('show'));
+
+renderAll();
+function simularTráficoRed() {
+  if(isSimulating) return;
+  const tot = Object.values(installed).filter(v => v !== null).length;
+  if (tot < SLOTS.length) {
+    const btn = document.getElementById('btnSimularRed');
+    btn.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}], {duration:280, easing:'ease-in-out'});
+    showToast("⚠️ Conecta todos los dispositivos primero");
+    logContext(`<span class="warn">> Aviso: No se puede simular el tráfico. La red está incompleta.</span>`);
+    return;
+  }
+  
+  isSimulating = true;
+  const btn = document.getElementById('btnSimularRed');
+  const originalText = btn.innerHTML;
+  btn.classList.add('simulating');
+  btn.innerHTML = `<i class="fa-solid fa-satellite-dish fa-spin"></i> Sincronizando...`;
+
+  showToast("⚡ Conectando líneas finas...");
+  logContext(`<span class="ok">> Trazando conexiones finas de luz (WAN ➔ LAN ➔ WiFi)...</span>`);
+
+  const svg = document.getElementById('connections');
+  if (!svg) { isSimulating=false; return; }
+  svg.innerHTML = '';
+
+  const secuenciaRutas = [
+    { from: 'slot_isp', to: 'slot_modem', color: 'celeste' },
+    { from: 'slot_modem', to: 'slot_router', color: 'celeste' },
+    { from: 'slot_router', to: 'slot_switch', color: 'verde' },
+    { from: 'slot_switch', to: 'slot_pc', color: 'verde' },
+    { from: 'slot_router', to: 'slot_ap', color: 'celeste' },
+    { from: 'slot_switch', to: 'slot_ap_wifi', color: 'verde' },
+    { from: 'slot_ap_wifi', to: 'slot_phone', color: 'celeste' }
+  ];
+
+  secuenciaRutas.forEach((ruta, index) => {
+    setTimeout(() => {
+      const s1 = SLOTS.find(s => s.id === ruta.from);
+      const s2 = SLOTS.find(s => s.id === ruta.to);
+      if (s1 && s2) {
+        const x1 = s1.x + 7, y1 = s1.y + 3.5, x2 = s2.x + 7, y2 = s2.y + 3.5;
+        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+        const dx = x2 - x1, dy = y2 - y1;
+        const cx = mx - dy * 0.12; 
+        const cy = my + dx * 0.12;
+        const colorHex = ruta.color === 'verde' ? '#10b981' : '#22d3ee';
+
+        document.querySelectorAll('.slot').forEach(el=>{
+          if(el.dataset && (el.dataset.id===ruta.from || el.dataset.id===ruta.to)) el.classList.add('active-node');
+        });
+
+        const lineaConexion = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        lineaConexion.setAttribute('d', `M${x1},${y1} Q${cx},${cy} ${x2},${y2}`);
+        lineaConexion.setAttribute('stroke', colorHex);
+        lineaConexion.setAttribute('stroke-width', '1.6');
+        lineaConexion.setAttribute('stroke-opacity', '0.95');
+        lineaConexion.setAttribute('fill', 'none');
+        lineaConexion.setAttribute('stroke-linecap', 'round');
+        lineaConexion.setAttribute('class', 'laser-animado');
+        lineaConexion.style.filter = `drop-shadow(0 0 2.5px ${colorHex}) drop-shadow(0 0 5px ${colorHex})`;
+        svg.appendChild(lineaConexion);
+        void lineaConexion.getBoundingClientRect();
+        lineaConexion.style.strokeDashoffset = '0';
+
+        setTimeout(()=>{ 
+          lineaConexion.classList.add('transmitting'); 
+          lineaConexion.style.color = colorHex; 
+        }, 620);
+
+        spawnParticle(ruta.from, ruta.to, ruta.color);
+        setTimeout(()=>spawnParticle(ruta.from, ruta.to, ruta.color), 130);
+        setTimeout(()=>spawnParticle(ruta.to, ruta.from, ruta.color==='verde'?'celeste':'verde'), 380);
+      }
+    }, index * 360); 
+  });
+
+  const tiempoTotal = secuenciaRutas.length * 360 + 900;
+  setTimeout(() => {
+    btn.classList.remove('simulating');
+    btn.classList.add('success');
+    btn.innerHTML = `<i class="fa-solid fa-check"></i> ¡Sincronizada!`;
+    document.querySelectorAll('.slot').forEach((el,i)=>{ setTimeout(()=>el.classList.add('active-node'), i*50); });
+    showToast("🌐 ¡Líneas finas conectadas!");
+    logContext(`<span class="ok">> Estado: Conexiones finas transmitiendo datos con éxito.</span>`);
+
+    setTimeout(()=>{
+      btn.classList.remove('success');
+      btn.innerHTML = originalText;
+      document.querySelectorAll('.slot').forEach(el=>el.classList.remove('active-node'));
+      redSincronizada = true; 
+      updateConnections();
+      setTimeout(()=>{
+        document.querySelectorAll('#connections path.active').forEach(p=>{
+          const c = p.getAttribute('stroke') || p.style.stroke;
+          p.setAttribute('stroke-width', '1.1');
+          p.style.strokeWidth = '1.1px';
+          p.setAttribute('stroke-opacity', '0.75');
+          p.style.strokeOpacity = '0.75';
+          p.style.strokeDasharray='3 12';
+          p.style.animation='flow 1.8s linear infinite';
+          p.style.filter = `drop-shadow(0 0 1.5px ${c})`;
+        });
+        document.querySelectorAll('#connections path.active.inner').forEach(p=>{
+          p.setAttribute('stroke-width', '0.6');
+          p.style.strokeWidth = '0.6px';
+          p.style.strokeOpacity = '0.6';
+        });
+        document.querySelectorAll('#connections path.glow').forEach(p=>{
+          p.setAttribute('stroke-width', '4');
+          p.style.strokeWidth = '4px';
+          p.style.opacity = '0.35';
+        });
+      }, 80);
+      isSimulating = false;
+    }, 1600);
+  }, tiempoTotal);
+}
+
+document.getElementById('btnSimularRed').addEventListener('click', simularTráficoRed);
+
+
+// === LÓGICA AISLADA DE COMPROBACIÓN DE RESOLUCIÓN PARA RED ===
+function checkScreenResolutionRed() {
+  const modal = document.getElementById('modalResolution');
+  const resText = document.getElementById('currentResolutionText');
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  
+  if(resText) {
+    resText.textContent = `${width} px × ${height} px`;
+  }
+  
+  if(window.forcedResolutionDismissedRed === true) {
+    if(modal) modal.classList.remove('show');
+    return;
+  }
+  
+  if(width < 1280 || height < 600) {
+    if(modal) modal.classList.add('show');
+  } else {
+    if(modal) modal.classList.remove('show');
+  }
+}
+
+function dismissResolutionModalRed() {
+  const modal = document.getElementById('modalResolution');
+  if(modal) modal.classList.remove('show');
+  window.forcedResolutionDismissedRed = true;
+}
+
+function cancelResolutionModalRed() {
+  window.location.href = 'index.html';
+}
+
+window.addEventListener('load', checkScreenResolutionRed);
+window.addEventListener('resize', checkScreenResolutionRed);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=24');
+  });
+}
+</script>
+</body>
+</html>

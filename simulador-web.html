@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador Web | NTX</title>
+<link rel="manifest" href="manifest.json?v=24">
+
+<meta name="theme-color" content="#0a1930">
+
+<!-- Favicon para SOLAPA NAVEGADOR - Libro circular -->
+<link rel="icon" href="/favicon.ico?v=24" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png?v=24">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png?v=24">
+
+<!-- Apple / iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png?v=24">
+
+<!-- PWA / Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192x192.png?v=24">
+<link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512x512.png?v=24">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg: #070b18; --bg-2: #0d132b;
+  --panel: rgba(20,28,58,0.86); --panel-solid: #141c3a;
+  --border: rgba(120,130,180,0.18); --border-strong: rgba(120,130,180,0.32);
+  --text: #e8ecf7; --muted: #8b93b5;
+  --cyan: #22d3ee; --violet: #a78bfa; --amber: #fbbf24; --pink: #f472b6; --green: #34d399; --red: #f43f5e;
+  --radius: 14px; --shadow: 0 12px 40px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.04) inset;
+  --blur: blur(18px) saturate(140%); --ease: cubic-bezier(.22,1,.36,1);
+  --pc-border: #2a3a5a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body{
+  font-family:'Inter',system-ui,sans-serif; color:var(--text);
+  background: radial-gradient(1200px 600px at 20% -10%, rgba(34,211,238,.15), transparent),
+              radial-gradient(900px 500px at 90% 10%, rgba(167,139,250,.18), transparent),
+              linear-gradient(180deg,var(--bg),var(--bg-2));
+}
+.grid-bg{position:fixed;inset:0;pointer-events:none;opacity:.06;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:40px 40px}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:rgba(120,130,180,.3);border-radius:20px}
+
+/* ===== HEADER EXACTO COMO SIMULADOR PC ===== */
+header{
+  text-align:center; padding:4px 320px; height:60px; position:relative; z-index:1;
+  display:flex; align-items:center; justify-content:center;
+}
+header h1{
+  margin:0; font-size:25px; font-weight:900;
+  background: linear-gradient(90deg,#e879f9,#a78bfa,#22d3ee);
+  background-size:200% auto; -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation: grad 6s linear infinite; letter-spacing:-.02em;
+}
+@keyframes grad{to{background-position:200% center}}
+
+/* ===== BOTONES PRINCIPALES - IGUAL QUE PC: top 20 right 20 ===== */
+.floating-nav-main{
+  position:fixed; top:20px; right:20px; display:flex; gap:10px; z-index:1000;
+}
+.nav-pill{
+  background: rgba(26,35,58,0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border:1px solid var(--pc-border); color:var(--text); padding:8px 14px; border-radius:10px;
+  font-size:12px; font-weight:700; cursor:pointer; text-decoration:none;
+  display:flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(0,0,0,.3);
+  transition: all .2s ease; white-space:nowrap;
+}
+.nav-pill:hover{border-color:var(--cyan); color:var(--cyan); transform:translateY(-2px); box-shadow:0 6px 16px rgba(34,211,238,.2)}
+.nav-dropdown{position:relative}
+.nav-dropdown-menu{
+  position:absolute; right:0; top:110%; background: rgba(26,35,58,0.95); backdrop-filter: blur(12px);
+  border:1px solid var(--pc-border); border-radius:12px; list-style:none; padding:8px 0; margin:0; width:200px;
+  box-shadow:0 10px 30px rgba(0,0,0,.5); display:none; z-index:1001;
+}
+.nav-dropdown-menu.show{display:block; animation: ddIn .22s var(--ease)}
+@keyframes ddIn{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:translateY(0)}}
+.nav-dropdown-menu li a{
+  display:flex; align-items:center; gap:10px; padding:10px 16px; color:var(--text);
+  text-decoration:none; font-size:12px; font-weight:600; transition:.2s;
+}
+.nav-dropdown-menu li a:hover{background: rgba(34,211,238,.15); color:var(--cyan); box-shadow: inset 3px 0 0 var(--cyan), 0 0 12px rgba(34,211,238,.25); padding-left:20px}
+
+/* ===== BOTONES SECUNDARIOS - Neon / Refresh / Tutorial - IGUAL QUE CAPTURA 2 ===== */
+.floating-nav-tools{
+  position:fixed; bottom:20px; right:20px; display:flex; gap:10px; z-index:1000;
+}
+.float-btn{
+  background: rgba(26,35,58,0.9); backdrop-filter: blur(10px); border:1px solid var(--pc-border);
+  color:var(--text); padding:8px 14px; border-radius:10px; font-size:12px; font-weight:700;
+  cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(0,0,0,.3);
+  transition: all .2s ease;
+}
+.float-btn:hover{border-color:var(--cyan); color:var(--cyan); transform:translateY(-2px); box-shadow:0 6px 16px rgba(34,211,238,.2)}
+.float-btn.active{background:linear-gradient(135deg,var(--cyan),var(--violet)); color:#000; border-color:transparent; box-shadow:0 6px 16px rgba(34,211,238,.3)}
+
+/* LAYOUT */
+.layout{
+  width:100vw; height:calc(100vh - 60px - 10px); margin:0; padding:0 8px 8px;
+  display:grid; grid-template-columns:300px 1fr 360px; gap:8px; position:relative; z-index:1; overflow:hidden;
+}
+@media(max-width:1110px){.layout{grid-template-columns:260px 1fr} header{padding:4px 20px} .floating-nav-main{position:static; justify-content:center; margin:0 auto 8px} header{height:auto; padding:10px; flex-direction:column; gap:8px} .floating-nav-tools{bottom:10px; right:10px; flex-wrap:wrap; justify-content:flex-end}}
+
+.panel{
+  background:var(--panel); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--border); border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.4);
+  display:flex; flex-direction:column; min-height:0; max-height:100%; overflow:hidden;
+}
+.panel-head{padding:12px 14px; font-size:11px; letter-spacing:.08em; font-weight:800; color:var(--cyan); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; justify-content:space-between}
+.icon-btn{width:28px;height:28px; display:grid; place-items:center; border-radius:8px; background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--muted); cursor:pointer; transition:.2s}
+.icon-btn:hover{color:var(--cyan); border-color:var(--cyan)}
+
+/* SEARCH */
+.search-wrap{padding:10px 12px; border-bottom:1px solid var(--border); background:rgba(0,0,0,.15)}
+.search-wrap input{width:100%; background:rgba(0,0,0,.32); border:1px solid var(--border); border-radius:10px; padding:10px 12px 10px 38px; color:var(--text); font-size:12px; outline:none; transition:.2s}
+.search-wrap input:focus{border-color:var(--cyan); box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+.search-inner{position:relative} .search-inner i{position:absolute; left:22px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:12px}
+
+/* SHELF DESAMONTONADO */
+.shelf{padding:10px 10px; display:flex; flex-direction:column; gap:0; overflow-y:auto; flex:1}
+.shelf-group{margin-bottom:16px; border-radius:12px; background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.05); padding:8px; transition:.2s}
+.shelf-group-header{display:flex; align-items:center; justify-content:space-between; padding:6px 6px 10px 6px; cursor:pointer; user-select:none}
+.shelf-group-header h3{margin:0; font-size:10px; letter-spacing:.08em; font-weight:800; display:flex; align-items:center; gap:6px}
+.shelf-group-header .count{font-size:10px; background:rgba(255,255,255,.08); padding:3px 8px; border-radius:100px; color:var(--muted); font-weight:700}
+.shelf-group.collapsed .group-items{display:none}
+.group-items{display:flex; flex-direction:column; gap:8px}
+.comp{
+  display:flex; gap:10px; align-items:center; padding:11px 12px; border-radius:10px;
+  border:1px solid rgba(255,255,255,.08); cursor:grab; user-select:none;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  transition: all .25s var(--ease); position:relative; overflow:hidden; box-shadow:0 2px 0 rgba(255,255,255,.02) inset;
+}
+.comp::before{content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:currentColor; opacity:.9}
+.comp:hover{transform:translateY(-2px); box-shadow:0 10px 20px rgba(0,0,0,.35); border-color:rgba(255,255,255,.12)}
+.comp.dragging{opacity:.5}
+.comp i{width:26px; height:26px; display:grid; place-items:center; font-size:13px; flex-shrink:0; border-radius:8px; background:rgba(255,255,255,.06)}
+.comp .meta{flex:1; min-width:0} .comp .name{font-size:12px; font-weight:800; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis} .comp .sub{font-size:10px; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-top:2px}
+.comp[data-type="html"]{color:var(--cyan)} .comp[data-type="css"]{color:var(--violet)} .comp[data-type="js"]{color:var(--amber)} .html-cat{color:var(--cyan)} .css-cat{color:var(--violet)} .js-cat{color:var(--amber)} .fx-cat{color:var(--pink)} .adv-cat{color:var(--green)}
+
+/* BOARD */
+.board-wrap{padding:8px; display:flex; flex-direction:column; gap:8px}
+.objetivo{background: linear-gradient(135deg, rgba(251,191,36,.14), rgba(245,158,11,.08)); border:1px dashed var(--amber); color:#fde68a; font-size:11px; font-weight:700; padding:10px 12px; border-radius:10px; display:flex; align-items:center; gap:10px}
+.objetivo .icon{width:28px;height:28px;border-radius:50%;background:var(--amber);color:#000;display:grid;place-items:center;flex-shrink:0; font-weight:900}
+.progress-bar{height:4px; background:rgba(0,0,0,.3); border-radius:10px; overflow:hidden; margin-top:6px} .progress-fill{height:100%; width:0%; background:linear-gradient(90deg,var(--cyan),var(--violet)); transition:width .6s var(--ease)}
+.board{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding-right:2px}
+.board-middle{display:grid; grid-template-columns:1.7fr 1fr; gap:8px}
+.slot{border:1.5px dashed rgba(255,255,255,.16); border-radius:12px; padding:10px; background:rgba(0,0,0,.18); min-height:88px; transition:.25s}
+.slot.drag-over{border-color:var(--cyan); background:rgba(34,211,238,.10); box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+.slot-title{font-size:10px; font-weight:800; letter-spacing:.06em; color:var(--cyan); display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.slot-hint{font-size:10px; color:var(--muted); margin:6px 0; font-style:italic}
+.slot-content{display:flex; flex-direction:column; gap:6px; margin-top:6px}
+.slot-count{font-size:10px; background:rgba(255,255,255,.08); border:1px solid var(--border); padding:2px 8px; border-radius:100px; font-weight:700}
+.slot-styles{display:flex; gap:5px; flex-wrap:wrap; margin-top:6px}
+.style-chip{font-size:9px; padding:3px 7px; border-radius:100px; background:rgba(167,139,250,.15); border:1px solid rgba(167,139,250,.25); color:var(--violet); font-weight:700}
+.placed-item{background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.12); border-radius:10px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center; gap:8px; animation:slideIn .3s var(--ease)}
+@keyframes slideIn{from{transform:translateY(8px); opacity:0} to{transform:translateY(0); opacity:1}}
+.editable-display{padding:6px 8px; border-radius:6px; border:1px dashed transparent; cursor:text; word-break:break-word; font-size:12px; font-weight:600}
+.editable-display:hover{border-color:rgba(34,211,238,.5); background:rgba(34,211,238,.12)}
+.item-actions{display:flex; gap:4px} .item-actions button{width:28px;height:28px; display:grid; place-items:center; border-radius:8px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); cursor:pointer; color:var(--muted); font-size:11px; transition:.2s}
+.edit-input{width:100%; background:rgba(0,0,0,.55); border:1.5px solid var(--cyan); border-radius:8px; padding:8px 10px; color:var(--text); font-size:13px; font-weight:600; outline:none}
+
+/* RIGHT */
+.check-panel{padding:10px; display:flex; flex-direction:column; gap:12px; flex:1; overflow-y:auto}
+.check{list-style:none; display:flex; flex-direction:column; gap:6px}
+.check li{padding:9px 10px; border-radius:10px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); font-size:11px; font-weight:600; display:flex; gap:8px; align-items:flex-start; transition:.3s}
+.check li.done{background:rgba(16,185,129,.14); border-color:rgba(16,185,129,.32); color:#6ee7b7}
+.check li .num{width:20px;height:20px; min-width:20px; border-radius:50%; background:rgba(255,255,255,.08); display:grid; place-items:center; font-size:10px; font-weight:800}
+.check li.done .num{background:var(--green); color:#000}
+.log{font-family:'JetBrains Mono',monospace; font-size:10px; background:rgba(0,0,0,.38); border:1px solid var(--border); border-radius:10px; padding:10px; min-height:80px; max-height:130px; overflow-y:auto; line-height:1.6}
+.log .ok{color:#6ee7b7} .log .warn{color:#fbbf24} .log .info{color:var(--cyan)} .log .js{color:var(--amber)}
+.explain{background: linear-gradient(135deg, rgba(34,211,238,.09), rgba(167,139,250,.06)); border:1px solid rgba(34,211,238,.18); border-radius:10px; padding:12px}
+.explain h4{font-size:11px; color:var(--cyan); margin-bottom:4px} .explain p{font-size:11px; line-height:1.5; color:#cbd5e1}
+.actions{display:flex; flex-direction:column; gap:6px; margin-top:auto; padding-top:12px; border-top:1px solid rgba(255,255,255,.07)}
+.btn{padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:rgba(255,255,255,.06); color:var(--text); font-size:11px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:.2s}
+.btn:hover{border-color:var(--cyan); color:var(--cyan)} .btn.primary{background:linear-gradient(135deg,var(--cyan),var(--violet)); color:#000; border:none; font-weight:800} .btn.full{width:100%} .btn-row{display:flex; gap:6px} .btn-row .btn{flex:1}
+
+/* MODALES */
+/* === MODAL DE ADVERTENCIA DE RESOLUCIÓN MÍNIMA === */
+.modal-resolution {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(2, 6, 15, 0.95);
+    backdrop-filter: blur(16px);
+    text-align: center;
+}
+.modal-resolution.show {
+    display: flex;
+}
+.modal-resolution-content {
+    background: linear-gradient(180deg, #16213e, #0e172c);
+    border: 2px solid var(--cyan);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 460px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.3), 0 20px 40px rgba(0,0,0,0.8);
+    animation: modalPulse 3s ease-in-out infinite;
+}
+
+@keyframes modalPulse {
+    0%, 100% { border-color: var(--cyan); box-shadow: 0 0 25px rgba(34, 211, 238, 0.25); }
+    50% { border-color: var(--violet); box-shadow: 0 0 35px rgba(167, 139, 250, 0.4); }
+}
+.modal-resolution-icon {
+    font-size: 48px;
+    color: var(--cyan);
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 10px rgba(34,211,238,0.5));
+}
+.modal-resolution-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+}
+.modal-resolution-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+.modal-resolution-desc b {
+    color: var(--cyan);
+    font-family: monospace;
+}
+.resolution-badge {
+    display: inline-block;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--cyan);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+.modal-resolution-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+.modal-resolution-btn {
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    color: #001020;
+    border: none;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(34,211,238,0.4);
+    transition: all 0.2s ease;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 44px;
+    padding: 0 10px;
+    margin: 0;
+}
+.modal-resolution-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34,211,238,0.6);
+}
+.modal-resolution-btn-cancel {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: none;
+}
+.modal-resolution-btn-cancel:hover {
+    background: rgba(244, 63, 94, 0.15);
+    border-color: #f43f5e;
+    color: #f43f5e;
+    box-shadow: 0 4px 15px rgba(244,63,94,0.2);
+}
+
+.modal{position:fixed; inset:0; background:rgba(0,0,0,.72); backdrop-filter: blur(12px); display:none; place-items:center; z-index:80; padding:16px}
+.modal.show{display:grid} .modal-content{background:linear-gradient(180deg, var(--panel-solid), #0e1430); border:1px solid var(--border); border-radius:16px; box-shadow:0 24px 70px rgba(0,0,0,.65); width:100%; max-width:540px; padding:20px} .modal-content.large{max-width:900px; max-height:92vh; overflow:auto}
+.tab-bar{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--border)}
+.tab-btn{padding:6px 12px; border-radius:100px; border:1px solid var(--border); background:rgba(255,255,255,.05); color:var(--muted); font-size:11px; font-weight:700; cursor:pointer; transition:.2s}
+.tab-btn.active{background:var(--cyan); color:#000; border-color:var(--cyan)}
+pre{background:#0a0f24; border:1px solid var(--border); border-radius:10px; padding:14px; overflow:auto; font-family:'JetBrains Mono',monospace; font-size:11px; line-height:1.5}
+.modal-js{position:fixed; inset:0; background:rgba(0,0,0,.78); backdrop-filter: blur(14px); display:none; place-items:center; z-index:200; padding:16px} .modal-js.show{display:grid}
+.modal-js-card{background:linear-gradient(180deg, #1b2450 0%, #0f172a 100%); border:1px solid rgba(34,211,238,.32); border-radius:16px; width:100%; max-width:420px; overflow:hidden; box-shadow:0 0 0 1px rgba(34,211,238,.18) inset, 0 24px 70px rgba(0,0,0,.65)}
+.modal-js-header{padding:16px 18px 0; display:flex; align-items:center; gap:12px} .modal-js-icon{width:40px;height:40px; border-radius:10px; background:linear-gradient(135deg,var(--cyan),var(--amber)); display:grid; place-items:center; font-size:18px; color:#000}
+#toastBox{position:fixed; bottom:18px; left:50%; transform:translateX(-50%); z-index:9999; display:flex; flex-direction:column; gap:6px; align-items:center; pointer-events:none}
+.toast{background:var(--panel-solid); border:1px solid var(--border); color:var(--text); padding:8px 16px; border-radius:100px; font-size:11px; font-weight:700; box-shadow:var(--shadow); animation:toastIn .3s var(--ease)}
+@keyframes toastIn{from{transform:translateY(12px); opacity:0} to{transform:translateY(0); opacity:1}}
+.mini-footer{height:30px; display:flex; align-items:center; justify-content:center; gap:14px; font-size:10px; color:var(--muted)}
+.mini-footer kbd{background:rgba(255,255,255,.08); border:1px solid var(--border); border-bottom-width:2px; padding:1px 5px; border-radius:4px; font-family:'JetBrains Mono',monospace; font-size:9px}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- HEADER IGUAL QUE PC -->
+<header>
+  <h1>Desarrollador Web (Arrastrar código)</h1>
+</header>
+
+<!-- BOTONES PRINCIPALES ARRIBA A LA DERECHA - EXACTO PC -->
+<div class="floating-nav-main">
+  <a href="index.html" class="nav-pill"><i class="fa-solid fa-house"></i> Inicio</a>
+  <div class="nav-dropdown">
+    <button class="nav-pill" onclick="toggleNavDropdown('sim')"><i class="fa-solid fa-gamepad"></i> Simulador <i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+    <ul id="nav-sim" class="nav-dropdown-menu"> 
+          <li><a href="simulador-web2.html"><i class="fa-solid fa-laptop-code" style="color:#ec4899;"></i> Escribir código web</a></li>
+       <li><a href="simulador-pc.html"><i class="fa-solid fa-computer" style="color:#06b6d4;"></i> Ensamblar PC</a></li>
+       <li><a href="simulador-red.html"><i class="fa-solid fa-network-wired" style="color:#8b5cf6;"></i>Conectar Redes</a></li>
+      <li><a href="simulador-dispositivos.html"><i class="fa-solid fa-keyboard" style="color:#f59e0b;"></i> Dispositivos E/S/M</a></li>
+    
+    </ul>
+  </div>
+  <div class="nav-dropdown">
+    <button class="nav-pill" onclick="toggleNavDropdown('menu')"><i class="fa-solid fa-bars"></i> Menú <i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+    <ul id="nav-menu" class="nav-dropdown-menu">
+       <li><a href="informatica.html"><span class="mod-num n1">1</span><i class="fa-solid fa-microchip" style="color:#3b82f6;"></i><span class="mod-text">Informática</span></a></li>
+                        <li><a href="redes.html"><span class="mod-num n2">2</span><i class="fa-solid fa-network-wired" style="color:#f59e0b;"></i><span class="mod-text">Redes</span></a></li>
+                        <li><a href="ofimatica.html"><span class="mod-num n3">3</span><i class="fa-solid fa-database" style="color:#10b981;"></i><span class="mod-text">Ofimática</span></a></li>
+                        <li><a href="diseño.html"><span class="mod-num n4">4</span><i class="fa-solid fa-image" style="color:#8b5cf6;"></i><span class="mod-text">Diseño</span></a></li>
+                        <li><a href="comunicacion.html"><span class="mod-num n5">5</span><i class="fa-solid fa-comments" style="color:#f97316;"></i><span class="mod-text">Comunicación</span></a></li>
+                        <li><a href="multimedia.html"><span class="mod-num n6">6</span><i class="fa-solid fa-video" style="color:#ef4444;"></i><span class="mod-text">Multimedia</span></a></li>
+                        <li><a href="seguridad.html"><span class="mod-num n7">7</span><i class="fa-solid fa-shield-halved" style="color:#0284c7;"></i><span class="mod-text">Seguridad</span></a></li>
+    </ul>
+  </div>
+  <a href="contacto.html" class="float-btn" title="Contacto"><i class="fa-solid fa-envelope"></i> Contacto</a>
+</div>
+
+<!-- BOTONES SECUNDARIOS - NEON / UNDO / REDO / TUTORIAL - ABAJO DERECHA COMO CAPTURA 2 -->
+<div class="floating-nav-tools">
+  <button class="float-btn" id="btnTheme" title="Cambiar tema"><i class="fa-solid fa-circle-half-stroke"></i> <span id="themeLabel">Neon</span></button>
+  <button class="float-btn" id="btnUndo" title="Deshacer"><i class="fa-solid fa-rotate-left"></i></button>
+  <button class="float-btn" id="btnRedo" title="Rehacer"><i class="fa-solid fa-rotate-right"></i></button>
+  <button class="float-btn active" onclick="document.getElementById('modalTutorial').classList.add('show')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tutorial</button>
+</div>
+
+<div class="layout">
+  <aside class="panel">
+    <div class="panel-head"><span><i class="fa-solid fa-cubes"></i> COMPONENTES</span><button class="icon-btn" id="btnClearSearch"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="search-wrap"><div class="search-inner"><i class="fa-solid fa-magnifying-glass"></i><input id="compSearch" placeholder="Buscar... (glass, confetti, neon)"></div></div>
+    <div class="shelf" id="shelf">
+      <div class="shelf-group" data-group="html"><div class="shelf-group-header" onclick="this.parentElement.classList.toggle('collapsed')"><h3 class="html-cat"><i class="fa-solid fa-code"></i> HTML — Estructura</h3><span class="count">10</span></div><div class="group-items">
+        <div class="comp" draggable="true" data-type="html" data-tag="header" data-name="Encabezado"><i class="fa-solid fa-window-maximize"></i><div class="meta"><div class="name">&lt;header&gt; Encabezado</div><div class="sub">logo + título</div></div></div>
+        <div class="comp" draggable="true" data-type="html" data-tag="nav" data-name="Navegación"><i class="fa-solid fa-bars"></i><div class="meta"><div class="name">&lt;nav&gt; Navegación</div><div class="sub">menú + links</div></div></div>
+        <div class="comp" draggable="true" data-type="html" data-tag="h1" data-name="Título H1"><i class="fa-solid fa-heading"></i><div class="meta"><div class="name">&lt;h1&gt; Título</div><div class="sub">título principal</div></div></div>
+        <div class="comp" draggable="true" data-type="html" data-tag="h2" data-name="Subtítulo H2"><i class="fa-solid fa-h2"></i><div class="meta"><div class="name">&lt;h2&gt; Subtítulo</div><div class="sub">sección</div></div></div>
+        <div class="comp" draggable="true" data-type="html" data-tag="p" data-name="Párrafo"><i class="fa-solid fa-paragraph"></i><div class="meta"><div class="name">&lt;p&gt; Párrafo</div><div class="sub">texto largo</div></div></div>
+        <div class="comp" draggable="true" data-type="html" data-tag="img" data-name="Imagen"><i class="fa-solid fa-image"></i><div class="meta"><div class="name">&lt;img&gt; Imagen</div><div class="sub">responsive</div></div></div>
+        <div class="comp" draggable="true" data-type="html" data-tag="button" data-name="Botón"><i class="fa-solid fa-hand-pointer"></i><div class="meta"><div class="name">&lt;button&gt; Botón</div><div class="sub">CTA click</div></div></div>
+        <div class="comp" draggable="true" data-type="html" data-tag="a" data-name="Enlace"><i class="fa-solid fa-link"></i><div class="meta"><div class="name">&lt;a&gt; Link</div><div class="sub">hipervínculo</div></div></div>
+        <div class="comp" draggable="true" data-type="html" data-tag="ul" data-name="Lista"><i class="fa-solid fa-list-ul"></i><div class="meta"><div class="name">&lt;ul&gt; Lista</div><div class="sub">bullet list</div></div></div>
+        <div class="comp" draggable="true" data-type="html" data-tag="form" data-name="Formulario"><i class="fa-solid fa-rectangle-list"></i><div class="meta"><div class="name">&lt;form&gt; Form</div><div class="sub">inputs + validación</div></div></div>
+      </div></div>
+      <div class="shelf-group" data-group="css-base"><div class="shelf-group-header" onclick="this.parentElement.classList.toggle('collapsed')"><h3 class="css-cat"><i class="fa-solid fa-palette"></i> CSS — Base</h3><span class="count">5</span></div><div class="group-items">
+        <div class="comp" draggable="true" data-type="css" data-style="bg"><i class="fa-solid fa-fill-drip"></i><div class="meta"><div class="name">Fondo Celeste</div><div class="sub">background cyan</div></div></div>
+        <div class="comp" draggable="true" data-type="css" data-style="big"><i class="fa-solid fa-text-height"></i><div class="meta"><div class="name">Texto Grande</div><div class="sub">font-size 24px</div></div></div>
+        <div class="comp" draggable="true" data-type="css" data-style="rounded"><i class="fa-solid fa-circle-notch"></i><div class="meta"><div class="name">Borde Redondeado</div><div class="sub">border-radius 16px</div></div></div>
+        <div class="comp" draggable="true" data-type="css" data-style="flex"><i class="fa-solid fa-arrows-to-center"></i><div class="meta"><div class="name">Centrado Flex</div><div class="sub">display:flex center</div></div></div>
+        <div class="comp" draggable="true" data-type="css" data-style="shadow"><i class="fa-solid fa-layer-group"></i><div class="meta"><div class="name">Sombra</div><div class="sub">box-shadow soft</div></div></div>
+      </div></div>
+      <div class="shelf-group" data-group="css-fx"><div class="shelf-group-header" onclick="this.parentElement.classList.toggle('collapsed')"><h3 class="fx-cat"><i class="fa-solid fa-wand-magic-sparkles"></i> CSS — Efectos PRO</h3><span class="count">7</span></div><div class="group-items">
+        <div class="comp" draggable="true" data-type="css" data-style="glass"><i class="fa-solid fa-glasses"></i><div class="meta"><div class="name">Glassmorphism</div><div class="sub">blur + transparencia</div></div></div>
+        <div class="comp" draggable="true" data-type="css" data-style="gradient"><i class="fa-solid fa-paint-roller"></i><div class="meta"><div class="name">Gradiente Animado</div><div class="sub">linear-gradient 135deg</div></div></div>
+        <div class="comp" draggable="true" data-type="css" data-style="neon"><i class="fa-solid fa-lightbulb"></i><div class="meta"><div class="name">Borde Neón</div><div class="sub">glow cyan</div></div></div>
+        <div class="comp" draggable="true" data-type="css" data-style="rotate"><i class="fa-solid fa-rotate"></i><div class="meta"><div class="name">Rotación -2°</div><div class="sub">transform rotate</div></div></div>
+        <div class="comp" draggable="true" data-type="css" data-style="bounce"><i class="fa-solid fa-basketball"></i><div class="meta"><div class="name">Bounce</div><div class="sub">animación salto</div></div></div>
+        <div class="comp" draggable="true" data-type="css" data-style="pulse"><i class="fa-solid fa-heart-pulse"></i><div class="meta"><div class="name">Pulse</div><div class="sub">escala infinita</div></div></div>
+        <div class="comp" draggable="true" data-type="css" data-style="blur"><i class="fa-solid fa-eye"></i><div class="meta"><div class="name">Blur Hover</div><div class="sub">filter blur hover</div></div></div>
+      </div></div>
+      <div class="shelf-group" data-group="js"><div class="shelf-group-header" onclick="this.parentElement.classList.toggle('collapsed')"><h3 class="js-cat"><i class="fa-solid fa-bolt"></i> JS — Interacción</h3><span class="count">4</span></div><div class="group-items">
+        <div class="comp" draggable="true" data-type="js" data-action="changeText"><i class="fa-solid fa-keyboard"></i><div class="meta"><div class="name">Clic cambia texto</div><div class="sub">textContent = ...</div></div></div>
+        <div class="comp" draggable="true" data-type="js" data-action="changeColor"><i class="fa-solid fa-palette"></i><div class="meta"><div class="name">Clic cambia color</div><div class="sub">style.background</div></div></div>
+        <div class="comp" draggable="true" data-type="js" data-action="counter"><i class="fa-solid fa-plus"></i><div class="meta"><div class="name">Contador +1</div><div class="sub">let count++</div></div></div>
+        <div class="comp" draggable="true" data-type="js" data-action="toggle"><i class="fa-solid fa-eye-slash"></i><div class="meta"><div class="name">Mostrar/Ocultar</div><div class="sub">opacity toggle</div></div></div>
+      </div></div>
+      <div class="shelf-group" data-group="js-adv"><div class="shelf-group-header" onclick="this.parentElement.classList.toggle('collapsed')"><h3 class="adv-cat"><i class="fa-solid fa-rocket"></i> JS — Avanzado</h3><span class="count">6</span></div><div class="group-items">
+        <div class="comp" draggable="true" data-type="js" data-action="alert"><i class="fa-solid fa-bell"></i><div class="meta"><div class="name">Alert Modal</div><div class="sub">showJsModal()</div></div></div>
+        <div class="comp" draggable="true" data-type="js" data-action="confetti"><i class="fa-solid fa-party-horn"></i><div class="meta"><div class="name">Confetti 🎉</div><div class="sub">canvas confetti</div></div></div>
+        <div class="comp" draggable="true" data-type="js" data-action="typing"><i class="fa-solid fa-i-cursor"></i><div class="meta"><div class="name">Typing Effect</div><div class="sub">typewriter JS</div></div></div>
+        <div class="comp" draggable="true" data-type="js" data-action="timer"><i class="fa-solid fa-stopwatch"></i><div class="meta"><div class="name">Timer 3s</div><div class="sub">setTimeout</div></div></div>
+        <div class="comp" draggable="true" data-type="js" data-action="storage"><i class="fa-solid fa-database"></i><div class="meta"><div class="name">Guardar Texto</div><div class="sub">localStorage</div></div></div>
+        <div class="comp" draggable="true" data-type="js" data-action="copy"><i class="fa-solid fa-copy"></i><div class="meta"><div class="name">Copiar</div><div class="sub">navigator.clipboard</div></div></div>
+      </div></div>
+    </div>
+  </aside>
+
+  <main class="panel board-wrap">
+    <div class="objetivo" id="objetivo"><div class="icon">!</div><div style="flex:1"><div style="font-weight:800">MISIÓN ACTUAL</div><div id="objetivoText">Paso 1 — Arrastrá un HEADER arriba.</div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div></div>
+    <div class="board" id="board">
+      <div class="slot" data-slot="header"><div class="slot-title"><i class="fa-solid fa-window-maximize"></i> HEADER <span class="slot-count">0</span><span class="slot-styles" id="styles-header"></span></div><div class="slot-hint">Logo, título — probá Glass + Neon</div><div class="slot-content"></div></div>
+      <div class="slot" data-slot="nav"><div class="slot-title"><i class="fa-solid fa-bars"></i> NAV <span class="slot-count">0</span><span class="slot-styles" id="styles-nav"></span></div><div class="slot-hint">Menú — ideal con Flex + Rounded</div><div class="slot-content"></div></div>
+      <div class="board-middle">
+        <div class="slot" data-slot="content"><div class="slot-title"><i class="fa-solid fa-file-lines"></i> CONTENIDO <span class="slot-count">0</span><span class="slot-styles" id="styles-content"></span></div><div class="slot-hint">H1, P, Img, Botón — Bounce/Pulse</div><div class="slot-content"></div></div>
+        <div class="slot" data-slot="sidebar"><div class="slot-title"><i class="fa-solid fa-table-columns"></i> SIDEBAR <span class="slot-count">0</span><span class="slot-styles" id="styles-sidebar"></span></div><div class="slot-hint">Form, lista — Glass queda pro</div><div class="slot-content"></div></div>
+      </div>
+      <div class="slot" data-slot="footer"><div class="slot-title"><i class="fa-solid fa-shoe-prints"></i> FOOTER <span class="slot-count">0</span><span class="slot-styles" id="styles-footer"></span></div><div class="slot-hint">Pie — Gradient + Shadow</div><div class="slot-content"></div></div>
+    </div>
+  </main>
+
+  <aside class="panel">
+    <div class="panel-head"><i class="fa-solid fa-list-check"></i> PROGRESO & CÓDIGO</div>
+    <div class="check-panel">
+      <ul class="check" id="checklist">
+        <li data-k="header"><span class="num">1</span><span>&lt;header&gt; al HEADER</span></li>
+        <li data-k="nav"><span class="num">2</span><span>&lt;nav&gt; al NAV</span></li>
+        <li data-k="title"><span class="num">3</span><span>&lt;h1&gt; en CONTENIDO</span></li>
+        <li data-k="text"><span class="num">4</span><span>&lt;p&gt; o &lt;h2&gt; con texto</span></li>
+        <li data-k="style"><span class="num">5</span><span>2 estilos CSS</span></li>
+        <li data-k="fx"><span class="num">6</span><span>Efecto PRO (glass/neon)</span></li>
+        <li data-k="js"><span class="num">7</span><span>Interacción JS</span></li>
+        <li data-k="adv"><span class="num">8</span><span>JS avanzado</span></li>
+      </ul>
+      <div class="log" id="log"><div class="ok">> Sistema listo. Doble clic edita. / busca. Ctrl+Z deshace.</div></div>
+      <div class="explain" id="explainBox"><h4><i class="fa-solid fa-lightbulb"></i> ¿Qué hace este bloque?</h4><p id="explainText">Pasá el mouse por un componente para ver explicación real.</p></div>
+      <div class="actions">
+        <div class="btn-row"><button class="btn" id="btnReset"><i class="fa-solid fa-trash-can"></i> Reiniciar</button><button class="btn" id="btnExport"><i class="fa-solid fa-download"></i> Export</button></div>
+        <button class="btn primary full" id="btnPreview"><i class="fa-solid fa-eye"></i> Vista previa + Código</button>
+        <button class="btn full" id="btnFinish"><i class="fa-solid fa-flag-checkered"></i> Finalizar misión</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="mini-footer"><span><kbd>Ctrl</kbd>+<kbd>Z</kbd> Deshacer</span><span><kbd>/</kbd> Buscar</span><span id="stats">0 componentes · 0 estilos</span></div>
+
+<!-- MODALES -->
+<div class="modal" id="modalTutorial"><div class="modal-content large" style="max-width:760px"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px"><div style="display:flex; gap:12px; align-items:center"><div style="width:52px;height:52px;background:linear-gradient(135deg,var(--cyan),var(--violet));border-radius:12px;display:grid;place-items:center;font-size:24px">🧩</div><div><h2 style="font-weight:900; font-size:20px">¿Cómo funciona?</h2><p style="font-size:11px;color:var(--muted)">HTML = qué hay · CSS = cómo se ve · JS = qué hace</p></div></div><button class="icon-btn" onclick="document.getElementById('modalTutorial').classList.remove('show')"><i class="fa-solid fa-xmark"></i></button></div><div class="tab-bar" id="tutoTabs"><button class="tab-btn active" data-tuto="pasos">Pasos</button><button class="tab-btn" data-tuto="html">HTML</button><button class="tab-btn" data-tuto="css">CSS</button><button class="tab-btn" data-tuto="js">JS</button></div><div id="tuto-pasos"><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px"><div style="padding:12px; border-radius:12px; background:rgba(34,211,238,.12); border:1px solid rgba(34,211,238,.22)"><b>1. Arrastrá</b><p style="font-size:11px; color:var(--muted)">HTML al HEADER/NAV/CONTENIDO/SIDEBAR/FOOTER. CSS al slot entero.</p></div><div style="padding:12px; border-radius:12px; background:rgba(167,139,250,.12); border:1px solid rgba(167,139,250,.22)"><b>2. Combiná</b><p style="font-size:11px; color:var(--muted)">Glass+Neon+Bounce se suman. Doble clic edita texto. Guarda en localStorage.</p></div><div style="padding:12px; border-radius:12px; background:rgba(251,191,36,.12); border:1px solid rgba(251,191,36,.22)"><b>3. JS real</b><p style="font-size:11px; color:var(--muted)">Confetti, Storage, Clipboard usan APIs reales del navegador.</p></div><div style="padding:12px; border-radius:12px; background:rgba(52,211,153,.12); border:1px solid rgba(52,211,153,.22)"><b>4. Exportá</b><p style="font-size:11px; color:var(--muted)">Vista previa genera HTML/CSS/JS limpio copiable a VS Code.</p></div></div></div><div id="tuto-html" style="display:none"><h4>HTML — Esqueleto</h4><div style="font-size:11px; line-height:1.6; color:#cbd5e1"><div><code>&lt;header&gt;</code> logo+título arriba</div><div><code>&lt;nav&gt;</code> menú con Flex</div><div><code>&lt;h1&gt;</code> solo 1 por página</div><div><code>&lt;form&gt;</code> inputs + validación</div></div></div><div id="tuto-css" style="display:none"><h4>CSS — Ropa</h4><div style="font-size:11px; line-height:1.6; color:#cbd5e1">Base: background, font-size, border-radius, flex, shadow. PRO: backdrop-filter blur, linear-gradient, box-shadow neon, @keyframes.</div></div><div id="tuto-js" style="display:none"><h4>JS — Cerebro</h4><div style="font-size:11px; line-height:1.6; color:#cbd5e1">textContent, style.background, let count++, localStorage, clipboard, setTimeout, confetti 40 divs.</div></div><div style="margin-top:18px; padding-top:16px; border-top:1px solid var(--border)">
+  <div style="font-size:11px; font-weight:800; letter-spacing:.08em; color:var(--muted); margin-bottom:12px; text-align:center"><i class="fa-solid fa-code-branch" style="margin-right:6px"></i>ELIGE TU MODO</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+    <button onclick="document.getElementById('modalTutorial').classList.remove('show')" style="text-align:left; padding:14px; border-radius:12px; background:linear-gradient(135deg, rgba(34,211,238,.18), rgba(34,211,238,.06)); border:1.5px solid rgba(34,211,238,.4); cursor:pointer">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px"><span style="width:32px;height:32px; background:linear-gradient(135deg,var(--cyan),var(--violet)); border-radius:8px; display:grid; place-items:center; font-size:16px">🧩</span><span style="font-weight:900; font-size:13px; color:var(--text)">Arrastrar bloques</span></div>
+      <div style="font-size:10.5px; color:#cbd5e1; line-height:1.4">Modo visual drag & drop. Ideal para empezar.</div>
+      <div style="margin-top:10px; font-size:10px; font-weight:800; color:var(--cyan); display:flex; align-items:center; gap:5px"><i class="fa-solid fa-play"></i> Continuar aqui</div>
+    </button>
+    <a href="simulador-web2.html" style="text-align:left; padding:14px; border-radius:12px; background:linear-gradient(135deg, rgba(167,139,250,.18), rgba(244,114,182,.08)); border:1.5px solid rgba(167,139,250,.4); cursor:pointer; text-decoration:none; display:block">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px"><span style="width:32px;height:32px; background:linear-gradient(135deg,var(--violet),var(--pink)); border-radius:8px; display:grid; place-items:center;"><i class="fa-solid fa-code" style="font-size:14px; color:#000"></i></span><span style="font-weight:900; font-size:13px; color:var(--text)">Escribir codigo</span></div>
+      <div style="font-size:10.5px; color:#cbd5e1; line-height:1.4">Editor directo HTML/CSS/JS. Para avanzados.</div>
+      <div style="margin-top:10px; font-size:10px; font-weight:800; color:var(--violet); display:flex; align-items:center; gap:5px"><i class="fa-solid fa-arrow-right"></i> Ir a escribir código</div>
+    </a>
+  </div>
+</div>
+<button class="btn primary full" style="margin-top:14px; opacity:.5" onclick="document.getElementById('modalTutorial').classList.remove('show')">Omitir y explorar</button></div></div>
+<div class="modal" id="modalPreview"><div class="modal-content large" id="previewContent"></div></div>
+<div class="modal-js" id="jsModal"><div class="modal-js-card"><div class="modal-js-header"><div class="modal-js-icon"><i class="fa-solid fa-bolt"></i></div><div><div style="font-weight:800" id="jsModalTitle">JS</div><div style="font-size:11px;color:var(--muted)" id="jsModalSub">Evento</div></div></div><div style="padding:16px 18px"><p id="jsModalMsg" style="font-size:13px;line-height:1.5">Mensaje</p><button class="btn primary full" style="margin-top:12px" onclick="document.getElementById('jsModal').classList.remove('show')">Entendido</button></div></div></div>
+
+<!-- MODAL RESOLUCION - ESTILO REFERENCIA DARK -->
+<div class="modal-resolution" id="modalResolution">
+  <div class="modal-resolution-content">
+    <div class="modal-resolution-icon"><i class="fa-solid fa-desktop"></i></div>
+    <div class="modal-resolution-title">INFORMACION IMPORTANTE</div>
+    <div class="modal-resolution-desc">
+      Este simulador de desarrollo WEB (html/css/js) requiere un espacio de trabajo amplio para una correcta experiencia educativa.
+    </div>
+    <div class="modal-resolution-desc small">Resolución detectada:</div>
+    <div class="resolution-badge" id="currentResolutionText">0 px × 0 px</div>
+    <div class="modal-resolution-desc small">
+      Por favor, ingresa desde una computadora o dispositivo con al menos <span class="hl">1110px de ancho por 600px de alto</span>
+    </div>
+    <div class="modal-resolution-buttons">
+      <button class="modal-resolution-btn modal-resolution-btn-cancel" onclick="cancelResolutionModalPc()">Cancelar</button>
+      <button class="modal-resolution-btn modal-resolution-btn-continue" onclick="dismissResolutionModalPc()">Continuar</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="toastBox"></div>
+
+<script>
+const $ = s => document.querySelector(s); const $$ = s => [...document.querySelectorAll(s)];
+const cssMap = {
+  bg: `.slot{ background: rgba(34,211,238,.18) !important; border-color: var(--cyan) !important; }`,
+  big: `.slot-content{ font-size: 1.35em } .editable-display{ font-size:18px }`,
+  rounded: `.slot{ border-radius: 22px } .placed-item{ border-radius:16px }`,
+  flex: `.slot-content{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center }`,
+  shadow: `.slot{ box-shadow: 0 14px 36px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.06) inset }`,
+  glass: `.slot{ backdrop-filter: blur(18px) saturate(140%); background: rgba(255,255,255,.08) !important; border:1px solid rgba(255,255,255,.18) !important }`,
+  gradient: `.slot{ background: linear-gradient(135deg, #22d3ee, #a78bfa, #f472b6) !important; color:#000 !important } .slot .slot-title,.slot .slot-hint{ color:#000 !important }`,
+  neon: `.slot{ box-shadow: 0 0 0 1px #22d3ee inset, 0 0 14px rgba(34,211,238,.6), 0 0 32px rgba(34,211,238,.25); border-color:#22d3ee !important }`,
+  rotate: `.slot{ transform: rotate(-1.6deg) }`,
+  bounce: `.slot{ animation: bounceSlot 1.4s ease infinite } @keyframes bounceSlot{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}`,
+  pulse: `.slot{ animation: pulseSlot 1.8s ease infinite } @keyframes pulseSlot{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}`,
+  blur: `.slot{ transition: filter .3s } .slot:hover{ filter: blur(.4px) brightness(1.08) }`
+};
+const stylePreview = { bg:'background: rgba(34,211,238,.18)', big:'font-size:1.2em', rounded:'border-radius:22px', flex:'display:flex;gap:8px;justify-content:center', shadow:'box-shadow:0 12px 30px rgba(0,0,0,.4)', glass:'backdrop-filter:blur(14px);background:rgba(255,255,255,.08)', gradient:'background:linear-gradient(135deg,#22d3ee,#a78bfa)', neon:'box-shadow:0 0 12px #22d3ee', rotate:'transform:rotate(-1.5deg)', bounce:'animation:bounce 1s infinite', pulse:'animation:pulse 1.5s infinite', blur:'filter:brightness(1.05)' };
+const explainData = {
+  bg:'<b>background</b> fondo: <code>background: #22d3ee22</code>', big:'<b>font-size</b> tamaño: <code>1.35em</code>', rounded:'<b>border-radius</b> esquinas: <code>22px</code>', flex:'<b>Flexbox</b> <code>display:flex; justify-content:center</code>', shadow:'<b>box-shadow</b> profundidad', glass:'<b>Glassmorphism</b> <code>backdrop-filter: blur(18px)</code>', gradient:'<b>Gradiente</b> <code>linear-gradient(135deg, cyan, violet, pink)</code>', neon:'<b>Neon glow</b> box-shadow doble', rotate:'<b>rotate</b> sticker', bounce:'<b>@keyframes bounce</b> translateY loop', pulse:'<b>@keyframes pulse</b> scale', blur:'<b>filter + :hover</b>', changeText:'<b>textContent</b> click', changeColor:'<b>style.background</b>', counter:'<b>let count++</b> closure', toggle:'<b>opacity toggle</b>', alert:'<b>Modal custom</b>', confetti:'<b>Canvas confetti</b> 40 divs', typing:'<b>Typewriter</b> setInterval', timer:'<b>setTimeout</b> 3s', storage:'<b>localStorage</b>', copy:'<b>clipboard</b>'
+};
+
+class SimuladorApp {
+  constructor(){ this.placed=[]; this.slotStyles={header:[],nav:[],content:[],sidebar:[],footer:[]}; this.slotLabels={header:[],nav:[],content:[],sidebar:[],footer:[]}; this.history=[]; this.historyIndex=-1; this.theme=localStorage.getItem('ntx-theme')||'dark'; this.init(); }
+  init(){ this.applyTheme(this.theme); this.loadFromStorage(); this.bindEvents(); this.renderAllSlots(); this.updateObjetivo(); setTimeout(()=>$('#modalTutorial').classList.add('show'),500); this.log('Sistema listo. / busca. Ctrl+Z deshace.','ok'); }
+  bindEvents(){
+    $$('.comp').forEach(el=>{
+      el.addEventListener('dragstart', e=>{ el.classList.add('dragging'); e.dataTransfer.setData('text/plain', JSON.stringify({type:el.dataset.type, tag:el.dataset.tag, style:el.dataset.style, action:el.dataset.action, name:el.dataset.name||el.textContent.trim()})); e.dataTransfer.effectAllowed='copy'; });
+      el.addEventListener('dragend', ()=>el.classList.remove('dragging'));
+      el.addEventListener('mouseenter', ()=>{ const key=el.dataset.style||el.dataset.action||el.dataset.tag; if(explainData[key]) $('#explainText').innerHTML=explainData[key]; });
+    });
+    $$('.slot').forEach(slot=>{
+      slot.addEventListener('dragover', e=>{ e.preventDefault(); slot.classList.add('drag-over'); });
+      slot.addEventListener('dragleave', ()=>slot.classList.remove('drag-over'));
+      slot.addEventListener('drop', e=>{ e.preventDefault(); slot.classList.remove('drag-over'); try{ const data=JSON.parse(e.dataTransfer.getData('text/plain')); this.handleDrop(slot.dataset.slot, data);}catch{}});
+    });
+    $('#compSearch').addEventListener('input', e=>{
+      const q=e.target.value.toLowerCase().trim();
+      $$('.comp').forEach(c=>{ const txt=(c.dataset.name+' '+(c.dataset.tag||'')+' '+(c.dataset.style||'')+' '+(c.dataset.action||'')+' '+c.textContent).toLowerCase(); c.style.display = q==='' || txt.includes(q) ? '' : 'none'; });
+      $$('.shelf-group').forEach(group=>{
+        const comps=[...group.querySelectorAll('.comp')]; const visible=comps.filter(c=>c.style.display!=='none').length;
+        group.style.display=visible>0||q==='' ? '' : 'none'; if(q!==''&&visible>0) group.classList.remove('collapsed');
+        const countEl=group.querySelector('.count'); if(countEl) countEl.textContent=q?`${visible}/${comps.length}`:`${comps.length}`;
+      });
+    });
+    $('#btnClearSearch').addEventListener('click',()=>{ $('#compSearch').value=''; $('#compSearch').dispatchEvent(new Event('input')); $$('.shelf-group').forEach(g=>{g.style.display=''}); });
+    $$('#tutoTabs .tab-btn').forEach(btn=>{ btn.addEventListener('click', ()=>{ $$('#tutoTabs .tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const tab=btn.dataset.tuto; $('#tuto-pasos').style.display=tab==='pasos'?'':'none'; $('#tuto-html').style.display=tab==='html'?'':'none'; $('#tuto-css').style.display=tab==='css'?'':'none'; $('#tuto-js').style.display=tab==='js'?'':'none'; }); });
+    document.addEventListener('keydown', e=>{ if(e.key==='/'&&document.activeElement.tagName!=='INPUT'){e.preventDefault(); $('#compSearch').focus();} if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault(); this.undo();} if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault(); this.redo();} if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault(); this.saveToStorage(); this.toast('💾 Guardado');} });
+    $('#btnTheme').addEventListener('click',()=>{ const themes=['dark','neon','light']; const idx=themes.indexOf(this.theme); this.theme=themes[(idx+1)%themes.length]; this.applyTheme(this.theme); this.toast(`Tema: ${this.theme}`); });
+    $('#btnUndo').addEventListener('click',()=>this.undo()); $('#btnRedo').addEventListener('click',()=>this.redo());
+    $('#btnReset').addEventListener('click',()=>this.reset()); $('#btnExport').addEventListener('click',()=>this.exportJSON());
+    $('#btnPreview').addEventListener('click',()=>this.preview()); $('#btnFinish').addEventListener('click',()=>this.finish());
+  }
+  applyTheme(t){ document.documentElement.setAttribute('data-theme', t==='dark'?'':t); if(t==='dark') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t); $('#themeLabel').textContent=t.charAt(0).toUpperCase()+t.slice(1); localStorage.setItem('ntx-theme', t); this.theme=t; }
+  handleDrop(slotId, data){
+    this.pushHistory();
+    if(data.type==='css'){ if(!this.slotStyles[slotId].includes(data.style)){ this.slotStyles[slotId].push(data.style); this.slotLabels[slotId].push(data.name||data.style); } this.renderSlotStyles(slotId); this.log(`🎨 CSS ${data.name||data.style} → ${slotId.toUpperCase()}`, 'info'); }
+    else { const id=Date.now()+Math.random(); this.placed.push({id, slot:slotId, type:data.type, tag:data.tag||'div', name:data.name||data.tag, customText:data.name||data.tag, js:data.action?[data.action]:[]}); this.log(`📦 ${data.name||data.tag} → ${slotId.toUpperCase()}`, data.type==='js'?'js':'ok'); }
+    this.renderSlot(document.querySelector(`.slot[data-slot="${slotId}"]`)); this.updateObjetivo(); this.saveToStorage(); this.updateStats();
+  }
+  renderSlotStyles(slotId){
+    const container=document.getElementById(`styles-${slotId}`); if(!container) return;
+    container.innerHTML=this.slotStyles[slotId].map((s,i)=>`<span class="style-chip">${this.slotLabels[slotId][i]||s} <i class="fa-solid fa-xmark" style="cursor:pointer;margin-left:4px" onclick="app.removeStyle('${slotId}','${s}')"></i></span>`).join('');
+    const slot=document.querySelector(`.slot[data-slot="${slotId}"]`); slot.style.cssText=''; let extra=this.slotStyles[slotId].map(s=>stylePreview[s]||'').join(';'); if(extra) slot.setAttribute('style', extra);
+  }
+  removeStyle(slotId, style){ this.pushHistory(); const idx=this.slotStyles[slotId].indexOf(style); if(idx>-1){ this.slotStyles[slotId].splice(idx,1); this.slotLabels[slotId].splice(idx,1); } const slot=document.querySelector(`.slot[data-slot="${slotId}"]`); slot.removeAttribute('style'); this.renderSlotStyles(slotId); this.renderSlot(slot); this.updateObjetivo(); this.saveToStorage(); }
+  renderSlot(slotEl){
+    const slotId=slotEl.dataset.slot; const content=slotEl.querySelector('.slot-content'); const items=this.placed.filter(p=>p.slot===slotId);
+    slotEl.querySelector('.slot-count').textContent=`${items.length} · ${this.slotStyles[slotId].length} estilos`;
+    content.innerHTML=items.map(it=>`<div class="placed-item" data-id="${it.id}"><div class="left"><div class="editable-display" ondblclick="app.startEdit(${it.id})">${this.escape(it.customText)}</div><div style="font-size:9px;color:var(--muted);margin-top:2px;font-family:'JetBrains Mono',monospace">${it.tag} ${it.js.length?'· JS: '+it.js.join(','):''}</div></div><div class="item-actions"><button onclick="app.startEdit(${it.id})"><i class="fa-solid fa-pen"></i></button><button onclick="app.deleteItem(${it.id})"><i class="fa-solid fa-trash"></i></button></div></div>`).join('') || `<div style="font-size:10px;color:var(--muted);text-align:center;padding:8px">Vacío — arrastrá</div>`;
+    this.renderSlotStyles(slotId);
+  }
+  renderAllSlots(){ $$('.slot').forEach(s=>this.renderSlot(s)); }
+  startEdit(id){ const it=this.placed.find(p=>p.id===id); if(!it) return; const el=document.querySelector(`.placed-item[data-id="${id}"] .left`); if(!el) return; el.innerHTML=`<input class="edit-input" value="${it.customText.replace(/"/g,'&quot;')}" onkeydown="if(event.key==='Enter') app.finishEdit(${id}, this.value)" onblur="app.finishEdit(${id}, this.value)" autofocus>`; el.querySelector('input').select(); }
+  finishEdit(id, val){ const it=this.placed.find(p=>p.id===id); if(!it) return; this.pushHistory(); it.customText=val.trim()||it.name; this.renderAllSlots(); this.saveToStorage(); }
+  deleteItem(id){ this.pushHistory(); this.placed=this.placed.filter(p=>p.id!==id); this.renderAllSlots(); this.updateObjetivo(); this.saveToStorage(); this.updateStats(); this.log('🗑️ Eliminado','warn'); }
+  pushHistory(){ this.history=this.history.slice(0, this.historyIndex+1); this.history.push(JSON.stringify({placed:this.placed, slotStyles:this.slotStyles, slotLabels:this.slotLabels})); this.historyIndex++; if(this.history.length>30){this.history.shift(); this.historyIndex--;} }
+  undo(){ if(this.historyIndex<=0){this.toast('Nada que deshacer'); return;} this.historyIndex--; const s=JSON.parse(this.history[this.historyIndex]); this.placed=s.placed; this.slotStyles=s.slotStyles; this.slotLabels=s.slotLabels; this.renderAllSlots(); this.updateObjetivo(); this.saveToStorage(); this.toast('↩️ Deshecho'); }
+  redo(){ if(this.historyIndex>=this.history.length-1){this.toast('Nada que rehacer'); return;} this.historyIndex++; const s=JSON.parse(this.history[this.historyIndex]); this.placed=s.placed; this.slotStyles=s.slotStyles; this.slotLabels=s.slotLabels; this.renderAllSlots(); this.updateObjetivo(); this.saveToStorage(); this.toast('↪️ Rehecho'); }
+  updateObjetivo(){
+    const hasHeader=this.placed.some(p=>p.tag==='header'); const hasNav=this.placed.some(p=>p.tag==='nav'); const hasH1=this.placed.some(p=>p.tag==='h1'||p.tag==='h2'); const hasText=this.placed.some(p=>p.tag==='p'||p.tag==='h2'); const stylesCount=Object.values(this.slotStyles).flat().length; const fxCount=Object.values(this.slotStyles).flat().filter(s=>['glass','gradient','neon','bounce','pulse','blur','rotate'].includes(s)).length; const jsCount=this.placed.filter(p=>p.js.length).length; const advCount=this.placed.filter(p=>p.js.some(j=>['confetti','storage','timer','typing','copy','alert'].includes(j))).length;
+    const checks={header:hasHeader, nav:hasNav, title:hasH1, text:hasText, style:stylesCount>=2, fx:fxCount>=1, js:jsCount>=1, adv:advCount>=1};
+    $$('#checklist li').forEach(li=>{ const k=li.dataset.k; li.classList.toggle('done', !!checks[k]); });
+    const done=Object.values(checks).filter(Boolean).length; $('#progressFill').style.width=`${(done/8)*100}%`;
+    let msg='¡Excelente! Probá efectos PRO'; if(!hasHeader) msg='Paso 1 — Arrastrá <header> al HEADER.'; else if(!hasNav) msg='Paso 2 — <nav> al NAV con Flex.'; else if(!hasH1) msg='Paso 3 — <h1> al CONTENIDO, doble clic edita.'; else if(stylesCount<2) msg='Paso 4 — 2 estilos CSS: Glass+Shadow.'; else if(fxCount<1) msg='Paso 5 — ¡Efecto PRO! Neon o Bounce 🔥'; else if(jsCount<1) msg='Paso 6 — Sumá JS: Confetti o Alert.'; else if(done===8) msg='🏆 ¡Misión completa! Exportá tu web.'; $('#objetivoText').textContent=msg;
+  }
+  updateStats(){ $('#stats').textContent=`${this.placed.length} componentes · ${Object.values(this.slotStyles).flat().length} estilos`; }
+  log(html, cls=''){ const log=$('#log'); const div=document.createElement('div'); div.className=cls; div.innerHTML=`> ${html}`; log.appendChild(div); log.scrollTop=log.scrollHeight; }
+  toast(msg){ const box=$('#toastBox'); const t=document.createElement('div'); t.className='toast'; t.innerHTML=msg; box.appendChild(t); setTimeout(()=>t.remove(),2600); }
+  escape(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  saveToStorage(){ localStorage.setItem('ntx-sim-v2', JSON.stringify({placed:this.placed, slotStyles:this.slotStyles, slotLabels:this.slotLabels})); }
+  loadFromStorage(){ try{ const raw=localStorage.getItem('ntx-sim-v2'); if(!raw) return; const d=JSON.parse(raw); this.placed=d.placed||[]; this.slotStyles=d.slotStyles||{header:[],nav:[],content:[],sidebar:[],footer:[]}; this.slotLabels=d.slotLabels||{header:[],nav:[],content:[],sidebar:[],footer:[]}; }catch{} }
+  reset(){ if(!confirm('¿Borrar todo?')) return; this.pushHistory(); this.placed=[]; this.slotStyles={header:[],nav:[],content:[],sidebar:[],footer:[]}; this.slotLabels={header:[],nav:[],content:[],sidebar:[],footer:[]}; $$('.slot').forEach(s=>{s.removeAttribute('style'); this.renderSlot(s);}); localStorage.removeItem('ntx-sim-v2'); $('#log').innerHTML='<div class="ok">> Reiniciado</div>'; this.updateObjetivo(); this.updateStats(); this.toast('Reiniciado'); }
+  exportJSON(){ const data={version:'2.2', placed:this.placed, styles:this.slotStyles}; const blob=new Blob([JSON.stringify(data,null,2)], {type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='mi-web-pro.json'; a.click(); URL.revokeObjectURL(url); this.toast('📦 Exportado'); }
+  preview(){
+    const slots=['header','nav','content','sidebar','footer']; let htmlCode=`<!DOCTYPE html>\n<html>\n<head><meta charset="UTF-8"><title>Mi Web PRO</title><style>\n`; let cssCode=''; let jsCode=`document.addEventListener('DOMContentLoaded',()=>{\n`; let previewHtml='';
+    slots.forEach(slotId=>{
+      const items=this.placed.filter(p=>p.slot===slotId); if(items.length===0 && this.slotStyles[slotId].length===0) return;
+      this.slotStyles[slotId].forEach(st=>{ if(cssMap[st] && !cssCode.includes(cssMap[st])) cssCode+=cssMap[st]+'\n'; });
+      const inline=this.slotStyles[slotId].map(s=>stylePreview[s]||'').join(';'); previewHtml+=`<div style="padding:12px;border:1px dashed #2a3a5a;border-radius:10px;margin-bottom:10px;${inline}"><h4 style="font-size:10px;color:#22d3ee;margin:0 0 8px">${slotId.toUpperCase()}</h4>`;
+      const tagMap={header:'header', nav:'nav', content:'main', sidebar:'aside', footer:'footer'}; htmlCode+=`  <${tagMap[slotId]}>\n`;
+      items.forEach(it=>{ const txt=it.customText||it.name; const esc=this.escape(txt); it.js.forEach(action=>{
+        if(action==='changeText') jsCode+=`  document.querySelectorAll('${it.tag}').forEach(el=>el.addEventListener('click',()=>el.textContent='¡Cambiado! 🎉'));\n`;
+        if(action==='changeColor') jsCode+=`  document.querySelectorAll('${it.tag}').forEach(el=>el.addEventListener('click',()=>el.style.background='#a78bfa'));\n`;
+        if(action==='counter') jsCode+=`  let c=0; document.querySelectorAll('${it.tag}').forEach(el=>el.addEventListener('click',()=>{c++; el.textContent='${esc} ('+c+')'}));\n`;
+        if(action==='toggle') jsCode+=`  document.querySelectorAll('${it.tag}').forEach(el=>el.addEventListener('click',()=>{el.style.opacity=el.style.opacity==='0.2'?'1':'0.2'}));\n`;
+        if(action==='confetti') jsCode+=`  document.querySelectorAll('${it.tag}').forEach(el=>el.addEventListener('click',()=>{ for(let i=0;i<40;i++){ const d=document.createElement('div'); d.textContent='🎉'; d.style.position='fixed'; d.style.left=Math.random()*100+'vw'; d.style.top='-10px'; d.style.fontSize='22px'; d.style.animation='fall '+(1+Math.random()*2)+'s linear forwards'; document.body.appendChild(d); setTimeout(()=>d.remove(),2500);} }));\n`;
+        if(action==='alert') jsCode+=`  document.querySelectorAll('${it.tag}').forEach(el=>el.addEventListener('click',()=>alert('${esc}')));\n`;
+        if(action==='storage') jsCode+=`  localStorage.setItem('ntx-text','${esc}');\n`;
+        if(action==='copy') jsCode+=`  document.querySelectorAll('${it.tag}').forEach(el=>el.addEventListener('click',()=>navigator.clipboard.writeText('${esc}')));\n`;
+        if(action==='timer') jsCode+=`  setTimeout(()=>alert('⏰ Timer: ${esc}'),3000);\n`;
+      });
+      if(it.tag==='h1') { htmlCode+=`    <h1>${txt}</h1>\n`; previewHtml+=`<h1>${esc}</h1>`; } else if(it.tag==='h2'){ htmlCode+=`    <h2>${txt}</h2>\n`; previewHtml+=`<h2 style="color:#a78bfa">${esc}</h2>`; } else if(it.tag==='p'){ htmlCode+=`    <p>${txt}</p>\n`; previewHtml+=`<p>${esc}</p>`; } else if(it.tag==='button'){ htmlCode+=`    <button>${txt}</button>\n`; previewHtml+=`<button style="padding:8px 14px;border-radius:8px;background:linear-gradient(90deg,#22d3ee,#a78bfa);border:none;font-weight:800">${esc}</button>`; } else { htmlCode+=`    <${it.tag}>${txt}</${it.tag}>\n`; previewHtml+=`<div>${esc}</div>`; }
+      }); htmlCode+=`  </${tagMap[slotId]}>\n`; previewHtml+=`</div>`;
+    }); htmlCode+=`</body>\n</html>`; jsCode+=`});\n`;
+    if(!previewHtml) previewHtml='<p style="text-align:center;opacity:.5;padding:30px">Nada todavía — arrastrá componentes</p>';
+    $('#previewContent').innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px"><div><h3 style="margin:0;font-size:18px;font-weight:900">Mi Página PRO + Código</h3><p style="font-size:11px;color:var(--muted)">Con glass, neon, confetti y localStorage</p></div><div style="display:flex;gap:6px"><button class="tab-btn active" data-tab="vista" onclick="window.switchTab('vista')">Vista</button><button class="tab-btn" data-tab="html" onclick="window.switchTab('html')">HTML</button><button class="tab-btn" data-tab="css" onclick="window.switchTab('css')">CSS</button><button class="tab-btn" data-tab="js" onclick="window.switchTab('js')">JS</button><button class="btn" onclick="document.getElementById('modalPreview').classList.remove('show')" style="padding:6px 10px"><i class="fa-solid fa-xmark"></i></button></div></div><div id="tab-vista" class="tab-content"><div style="background:#0f172a;padding:16px;border-radius:12px;min-height:200px">${previewHtml}</div></div><div id="tab-html" class="tab-content" style="display:none"><pre><code id="code-html"></code></pre></div><div id="tab-css" class="tab-content" style="display:none"><pre><code id="code-css"></code></pre></div><div id="tab-js" class="tab-content" style="display:none"><pre><code id="code-js"></code></pre></div>`;
+    $('#code-html').textContent=htmlCode; $('#code-css').textContent=cssCode || '/* Agregá estilos */\n'+Object.values(cssMap).join('\n'); $('#code-js').textContent=jsCode; $('#modalPreview').classList.add('show'); window.switchTab=(tab)=>{ $$('.tab-content').forEach(t=>t.style.display='none'); $(`#tab-${tab}`).style.display='block'; $$('.tab-btn').forEach(b=>b.classList.remove('active')); document.querySelector(`[data-tab="${tab}"]`)?.classList.add('active'); };
+  }
+  finish(){ if(this.placed.length<3){this.toast('⚠️ Te faltan componentes'); return;} this.confettiBurst(); $('#jsModalTitle').textContent='¡Misión completada!'; $('#jsModalSub').textContent='NTX Labs'; $('#jsModalMsg').innerHTML=`Creaste tu web con <b>${this.placed.length}</b> componentes y <b>${Object.values(this.slotStyles).flat().length}</b> estilos PRO.`; $('#jsModal').classList.add('show'); }
+  confettiBurst(){ for(let i=0;i<50;i++){ const d=document.createElement('div'); d.textContent=['🎉','✨','🚀','💜','⚡'][Math.floor(Math.random()*5)]; d.style.position='fixed'; d.style.left=Math.random()*100+'vw'; d.style.top='-20px'; d.style.fontSize=(18+Math.random()*18)+'px'; d.style.pointerEvents='none'; d.style.zIndex='9999'; d.style.animation=`fall ${1+Math.random()*2.5}s linear forwards`; document.body.appendChild(d); setTimeout(()=>d.remove(),3000); } }
+}
+const styleEl=document.createElement('style'); styleEl.textContent=`@keyframes fall{ to{ transform: translateY(105vh) rotate(720deg); opacity:0 } }`; document.head.appendChild(styleEl);
+const app=new SimuladorApp(); window.app=app;
+function showJsModal(msg,title='JS',sub='Evento'){ $('#jsModalTitle').textContent=title; $('#jsModalSub').textContent=sub; $('#jsModalMsg').textContent=msg; $('#jsModal').classList.add('show'); } window.showJsModal=showJsModal;
+function toggleNavDropdown(which){ const id=which==='sim'?'nav-sim':'nav-menu'; const el=document.getElementById(id); const otherId=which==='sim'?'nav-menu':'nav-sim'; const other=document.getElementById(otherId); if(other) other.classList.remove('show'); if(el) el.classList.toggle('show'); }
+function closeNavDropdowns(){ $$('.nav-dropdown-menu').forEach(m=>m.classList.remove('show')); } window.toggleNavDropdown=toggleNavDropdown; window.closeNavDropdowns=closeNavDropdowns;
+document.addEventListener('click', (e)=>{ if(!e.target.closest('.nav-dropdown')) closeNavDropdowns(); });
+function showGuia(){ $('#jsModalTitle').textContent='Guía de estudio'; $('#jsModalSub').textContent='NTX Labs'; $('#jsModalMsg').innerHTML=`<div style="text-align:left; font-size:12px; line-height:1.6"><b>HTML</b>=estructura, <b>CSS</b>=estilo, <b>JS</b>=interacción. Combiná Glass+Neon+Shadow para look pro.</div>`; $('#jsModal').classList.add('show'); }
+function showGlosario(){ $('#jsModalTitle').textContent='Glosario'; $('#jsModalSub').textContent='Referencia rápida'; $('#jsModalMsg').innerHTML=`<div style="text-align:left; font-size:11px; line-height:1.6; max-height:50vh; overflow:auto"><b style="color:var(--cyan)">HTML</b>: header nav h1 h2 p img button a ul form<br><b style="color:var(--violet)">CSS</b>: background, font-size, border-radius, flex, shadow, backdrop-filter, linear-gradient, neon, keyframes<br><b style="color:var(--amber)">JS</b>: addEventListener, textContent, style, count, opacity, localStorage, clipboard, setTimeout<br><b style="color:var(--green)">Atajos</b>: / buscar, Ctrl+Z deshacer, Ctrl+Y rehacer, Ctrl+S guardar</div>`; $('#jsModal').classList.add('show'); }
+function showContacto(e){ if(e) e.preventDefault(); $('#jsModalTitle').textContent='Contacto - NTX Labs'; $('#jsModalSub').textContent='Simulador Web PRO v2.3'; $('#jsModalMsg').innerHTML=`<div style="text-align:left; font-size:12px; line-height:1.6">Hecho para 4to Año.<br><br><span style="padding:6px 10px; background:rgba(34,211,238,.15); border:1px solid rgba(34,211,238,.25); border-radius:8px; font-size:11px"><i class="fa-solid fa-envelope"></i> contacto@ntxlabs.edu</span></div>`; $('#jsModal').classList.add('show'); closeNavDropdowns(); }
+window.showGuia=showGuia; window.showGlosario=showGlosario; window.showContacto=showContacto;
+// === LÓGICA AISLADA DE COMPROBACIÓN DE RESOLUCIÓN PARA PC ===
+function checkScreenResolutionPc() {
+  const modal = document.getElementById('modalResolution');
+  const resText = document.getElementById('currentResolutionText');
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  
+  if(resText) {
+    resText.textContent = `${width} px × ${height} px`;
+  }
+  
+  if(window.forcedResolutionDismissedPc === true) {
+    if(modal) modal.classList.remove('show');
+    return;
+  }
+  
+  if(width < 1110 || height < 600) {
+    if(modal) modal.classList.add('show');
+  } else {
+    if(modal) modal.classList.remove('show');
+  }
+}
+
+function dismissResolutionModalPc() {
+  const modal = document.getElementById('modalResolution');
+  if(modal) modal.classList.remove('show');
+  window.forcedResolutionDismissedPc = true;
+}
+
+function cancelResolutionModalPc() {
+  window.location.href = 'index.html';
+}
+
+window.addEventListener('load', checkScreenResolutionPc);
+window.addEventListener('resize', checkScreenResolutionPc);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=24');
+  });
+}
+</script>
+</body>
+</html>

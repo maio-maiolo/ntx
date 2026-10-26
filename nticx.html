@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Nticx | NTX  </title>
+<link rel="manifest" href="manifest.json?v=24">
+
+<meta name="theme-color" content="#0a1930">
+
+<!-- Favicon para SOLAPA NAVEGADOR - Libro circular -->
+<link rel="icon" href="/favicon.ico?v=24" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png?v=24">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png?v=24">
+
+<!-- Apple / iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png?v=24">
+
+<!-- PWA / Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192x192.png?v=24">
+<link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512x512.png?v=24">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary-color:#0c2340;--secondary-color:#112334;--accent-blue:#3b82f6;--bg-light:#f4f7fa;--text-main:#333;--text-muted:#666;--white:#fff;--cyan:#06b6d4;--amber:#f59e0b;--violet:#8b5cf6;--green:#10b981;--red:#ef4444;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{background:var(--white);color:var(--text-main);overflow-x:hidden;line-height:1.6;}
+.hero { background: #112334; color:var(--white); padding:50px 20px; }
+        .hero-container { max-width:1200px; margin:0 auto; display:flex; flex-direction:row; align-items:center; gap:30px; text-align:left; }
+        .hero img { max-width:140px; height:auto; }
+        .hero-text h1 { font-size:34px; font-weight:800; margin-bottom:8px; }
+        .hero-text p { font-size:15px; color:#d1d5db; line-height:1.5; }
+        .content-container { max-width:1350px; margin:40px auto 80px auto; padding:0 20px; }
+        .section-box { background:var(--white); border:1px solid #e2e8f0; border-radius:16px; padding:40px; margin-bottom:40px; box-shadow:0 10px 30px rgba(0,0,0,0.02); }
+        .section-box h2 { font-size:26px; color:var(--primary-color); margin-bottom:20px; display:flex; align-items:center; gap:12px; border-bottom:2px solid #f1f5f9; padding-bottom:15px; }
+        .section-box h2 i { color:var(--accent-blue); }
+        .section-box h3 { font-size:20px; color:var(--primary-color); margin-top:25px; margin-bottom:12px; }
+        .section-box p { margin-bottom:15px; }
+        .indice { background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%); border:1px dashed #93c5fd; border-radius:16px; padding:25px 30px; margin-bottom:40px; }
+        .indice h3 { margin-top:0; }
+        .indice ol { margin-left:20px; display:flex; flex-direction:column; gap:6px; }
+        .indice a { color:#1e40af; text-decoration:none; font-weight:500; }
+        .indice a:hover { text-decoration:underline; }
+        .ciclo-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:20px; margin:25px 0; }
+        .ciclo-grid-3 { display:grid; grid-template-columns: repeat(3, 1fr); gap:20px; margin:25px 0; }
+        .ciclo-item { background:var(--bg-light); border-radius:12px; padding:20px; border-left:4px solid var(--accent-blue); display:flex; flex-direction:column; justify-content:space-between; }
+        .ciclo-item h4 { font-size:16px; color:var(--primary-color); margin-bottom:8px; display:flex; gap:8px; align-items:center; }
+        .ciclo-item p { font-size:13.5px; color:var(--text-muted); margin:0; }
+        .card-hs { background:#f8fafc; border-radius:12px; padding:25px; border:1px solid #e2e8f0; display:flex; flex-direction:column; justify-content:space-between; }
+        .card-hs h4 { font-size:17px; color:var(--primary-color); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+        .card-hs p { font-size:13.5px; }
+        .hw-sw-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:30px; margin:25px 0; }
+        .perifericos-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:20px; margin:25px 0; }
+        .ejemplo-box { background:#ecfeff; border:1px solid #a5f3fc; border-radius:12px; padding:20px; margin:25px 0; font-size:14.5px; color:#155e75; display:flex; gap:12px; }
+        .ejemplo-box i { font-size:20px; margin-top:2px; }
+        .badge-modulo { display:inline-flex; align-items:center; gap:6px; background:var(--primary-color); color:white; padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700; letter-spacing:0.5px; margin-bottom:10px; }
+        .icon-box { width:56px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:12px; }
+        /* Quiz */
+        .quiz-section { border-radius:20px; padding:35px; margin-bottom:40px; box-shadow:0 10px 25px -5px rgba(0,0,0,0.05); transition:all 0.3s ease; }
+        .quiz-header-toggle { display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none; padding-bottom:5px; }
+        .quiz-header-toggle h2 { font-size:19px; font-weight:700; margin-bottom:0; border:none; padding:0; display:flex; align-items:center; gap:12px; }
+        .quiz-header-toggle h2 i { padding:10px; border-radius:12px; font-size:16px; }
+        .toggle-icon { font-size:16px; color:#64748b; background:var(--white); width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:50%; box-shadow:0 2px 5px rgba(0,0,0,0.05); transition:transform 0.4s; }
+        .quiz-body { max-height:0; overflow:hidden; transition:max-height 0.6s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease; padding-top:0; }
+        .quiz-section.open .quiz-body { max-height:9000px; padding-top:30px; }
+        .quiz-section.open .toggle-icon { transform:rotate(180deg); }
+        .question-card { background:var(--white); border-radius:14px; padding:22px 25px; margin-bottom:20px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.02); border:1px solid #e2e8f0; }
+        .question-card p.q-title { font-weight:600; color:#1e293b; margin-bottom:15px; font-size:14.5px; }
+        .options-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
+        .options-list label { background:#f8fafc; padding:10px 14px; border-radius:10px; font-size:13.5px; color:#475569; border:1px solid #e2e8f0; display:flex; align-items:center; gap:12px; cursor:pointer; }
+        .options-list label:hover { background:#f1f5f9; }
+        .options-list input { accent-color:#2563eb; transform:scale(1.15); }
+        .question-card.correct { border-color:#22c55e; background:#f0fdf4; }
+        .question-card.incorrect { border-color:#ef4444; background:#fef2f2; }
+        .feedback-text { margin-top:12px; font-size:13px; font-weight:600; display:none; }
+        .question-card.correct .feedback-text { display:block; color:#16a34a; }
+        .question-card.incorrect .feedback-text { display:block; color:#dc2626; }
+        .btn-submit-quiz { display:block; width:100%; color:var(--white); border:none; padding:14px; border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; margin-top:25px; transition:all 0.2s; }
+        .btn-submit-quiz:hover { transform:translateY(-2px); opacity:0.95; }
+        .quiz-results { text-align:center; margin-top:20px; font-size:16px; font-weight:700; padding:15px; background:var(--white); border-radius:12px; border:1px solid #e2e8f0; display:none; }
+        footer { background:var(--bg-light); border-top:1px solid #e2e8f0; text-align:center; padding:25px; font-size:13px; color:var(--text-muted); }
+        
+        
+        
+        .modal-
+        .modal-close-btn { position:absolute; top:15px; right:15px; background:rgba(255,255,255,0.15); border:none; color:white; width:32px; height:32px; border-radius:50%; cursor:pointer; }
+        .modal-heart-icon { width:60px; height:60px; background:rgba(239,68,68,0.15); border:1.5px solid #ef4444; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px auto; font-size:26px; color:#ef4444; }
+        .modal-body { padding:25px; }
+        .modal-link-box { display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 15px; margin:20px 0; }
+        .modal-link-info { display:flex; gap:10px; align-items:center; }
+        .btn-copiar { background:#113868; color:white; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-weight:600; }
+        .btn-mp-primary { display:flex; align-items:center; justify-content:center; gap:8px; background:#e0f2fe; border:1.5px solid #0ea5e9; color:#0369a1; padding:12px; border-radius:12px; text-decoration:none; font-weight:700; margin-bottom:10px; }
+        .modal-footer-text { display:block; text-align:center; font-size:12px; color:#94a3b8; margin-top:10px; }
+        @media (max-width:900px) {  .ciclo-grid, .ciclo-grid-3, .perifericos-grid, .hw-sw-grid { grid-template-columns:1fr; } .hero-container { flex-direction:column; text-align:center; } }
+    
+        /* === FIX IMAGENES INMENSAS - OVERRIDE === */
+        .ciclo-img-container {
+            min-height: 200px !important;
+            max-height: 260px !important;
+            padding: 12px !important;
+            background: #f8fafc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .ciclo-img-container img {
+            max-width: 220px !important;
+            max-height: 180px !important;
+            width: 100% !important;
+            height: auto !important;
+            transform: none !important;
+            object-fit: contain !important;
+        }
+        .img-tarjeta-grande {
+            min-height: unset !important;
+            max-height: 200px !important;
+            max-width: 240px !important;
+            width: 100% !important;
+            filter: none !important;
+        }
+        .ciclo-item {
+            overflow: hidden;
+        }
+        .ciclo-item .ciclo-content {
+            flex: 1;
+        }
+        /* Asegura grid no se rompa con imagenes grandes */
+        .ciclo-grid, .ciclo-grid-3 {
+            align-items: start;
+        }
+
+    
+        /* === FIX 2 - IMAGENES GRANDES EN INNOVACION Y RECURSOS === */
+        .hw-sw-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .hw-sw-grid-4 .card-hs {
+            width: 100%;
+            overflow: hidden;
+        }
+        .hw-sw-grid-4 .software-logos {
+            min-height: 200px !important;
+            max-height: 220px !important;
+            height: 220px !important;
+            padding: 12px !important;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .hw-sw-grid-4 .software-logos img {
+            max-height: 180px !important;
+            max-width: 100% !important;
+            width: auto !important;
+            height: auto !important;
+            transform: none !important;
+            object-fit: contain !important;
+        }
+        .software-logos {
+            min-height: 200px !important;
+            max-height: 220px !important;
+            height: auto !important;
+            padding: 12px !important;
+            overflow: hidden;
+        }
+        .software-logos img {
+            max-height: 180px !important;
+            max-width: 220px !important;
+            transform: none !important;
+        }
+        .perifericos-grid .software-logos {
+            min-height: 200px !important;
+        }
+        .perifericos-grid .software-logos img {
+            max-height: 180px !important;
+        }
+        .software-img-grande {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-height: 240px;
+            overflow: hidden;
+            padding: 10px;
+        }
+        .software-img-grande img {
+            max-width: 300px !important;
+            max-height: 200px !important;
+            width: 100% !important;
+            height: auto !important;
+            object-fit: contain !important;
+        }
+        @media (max-width: 1400px) {
+            .hw-sw-grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 900px) {
+            .hw-sw-grid-4 { grid-template-columns: 1fr; }
+        }
+
+    
+</style>
+<link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/responsive-fix.css">
+<link rel="stylesheet" href="css/footer.css?v=1">
+<link rel="stylesheet" href="css/fix-autoevaluacion.css?v=1">
+<link rel="stylesheet" href="css/autoevaluacion-uniforme.css?v=1">
+</head>
+<body>
+<div id="header-placeholder"></div>
+<!-- Hero Section - Diseño unificado con Informática -->
+    <section class="hero">
+        <div class="hero-container">
+            <img src="img/ntics-hero.webp" alt="NTICx ilustrativa">
+            <div class="hero-text" style="text-align:left;">
+                <span style="display:inline-flex;align-items:center;gap:6px;background:#1e293b;border:1px solid #334155;color:#93c5fd;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:0.6px;margin-bottom:14px;text-transform:uppercase"><i class="fa-solid fa-book-open"></i> MÓDULO EXTRA - NTICX</span>
+                <h1 style="font-size:36px;line-height:1.1;margin:0 0 12px 0;font-weight:800;letter-spacing:-0.5px">NTICX y Cultura Digital</h1>
+                <p style="font-size:15.5px;color:#cbd5e1;margin-bottom:22px;line-height:1.5;max-width:720px">Integración pedagógica y social de las tecnologías emergentes en entornos contemporáneos.</p>
+                
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;max-width:640px">
+                    <div style="display:flex;gap:10px;align-items:center;background:#1e293b;border:1px solid #334155;padding:10px 16px;border-radius:12px">
+                        <div style="background:transparent;color:#22c55e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1.5px solid #22c55e"><i class="fa-solid fa-check" style="font-size:10px"></i></div>
+                        <div style="font-size:13.5px;line-height:1.4"><strong style="color:#fff;">Innovación:</strong> <span style="color:#94a3b8;">Impacto de las tecnologías emergentes.</span></div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center;background:#1e293b;border:1px solid #334155;padding:10px 16px;border-radius:12px">
+                        <div style="background:transparent;color:#22c55e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1.5px solid #22c55e"><i class="fa-solid fa-check" style="font-size:10px"></i></div>
+                        <div style="font-size:13.5px;line-height:1.4"><strong style="color:#fff;">Educación y TIC:</strong> <span style="color:#94a3b8;">Recursos didácticos y metodologías.</span></div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center;background:#1e293b;border:1px solid #334155;padding:10px 16px;border-radius:12px">
+                        <div style="background:transparent;color:#22c55e;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1.5px solid #22c55e"><i class="fa-solid fa-check" style="font-size:10px"></i></div>
+                        <div style="font-size:13.5px;line-height:1.4"><strong style="color:#fff;">Tendencias:</strong> <span style="color:#94a3b8;">Inteligencia artificial y nuevos paradigmas.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<div class="content-container">
+
+        <!-- NTICs y Cultura Digital -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-globe"></i> NTICs y Cultura Digital</h2>
+            <p>Las Nuevas Tecnologías de la Información y la Comunicación (NTICs) configuran hoy en día un nuevo paradigma conocido como <strong>Cultura Digital</strong>. Este concepto no se limita al uso instrumental de dispositivos o software, sino que abarca las formas de pensar, interactuar, producir conocimiento, consumir contenidos y relacionarse socialmente en la era conectada.</p>
+            <p>La cultura digital redefininió el espacio público y privado, transformando al ciudadano contemporáneo en un prosumidor activo (productor y consumidor de información) dentro de redes globales interconectadas.</p>
+            
+            <div class="ciclo-grid">
+                <div class="ciclo-item">
+                    <div class="ciclo-content">
+                        <h4>1. Conectividad Global</h4>
+                        <p>Intercambio instantáneo de datos, saberes y experiencias a través de redes de alta velocidad.</p>
+                    </div>
+                    <div class="ciclo-img-container">
+                        <img src="img/conectividad.webp" alt="Conectividad Global" class="img-tarjeta-grande">
+                    </div>
+                </div>
+
+                <div class="ciclo-item">
+                    <div class="ciclo-content">
+                        <h4>2. Alfabetización Digital</h4>
+                        <p>Desarrollo de habilidades críticas para buscar, evaluar, sintetizar y comunicar información digital.</p>
+                    </div>
+                    <div class="ciclo-img-container">
+                        <img src="img/alfabetizacion.webp" alt="Alfabetización Digital" class="img-tarjeta-grande" >
+                    </div>
+                </div>
+
+                <div class="ciclo-item">
+                    <div class="ciclo-content">
+                        <h4>3. Ciudadanía Digital</h4>
+                        <p>Ejercicio responsable, ético y seguro de los derechos y deberes en entornos virtuales.</p>
+                    </div>
+                    <div class="ciclo-img-container">
+                        <img src="img/ciudadania.webp" alt="Ciudadanía Digital" class="img-tarjeta-grande">
+                    </div>
+                </div>
+
+                <div class="ciclo-item">
+                    <div class="ciclo-content">
+                        <h4>4. Inteligencia Colectiva</h4>
+                        <p>Construcción colaborativa de saberes mediante comunidades virtuales de práctica e intercambio.</p>
+                    </div>
+                    <div class="ciclo-img-container">
+                        <img src="img/colectiva.webp" alt="Inteligencia Colectiva" class="img-tarjeta-grande">
+                    </div>
+                </div>
+            </div>
+
+            <div class="ejemplo-box">
+                <i class="fa-solid fa-lightbulb"></i> <strong>Aplicación práctica:</strong> En un entorno educativo contemporáneo, la cultura digital permite que docentes y estudiantes colaboren en repositorios abiertos, co-creen wikis de investigación y debatan problemáticas sociales globales mediante foros sincrónicos y asincrónicos.
+            </div>
+        </div>
+
+        <!-- Integración Pedagógica y Social -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-people-roof"></i> Integración Pedagógica y Social de Tecnologías Emergentes</h2>
+            <p>La integración efectiva de las tecnologías en los entornos contemporáneos exige ir más allá de la mera digitalización de contenidos tradicionales. Requiere repensar los vínculos pedagógicos y sociales para promover aprendizajes significativos y inclusión comunitaria.</p>
+            
+            <div class="hw-sw-grid">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-chalkboard-user"></i> Integración Pedagógica</h4>
+                        <p>Incorporación intencional de herramientas digitales al servicio de los objetivos curriculares. Se fundamenta en modelos teóricos como TPACK (Conocimiento Tecnológico Pedagógico del Contenido), alineando la tecnología con la didáctica específica.</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/pedagogica.webp" alt="Integración Pedagógica" class="img-tarjeta-grande">
+                    </div>
+                </div>
+
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-handshake-angle"></i> Integración Social y Comunitaria</h4>
+                        <p>Reducción de la brecha digital mediante proyectos de alfabetización tecnológica que involucren a la comunidad, fomentando la equidad de acceso, la participación ciudadana y la cohesión social en sectores vulnerables.</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/social.webp" alt="Integración Social" class="img-tarjeta-grande">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Innovación y Educación y TIC -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-rocket"></i> Innovación, Recursos Didácticos y Metodologías</h2>
+            <p>Las NTICs actúan como catalizadores de la innovación educativa, transformando tanto los recursos didácticos disponibles como las metodologías de enseñanza y evaluación en el aula.</p>
+
+            <div class="hw-sw-grid-4">
+                <!-- Tarjeta 1 -->
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-bolt"></i> Innovación Tecnológica</h4>
+                        <p>Impacto transformador de las herramientas emergentes en la disrupción de modelos educativos tradicionales, fomentando la flexibilidad temporal y espacial del aprendizaje (blended learning y educación híbrida).</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/innovacion.webp" alt="Innovación Tecnológica">
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2 -->
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-book-open-reader"></i> Recursos Didácticos Digitales</h4>
+                        <p>Materiales interactivos, simuladores virtuales, objetos de aprendizaje reutilizables (OAs), infografías dinámicas y laboratorios remotos que estimulan la motivación y el pensamiento crítico.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/recursos.webp" alt="Recursos Didácticos">
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3 -->
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-puzzle-piece"></i> Metodologías Activas</h4>
+                        <p>Estrategias centradas en el estudiante como el Aprendizaje Basado en Proyectos (ABP), aula invertida (flipped classroom), gamificación y resolución colaborativa de retos tecnológicos.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/metodologias.webp" alt="Metodologías Activas">
+                    </div>
+                </div>
+
+                <!-- Tarjeta 4 -->
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-chart-line"></i> Evaluación Formativa Digital</h4>
+                        <p>Sistemas de seguimiento continuo mediante rúbricas digitales, cuestionarios gamificados, portafolios electrónicos y analíticas de aprendizaje (learning analytics) para retroalimentación oportuna.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/evaluacion.webp" alt="Evaluación Formativa">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tendencias: Inteligencia Artificial y Nuevos Paradigmas -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-brain"></i> Tendencias: Inteligencia Artificial y Nuevos Paradigmas</h2>
+            <p>El escenario tecnológico actual está profundamente marcado por la irrupción de la Inteligencia Artificial (IA), el aprendizaje automático (machine learning), la analítica predictiva y los entornos inmersivos, abriendo debates éticos y pedagógicos sin precedentes.</p>
+
+            <div class="perifericos-grid">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-robot"></i> Asistentes de IA Educativa</h4>
+                        <p>Tutores inteligentes capaces de personalizar trayectorias de aprendizaje y adaptar contenidos al ritmo de cada alumno.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/ia-asistente.webp" alt="IA Educativa">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-vr-cardboard"></i> Realidad Inmersiva (VR/AR)</h4>
+                        <p>Simulaciones tridimensionales que permiten explorar entornos complejos, históricos o científicos de forma vivencial.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/vr-ar.webp" alt="Realidad Virtual y Aumentada">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-shield-halved"></i> Ética y Privacidad</h4>
+                        <p>Desafíos vinculados al uso responsable de datos, propiedad intelectual, sesgos algorítmicos y pensamiento crítico ante la desinformación.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/etica-ia.webp" alt="Ética y Privacidad en IA">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-network-wired"></i> Nuevos Paradigmas</h4>
+                        <p>Evolución hacia la Web 4.0, internet de las cosas (IoT) aplicado a smart classrooms y ecosistemas hiperconectados de aprendizaje.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/paradigmas.webp" alt="Nuevos Paradigmas Tecnológicos">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Autoevaluación interactiva -->
+        <div class="quiz-section" id="quizSectionContainer">
+            <div class="quiz-header-toggle" onclick="toggleQuiz()">
+                <h2><i class="fa-solid fa-list-check"></i> Autoevaluación: NTICs y Cultura Digital</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon"></i>
+            </div>
+
+            <div class="quiz-body">
+                <p style="margin-bottom: 25px; color: #155e75;">Selecciona una opción para cada pregunta y haz clic en "Corregir Cuestionario" al finalizar.</p>
+
+                <form id="quizForm">
+                    <!-- Pregunta 1 -->
+                    <div class="question-card" id="q1" data-correct="b">
+                        <p class="q-title">1. ¿Qué define fundamentalmente el concepto de "Cultura Digital"?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p1" value="a"> a) La capacidad de ensamblar componentes físicos de computadoras.</label>
+                            <label><input type="radio" name="p1" value="b"> b) Las nuevas formas de pensar, interactuar, producir conocimiento y relacionarse socialmente mediadas por tecnologías.</label>
+                            <label><input type="radio" name="p1" value="c"> c) El almacenamiento exclusivo de archivos en discos rígidos locales.</label>
+                            <label><input type="radio" name="p1" value="d"> d) El diseño de redes de área local sin acceso a internet.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <!-- Pregunta 2 -->
+                    <div class="question-card" id="q2" data-correct="c">
+                        <p class="q-title">2. ¿Qué propósito principal persigue la integración pedagógica de las NTICs?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p2" value="a"> a) Reemplazar por completo la labor docente por sistemas automáticos.</label>
+                            <label><input type="radio" name="p2" value="b"> b) Incrementar el consumo de energía eléctrica en las aulas.</label>
+                            <label><input type="radio" name="p2" value="c"> c) Incorporar intencionalmente las herramientas al servicio de los objetivos curriculares y didácticos.</label>
+                            <label><input type="radio" name="p2" value="d"> d) Eliminar las evaluaciones escritas en papel.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <!-- Pregunta 3 -->
+                    <div class="question-card" id="q3" data-correct="a">
+                        <p class="q-title">3. ¿Qué caracteriza a una metodología activa apoyada en tecnologías?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p3" value="a"> a) Centrar el aprendizaje en el estudiante mediante proyectos, resolución de retos y colaboración.</label>
+                            <label><input type="radio" name="p3" value="b"> b) Exponer cátedras magistrales sin interacción durante horas.</label>
+                            <label><input type="radio" name="p3" value="c"> c) Memorizar textos estáticos sin posibilidad de debate.</label>
+                            <label><input type="radio" name="p3" value="d"> d) Trabajar de manera estrictamente aislada sin conexión.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <!-- Pregunta 4 -->
+                    <div class="question-card" id="q4" data-correct="b">
+                        <p class="q-title">4. ¿Qué rol cumple la Inteligencia Artificial (IA) en las tendencias educativas actuales?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p4" value="a"> a) Desactivar las redes de conectividad escolar.</label>
+                            <label><input type="radio" name="p4" value="b"> b) Proveer asistentes de tutoría inteligente para personalizar trayectorias de aprendizaje.</label>
+                            <label><input type="radio" name="p4" value="c"> c) Sustituir la necesidad de pensar críticamente por parte de los alumnos.</label>
+                            <label><input type="radio" name="p4" value="d"> d) Controlar la temperatura del aire acondicionado institucional.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <!-- Pregunta 5 -->
+                    <div class="question-card" id="q5" data-correct="c">
+                        <p class="q-title">5. ¿A qué se refiere el concepto de "Ciudadanía Digital"?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p5" value="a"> a) Poseer un documento nacional de identidad escaneado.</label>
+                            <label><input type="radio" name="p5" value="b"> b) Tener una cuenta de correo electrónico corporativo.</label>
+                            <label><input type="radio" name="p5" value="c"> c) El ejercicio ético, responsable, seguro y consciente de los derechos y deberes en entornos virtuales.</label>
+                            <label><input type="radio" name="p5" value="d"> d) Navegar de forma anónima sin cumplir normativas legales.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <!-- Pregunta 6 -->
+                    <div class="question-card" id="q6" data-correct="a">
+                        <p class="q-title">6. ¿Qué desafío ético plantea la irrupción de herramientas de IA generativa en la educación?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p6" value="a"> a) El manejo de la autoría, plagio, sesgos algorítmicos y el pensamiento crítico frente a la información.</label>
+                            <label><input type="radio" name="p6" value="b"> b) La incompatibilidad de voltaje con los tomacorrientes estándar.</label>
+                            <label><input type="radio" name="p6" value="c"> c) La obligación de utilizar pantallas de rayos catódicos.</label>
+                            <label><input type="radio" name="p6" value="d"> d) La eliminación definitiva del formato PDF.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <!-- Pregunta 7 -->
+                    <div class="question-card" id="q7" data-correct="b">
+                        <p class="q-title">7. ¿Qué función cumplen los recursos didácticos digitales como simuladores y laboratorios remotos?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p7" value="a"> a) Encarecer los costos operativos de las instituciones.</label>
+                            <label><input type="radio" name="p7" value="b"> b) Permitir la experimentación interactiva y vivencial de conceptos complejos de forma segura.</label>
+                            <label><input type="radio" name="p7" value="c"> c) Reemplazar la interacción humana entre compañeros.</label>
+                            <label><input type="radio" name="p7" value="d"> d) Bloquear el acceso a internet en los laboratorios.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <!-- Pregunta 8 -->
+                    <div class="question-card" id="q8" data-correct="c">
+                        <p class="q-title">8. ¿Qué implica la integración social y comunitaria de las tecnologías emergentes?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p8" value="a"> a) Vender dispositivos móviles a precios de mercado.</label>
+                            <label><input type="radio" name="p8" value="b"> b) Centralizar el conocimiento en una única corporación.</label>
+                            <label><input type="radio" name="p8" value="c"> c) Reducir la brecha digital y promover la inclusión y participación ciudadana en sectores vulnerables.</label>
+                            <label><input type="radio" name="p8" value="d"> d) Excluir a los adultos mayores de los procesos tecnológicos.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <!-- Pregunta 9 -->
+                    <div class="question-card" id="q9" data-correct="a">
+                        <p class="q-title">9. ¿Qué modelo teórico ayuda a alinear el conocimiento tecnológico, pedagógico y del contenido?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p9" value="a"> a) Modelo TPACK.</label>
+                            <label><input type="radio" name="p9" value="b"> b) Protocolo TCP/IP.</label>
+                            <label><input type="radio" name="p9" value="c"> c) Estándar USB 3.0.</label>
+                            <label><input type="radio" name="p9" value="d"> d) Arquitectura Von Neumann.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <!-- Pregunta 10 -->
+                    <div class="question-card" id="q10" data-correct="b">
+                        <p class="q-title">10. ¿Cuál es el impacto de la innovación tecnológica en la flexibilidad educativa?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p10" value="a"> a) Obliga a asistir en horarios rígidos y presenciales obligatorios sin excepción.</label>
+                            <label><input type="radio" name="p10" value="b"> b) Facilita modalidades híbridas (blended learning) y acceso flexible a los saberes según tiempo y espacio.</label>
+                            <label><input type="radio" name="p10" value="c"> c) Reduce la calidad de los materiales didácticos disponibles.</label>
+                            <label><input type="radio" name="p10" value="d"> d) Impide la comunicación asincrónica entre equipos.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm', 1, 10, 'resultadoFinal')">Corregir Cuestionario</button>
+                    <div class="quiz-results" id="resultadoFinal"></div>
+                </form>
+            </div>
+        </div>
+
+<div style="margin:30px 0; text-align:center;"><div style="height:2px; background: linear-gradient(90deg, transparent, #3b82f6, transparent); margin:20px 0;"></div><div style="display:inline-flex; background:#113868; color:white; padding:12px 24px; border-radius:24px; font-weight:800; gap:8px; align-items:center;"><i class="fa-solid fa-layer-group"></i> 7 MÓDULOS DE ALFABETIZACIÓN DIGITAL</div></div>
+
+
+
+    <div class="indice">
+        <h3><i class="fa-solid fa-list-ol" style="color:var(--accent-blue);"></i> Índice de Módulos</h3>
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:12px;">Este programa está basado en el marco de Alfabetizaciones Múltiples. Cada módulo incluye teoría, ejemplos y recursos visuales.</p>
+        <ol>
+            <li><a href="#mod1"><i class="fa-solid fa-microchip"></i> Módulo 1. Alfabetización informática-computacional</a></li>
+            <li><a href="#mod2"><i class="fa-solid fa-network-wired"></i> Módulo 2. Alfabetización en redes digitales de información</a></li>
+            <li><a href="#mod3"><i class="fa-solid fa-magnifying-glass"></i> Módulo 3. Alfabetización en manejo de la información</a></li>
+            <li><a href="#mod4"><i class="fa-solid fa-image"></i> Módulo 4. Alfabetización en manejo de componentes de imagen visual</a></li>
+            <li><a href="#mod5"><i class="fa-solid fa-users"></i> Módulo 5. Alfabetización en medios digitales de comunicación y colaboración</a></li>
+            <li><a href="#mod6"><i class="fa-solid fa-video"></i> Módulo 6. Alfabetización multimedia</a></li>
+            <li><a href="#mod7"><i class="fa-solid fa-shield-halved"></i> Módulo 7. Ciudadanía digital</a></li>
+        </ol>
+    </div>
+
+    <!-- MÓDULO 1 -->
+    <div class="section-box" id="mod1">
+        <span class="badge-modulo"><i class="fa-solid fa-microchip"></i> MÓDULO 1</span>
+        <h2><i class="fa-solid fa-computer" style="color:#3b82f6;"></i> Alfabetización informática-computacional</h2>
+        <p>Es la alfabetización fundacional. No se trata solo de "usar la compu", sino de comprender cómo funciona un sistema informático, su arquitectura y su lógica. Es la base para todo lo demás.</p>
+        
+        <div class="ciclo-grid-3">
+            <div class="ciclo-item" style="border-left-color:#3b82f6;">
+                <div>
+                    <div class="icon-box" style="background:#dbeafe; color:#2563eb;"><i class="fa-solid fa-hard-drive"></i></div>
+                    <h4>Hardware y Arquitectura</h4>
+                    <p>Modelo de Von Neumann: CPU, Memoria RAM/ROM, E/S. Placa madre, microprocesador, almacenamiento HDD/SSD. Unidades de medida: bit, byte, KB, MB, GB. Diferencia 32 vs 64 bits y su impacto en RAM.</p>
+                </div>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#10b981;">
+                <div>
+                    <div class="icon-box" style="background:#d1fae5; color:#059669;"><i class="fa-brands fa-windows"></i></div>
+                    <h4>Software y Sistema Operativo</h4>
+                    <p>Software de sistema, de aplicación y de programación. SO como mediador (Windows, Linux, macOS, Android). Funciones: gestión de procesos, memoria, archivos y periféricos. Evolución: serie, batch, tiempo compartido.</p>
+                </div>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#8b5cf6;">
+                <div>
+                    <div class="icon-box" style="background:#ede9fe; color:#7c3aed;"><i class="fa-solid fa-code"></i></div>
+                    <h4>Pensamiento Computacional</h4>
+                    <p>Descomposición, abstracción, reconocimiento de patrones y algoritmos. Secuencia, condición (if) y repetición (loop). Diagrama de flujo y pseudocódigo. No necesitas programar profesionalmente para pensar computacionalmente.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ejemplo-box">
+            <i class="fa-solid fa-lightbulb" style="color:#0891b2;"></i>
+            <div><strong>Ejemplo didáctico:</strong> Si tu PC tarda mucho, ¿es problema de CPU (procesamiento), RAM (memoria) o disco (almacenamiento)? Entender la arquitectura te permite diagnosticar sin depender de un técnico.</div>
+        </div>
+
+        <h3><i class="fa-solid fa-diagram-project"></i> Ciclo de la información</h3>
+        <div class="perifericos-grid" style="grid-template-columns:repeat(4,1fr);">
+            <div class="card-hs"><h4><i class="fa-solid fa-keyboard"></i> Entrada</h4><p>Teclado, mouse, escáner, micrófono. Datos crudos.</p></div>
+            <div class="card-hs"><h4><i class="fa-solid fa-gears"></i> Procesamiento</h4><p>CPU + ALU + RAM. Transformación según instrucciones (Fetch-Decode-Execute).</p></div>
+            <div class="card-hs"><h4><i class="fa-solid fa-database"></i> Almacenamiento</h4><p>SSD, HDD, nube. Persistencia de información.</p></div>
+            <div class="card-hs"><h4><i class="fa-solid fa-display"></i> Salida</h4><p>Monitor, impresora, parlantes. Información útil para el usuario.</p></div>
+        </div>
+    </div>
+
+    <!-- MÓDULO 2 -->
+    <div class="section-box" id="mod2">
+        <span class="badge-modulo" style="background:#f59e0b;"><i class="fa-solid fa-network-wired"></i> MÓDULO 2</span>
+        <h2><i class="fa-solid fa-globe" style="color:#f59e0b;"></i> Alfabetización en redes digitales de información</h2>
+        <p>Comprender Internet no como "la nube mágica" sino como una infraestructura física y lógica de redes interconectadas. Esta alfabetización permite usarla críticamente y con autonomía.</p>
+
+        <div class="hw-sw-grid">
+            <div class="card-hs" style="border-left:4px solid #f59e0b;">
+                <h4><i class="fa-solid fa-layer-group"></i> ¿Cómo funciona Internet?</h4>
+                <p><strong>Modelo cliente-servidor</strong>, protocolos <strong>TCP/IP</strong>, DNS (traduce nombres a IP), HTTP/HTTPS. Tipos de red: PAN, LAN, WAN. Medios: fibra, Wi-Fi, 4G/5G. Router, switch y punto de acceso.</p>
+                <p style="margin-top:10px;"><span style="background:#fef3c7; padding:2px 8px; border-radius:6px; font-size:12px;"><i class="fa-solid fa-wifi"></i> IP - DNS - URL</span></p>
+            </div>
+            <div class="card-hs" style="border-left:4px solid #06b6d4;">
+                <h4><i class="fa-solid fa-cloud"></i> Servicios y la Nube</h4>
+                <p>Navegadores (Chrome, Firefox), motores de búsqueda (Google, DuckDuckGo), correo electrónico, almacenamiento en la nube (Drive, OneDrive). Diferencia entre Internet y Web. Computación en la nube: IaaS, PaaS, SaaS.</p>
+                <p style="margin-top:10px;"><span style="background:#cffafe; padding:2px 8px; border-radius:6px; font-size:12px;"><i class="fa-brands fa-google-drive"></i> Drive / Dropbox / iCloud</span></p>
+            </div>
+        </div>
+
+        <div class="ciclo-grid-3">
+            <div class="ciclo-item" style="border-left-color:#f59e0b;">
+                <h4><i class="fa-solid fa-shield"></i> Seguridad en red</h4>
+                <p>HTTPS y candado verde, redes públicas riesgosas, VPN. Contraseñas seguras y 2FA. Firewall básico.</p>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#06b6d4;">
+                <h4><i class="fa-solid fa-gauge-high"></i> Ancho de banda</h4>
+                <p>Diferencia entre Mbps (megabits) y MBps (megabytes). Latencia y ping. Por qué 100 Mbps no es 100 MB/s (es /8 = 12,5 MB/s).</p>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#10b981;">
+                <h4><i class="fa-solid fa-share-nodes"></i> Internet de las Cosas</h4>
+                <p>Dispositivos IoT, domótica, datos que generan. Ventajas y riesgos de privacidad.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTOEVALUACIÓN 1 (Módulo 1 y 2) -->
+    <div class="quiz-section" id="quizContainer1" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border:1px solid #bfdbfe;">
+        <div class="quiz-header-toggle" onclick="toggleQuiz(1)">
+            <h2 style="color:#1e40af;"><i class="fa-solid fa-list-check" style="background:#dbeafe; color:#1e40af;"></i> Autoevaluación 1: Módulos 1 y 2 (Informática y Redes)</h2>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="quiz-body">
+            <p style="margin-bottom:20px; color:#1e3a8a; font-size:14px;">Comprueba lo aprendido sobre arquitectura, pensamiento computacional e infraestructura de redes.</p>
+            <form id="quizForm1">
+                <div class="question-card" id="q1a1" data-correct="b"><p class="q-title">1. ¿Cuáles son los 3 componentes del modelo Von Neumann?</p><div class="options-list"><label><input type="radio" name="q1a1" value="a"> a) Monitor, CPU, impresora</label><label><input type="radio" name="q1a1" value="b"> b) CPU, Memoria principal y Módulos E/S</label><label><input type="radio" name="q1a1" value="c"> c) Windows, Word y Excel</label><label><input type="radio" name="q1a1" value="d"> d) Teclado, mouse, pantalla</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q1a2" data-correct="c"><p class="q-title">2. ¿Qué hace el Contador de Programa (PC)?</p><div class="options-list"><label><input type="radio" name="q1a2" value="a"> a) Cuenta cuántos programas hay instalados</label><label><input type="radio" name="q1a2" value="b"> b) Mide la temperatura de la CPU</label><label><input type="radio" name="q1a2" value="c"> c) Indica la próxima instrucción a ejecutar en el ciclo Fetch</label><label><input type="radio" name="q1a2" value="d"> d) Calcula el costo de la PC</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q1a3" data-correct="a"><p class="q-title">3. ¿Por qué un SO de 32 bits no ve más de 4GB de RAM?</p><div class="options-list"><label><input type="radio" name="q1a3" value="a"> a) Por limitación de direccionamiento: 2^32 = 4.294.967.296 direcciones</label><label><input type="radio" name="q1a3" value="b"> b) Porque la RAM es muy cara</label><label><input type="radio" name="q1a3" value="c"> c) Porque Windows no quiere</label><label><input type="radio" name="q1a3" value="d"> d) Porque necesita internet</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q1a4" data-correct="d"><p class="q-title">4. ¿Qué es el pensamiento computacional?</p><div class="options-list"><label><input type="radio" name="q1a4" value="a"> a) Pensar como una computadora sin errores</label><label><input type="radio" name="q1a4" value="b"> b) Solo saber programar en Python</label><label><input type="radio" name="q1a4" value="c"> c) Usar una calculadora</label><label><input type="radio" name="q1a4" value="d"> d) Descomponer problemas, abstraer, reconocer patrones y diseñar algoritmos</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q1a5" data-correct="b"><p class="q-title">5. ¿Qué significa DNS en redes?</p><div class="options-list"><label><input type="radio" name="q1a5" value="a"> a) Disco No Seguro</label><label><input type="radio" name="q1a5" value="b"> b) Sistema que traduce nombres de dominio (google.com) a direcciones IP</label><label><input type="radio" name="q1a5" value="c"> c) Un antivirus</label><label><input type="radio" name="q1a5" value="d"> d) Un tipo de cable</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q1a6" data-correct="a"><p class="q-title">6. Si tenés 100 Mbps de internet, ¿cuánto podés descargar en MB/s aproximadamente?</p><div class="options-list"><label><input type="radio" name="q1a6" value="a"> a) 12,5 MB/s (100/8)</label><label><input type="radio" name="q1a6" value="b"> b) 100 MB/s</label><label><input type="radio" name="q1a6" value="c"> c) 1000 MB/s</label><label><input type="radio" name="q1a6" value="d"> d) 1 MB/s</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q1a7" data-correct="c"><p class="q-title">7. ¿Qué diferencia hay entre Internet y la Web?</p><div class="options-list"><label><input type="radio" name="q1a7" value="a"> a) Son lo mismo</label><label><input type="radio" name="q1a7" value="b"> b) Internet es solo Google</label><label><input type="radio" name="q1a7" value="c"> c) Internet es la infraestructura de redes; la Web (WWW) es un servicio que funciona sobre ella con HTTP</label><label><input type="radio" name="q1a7" value="d"> d) La Web es más vieja que Internet</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q1a8" data-correct="b"><p class="q-title">8. ¿Qué es la nube (cloud)?</p><div class="options-list"><label><input type="radio" name="q1a8" value="a"> a) Una nube real en el cielo</label><label><input type="radio" name="q1a8" value="b"> b) Servidores de terceros en internet que almacenan y procesan tus datos de forma remota</label><label><input type="radio" name="q1a8" value="c"> c) Solo Dropbox</label><label><input type="radio" name="q1a8" value="d"> d) El Wi-Fi del vecino</label></div><div class="feedback-text"></div></div>
+                <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm1',1,8,'res1','q1a')" style="background: linear-gradient(135deg,#3b82f6 0%,#1d4ed8 100%);">Corregir Autoevaluación 1</button>
+                <div class="quiz-results" id="res1"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MÓDULO 3 -->
+    <div class="section-box" id="mod3">
+        <span class="badge-modulo" style="background:#10b981;"><i class="fa-solid fa-magnifying-glass"></i> MÓDULO 3</span>
+        <h2><i class="fa-solid fa-database" style="color:#10b981;"></i> Alfabetización en manejo de la información</h2>
+        <p>Vivimos en infoxicación (exceso de información). Esta alfabetización es saber buscar, filtrar, evaluar críticamente, organizar y usar éticamente la información. Es la competencia clave contra fake news.</p>
+
+        <div class="ciclo-grid">
+            <div class="ciclo-item" style="border-left-color:#10b981;">
+                <div>
+                    <div class="icon-box" style="background:#d1fae5; color:#059669;"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                    <h4>1. Buscar con criterio</h4>
+                    <p>Operadores de búsqueda: comillas exactas, -excluir, site:.edu, filetype:pdf. Uso de Google Académico, bases de datos. Palabras clave vs lenguaje natural.</p>
+                </div>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#f59e0b;">
+                <div>
+                    <div class="icon-box" style="background:#fef3c7; color:#d97706;"><i class="fa-solid fa-check-double"></i></div>
+                    <h4>2. Evaluar fuentes (CRAAP)</h4>
+                    <p><strong>C</strong>urrency, <strong>R</strong>elevance, <strong>A</strong>uthority, <strong>A</strong>ccuracy, <strong>P</strong>urpose. ¿Quién lo dice? ¿Cuándo? ¿Con qué evidencia? ¿Qué sesgo tiene? Triangulación de fuentes.</p>
+                </div>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#ef4444;">
+                <div>
+                    <div class="icon-box" style="background:#fee2e2; color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h4>3. Fake news y desinformación</h4>
+                    <p>Misinformation vs Disinformation vs Malinformation. Clickbait, deepfakes, sesgo de confirmación. Herramientas de fact-checking: Chequeado, Google Fact Check, TinEye (búsqueda inversa de imágenes).</p>
+                </div>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#8b5cf6;">
+                <div>
+                    <div class="icon-box" style="background:#ede9fe; color:#7c3aed;"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h4>4. Uso ético y legal</h4>
+                    <p>Derechos de autor, licencias Creative Commons (BY, SA, NC, ND), dominio público, citación APA. Plagio y cómo evitarlo. Gestores bibliográficos: Zotero, Mendeley.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ejemplo-box" style="background:#f0fdf4; border-color:#86efac;">
+            <i class="fa-solid fa-filter" style="color:#16a34a;"></i>
+            <div><strong>Flujo de curaduría:</strong> Buscar → Filtrar → Evaluar → Organizar (Notion, Drive) → Sintetizar → Compartir con atribución. No todo lo que brilla en Google es oro académico.</div>
+        </div>
+    </div>
+
+    <!-- MÓDULO 4 -->
+    <div class="section-box" id="mod4">
+        <span class="badge-modulo" style="background:#8b5cf6;"><i class="fa-solid fa-image"></i> MÓDULO 4</span>
+        <h2><i class="fa-solid fa-palette" style="color:#8b5cf6;"></i> Alfabetización en manejo de componentes de imagen visual</h2>
+        <p>Leer y producir imágenes es un lenguaje. Esta alfabetización enseña a entender la imagen como mensaje, no como decoración. Crucial en época de Instagram, TikTok y comunicación visual.</p>
+
+        <div class="hw-sw-grid">
+            <div class="card-hs">
+                <h4><i class="fa-solid fa-camera"></i> Fundamentos técnicos</h4>
+                <p><strong>Pixel vs Vector:</strong> JPG/PNG (mapa de bits, pierde calidad al ampliar) vs SVG/AI (matemático, escalable infinito).<br><br><strong>Resolución:</strong> 72 dpi web vs 300 dpi impresión.<br><strong>Color:</strong> RGB (pantalla, luz) vs CMYK (impresión, pigmento).<br><strong>Formatos:</strong> JPG foto, PNG transparencia, WEBP web moderno, GIF animación simple.</p>
+            </div>
+            <div class="card-hs">
+                <h4><i class="fa-solid fa-wand-magic-sparkles"></i> Gramática visual y edición</h4>
+                <p><strong>Composición:</strong> Regla de tercios, jerarquía, contraste, espacio negativo.<br><strong>Edición:</strong> Capas, máscara, recorte, ajuste de brillo/contraste.<br><strong>Herramientas:</strong> Canva (rápido), Photopea (gratis tipo Photoshop), GIMP, Figma, Illustrator.<br><strong>Banco de recursos:</strong> Unsplash, Pexels, Flaticon, con licencias claras.</p>
+            </div>
+        </div>
+
+        <div class="perifericos-grid">
+            <div class="card-hs" style="border-left:4px solid #8b5cf6;"><h4><i class="fa-solid fa-eye"></i> Semiótica visual</h4><p>Toda imagen comunica: denotación (lo que se ve) y connotación (lo que significa culturalmente). Colores, gestos, encuadres no son neutros.</p></div>
+            <div class="card-hs" style="border-left:4px solid #06b6d4;"><h4><i class="fa-solid fa-universal-access"></i> Accesibilidad</h4><p>Texto alternativo (alt text) para lectores de pantalla, contraste suficiente, no solo transmitir información por color.</p></div>
+            <div class="card-hs" style="border-left:4px solid #10b981;"><h4><i class="fa-solid fa-file-image"></i> Infografía</h4><p>Visualización de datos: transformar números aburridos en historias visuales comprensibles. Menos texto, más esquema.</p></div>
+        </div>
+    </div>
+
+    <!-- AUTOEVALUACIÓN 2 (Módulo 3 y 4) -->
+    <div class="quiz-section" id="quizContainer2" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border:1px solid #86efac;">
+        <div class="quiz-header-toggle" onclick="toggleQuiz(2)">
+            <h2 style="color:#14532d;"><i class="fa-solid fa-list-check" style="background:#dcfce7; color:#15803d;"></i> Autoevaluación 2: Módulos 3 y 4 (Información e Imagen)</h2>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="quiz-body">
+            <p style="margin-bottom:20px; color:#14532d; font-size:14px;">Evalúa tu capacidad crítica frente a la información y tu comprensión del lenguaje visual.</p>
+            <form id="quizForm2">
+                <div class="question-card" id="q2a1" data-correct="c"><p class="q-title">1. ¿Qué significa el test CRAAP para evaluar fuentes?</p><div class="options-list"><label><input type="radio" name="q2a1" value="a"> a) Un insulto a la fuente</label><label><input type="radio" name="q2a1" value="b"> b) Solo mirar si tiene dibujitos</label><label><input type="radio" name="q2a1" value="c"> c) Currency, Relevance, Authority, Accuracy, Purpose (Actualidad, Relevancia, Autoridad, Precisión, Propósito)</label><label><input type="radio" name="q2a1" value="d"> d) Copiar, Resumir, Aprobar, Archivar, Publicar</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q2a2" data-correct="b"><p class="q-title">2. ¿Cuál es la mejor búsqueda para encontrar PDFs académicos de la UBA sobre NTICs?</p><div class="options-list"><label><input type="radio" name="q2a2" value="a"> a) nticx cosas lindas</label><label><input type="radio" name="q2a2" value="b"> b) "NTICx" site:uba.ar filetype:pdf</label><label><input type="radio" name="q2a2" value="c"> c) www.google.com</label><label><input type="radio" name="q2a2" value="d"> d) facebook nticx</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q2a3" data-correct="a"><p class="q-title">3. ¿Qué es una fake news tipo disinformation?</p><div class="options-list"><label><input type="radio" name="q2a3" value="a"> a) Información falsa creada deliberadamente para engañar o manipular</label><label><input type="radio" name="q2a3" value="b"> b) Una noticia vieja</label><label><input type="radio" name="q2a3" value="c"> c) Una noticia aburrida</label><label><input type="radio" name="q2a3" value="d"> d) Una noticia con faltas de ortografía</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q2a4" data-correct="d"><p class="q-title">4. ¿Qué licencia Creative Commons permite uso comercial y modificaciones si das crédito?</p><div class="options-list"><label><input type="radio" name="q2a4" value="a"> a) CC BY-NC-ND</label><label><input type="radio" name="q2a4" value="b"> b) Todos los derechos reservados</label><label><input type="radio" name="q2a4" value="c"> c) CC BY-NC</label><label><input type="radio" name="q2a4" value="d"> d) CC BY</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q2a5" data-correct="b"><p class="q-title">5. ¿Cuál es la diferencia clave entre JPG y SVG?</p><div class="options-list"><label><input type="radio" name="q2a5" value="a"> a) No hay diferencia</label><label><input type="radio" name="q2a5" value="b"> b) JPG es mapa de bits (pixeles) y pierde calidad al ampliar; SVG es vectorial (matemática) y es escalable infinito sin pérdida</label><label><input type="radio" name="q2a5" value="c"> c) SVG solo sirve para fotos</label><label><input type="radio" name="q2a5" value="d"> d) JPG es para imprimir en 3D</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q2a6" data-correct="a"><p class="q-title">6. ¿Qué es RGB vs CMYK?</p><div class="options-list"><label><input type="radio" name="q2a6" value="a"> a) RGB luz para pantallas, CMYK pigmento para impresión</label><label><input type="radio" name="q2a6" value="b"> b) Dos antivirus</label><label><input type="radio" name="q2a6" value="c"> c) Dos redes sociales</label><label><input type="radio" name="q2a6" value="d"> d) Son lo mismo</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q2a7" data-correct="c"><p class="q-title">7. ¿Por qué es importante el texto alternativo (alt text) en una imagen web?</p><div class="options-list"><label><input type="radio" name="q2a7" value="a"> a) Para que Google se enoje</label><label><input type="radio" name="q2a7" value="b"> b) Solo para decorar el código</label><label><input type="radio" name="q2a7" value="c"> c) Para accesibilidad (lectores de pantalla) y SEO, describe la imagen a quien no la puede ver</label><label><input type="radio" name="q2a7" value="d"> d) Para hacer la imagen más pesada</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q2a8" data-correct="b"><p class="q-title">8. ¿Qué herramienta es ideal para búsqueda inversa de imágenes y detectar fake images?</p><div class="options-list"><label><input type="radio" name="q2a8" value="a"> a) Paint</label><label><input type="radio" name="q2a8" value="b"> b) Google Imágenes inversa / TinEye</label><label><input type="radio" name="q2a8" value="c"> c) Calculadora</label><label><input type="radio" name="q2a8" value="d"> d) WhatsApp</label></div><div class="feedback-text"></div></div>
+                <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm2',1,8,'res2','q2a')" style="background: linear-gradient(135deg,#10b981 0%,#059669 100%);">Corregir Autoevaluación 2</button>
+                <div class="quiz-results" id="res2"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MÓDULO 5 -->
+    <div class="section-box" id="mod5">
+        <span class="badge-modulo" style="background:#f97316;"><i class="fa-solid fa-users"></i> MÓDULO 5</span>
+        <h2><i class="fa-solid fa-comments" style="color:#f97316;"></i> Alfabetización en medios digitales de comunicación y colaboración</h2>
+        <p>Pasamos de consumidores a prosumidores. Esta alfabetización enseña a comunicarse, colaborar y co-crear en entornos digitales distribuidos, con criterios de eficacia y respeto.</p>
+
+        <div class="ciclo-grid-3">
+            <div class="ciclo-item" style="border-left-color:#f97316;">
+                <div>
+                    <div class="icon-box" style="background:#ffedd5; color:#ea580c;"><i class="fa-solid fa-comments"></i></div>
+                    <h4>Comunicación digital</h4>
+                    <p>Sincrónica (Meet, Zoom, chat) vs Asincrónica (mail, foro, Docs comentarios). Netiqueta: asunto claro, no todo en mayúsculas, responder a tiempo. Identidad digital y tono según contexto.</p>
+                </div>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#06b6d4;">
+                <div>
+                    <div class="icon-box" style="background:#cffafe; color:#0891b2;"><i class="fa-solid fa-people-group"></i></div>
+                    <h4>Trabajo colaborativo</h4>
+                    <p>Google Workspace, Microsoft 365, Notion, Trello, Miro. Edición simultánea, control de versiones, comentarios, historial. Roles: editor, comentarista, lector.</p>
+                </div>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#8b5cf6;">
+                <div>
+                    <div class="icon-box" style="background:#ede9fe; color:#7c3aed;"><i class="fa-solid fa-diagram-project"></i></div>
+                    <h4>Inteligencia colectiva</h4>
+                    <p>Wikipedia, foros, comunidades de práctica. Construcción de conocimiento entre pares. Licencias abiertas, repositorios, crowdsourcing. Modelo TPACK para integrar tecnología y pedagogía.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="hw-sw-grid">
+            <div class="card-hs" style="border-left:4px solid #f97316;"><h4><i class="fa-solid fa-envelope"></i> Buenas prácticas</h4><p>Email profesional: asunto descriptivo, saludo, cuerpo breve, cierre y firma. Evitar "Responder a todos" innecesario. Videollamada: cámara, micrófono, fondo, puntualidad.</p></div>
+            <div class="card-hs" style="border-left:4px solid #10b981;"><h4><i class="fa-solid fa-shield-halved"></i> Seguridad colaborativa</h4><p>Permisos de Drive: no compartir con "cualquier persona con el enlace" si es confidencial. Historial de versiones para recuperar. Cuidado con phishing en colaboraciones.</p></div>
+        </div>
+    </div>
+
+    <!-- MÓDULO 6 -->
+    <div class="section-box" id="mod6">
+        <span class="badge-modulo" style="background:#ef4444;"><i class="fa-solid fa-video"></i> MÓDULO 6</span>
+        <h2><i class="fa-solid fa-film" style="color:#ef4444;"></i> Alfabetización multimedia</h2>
+        <p>Integrar texto, audio, imagen, video y animación para contar historias. No es solo "poner un video", sino diseñar una experiencia narrativa coherente, accesible y con propósito.</p>
+
+        <div class="perifericos-grid">
+            <div class="card-hs">
+                <div>
+                    <div class="icon-box" style="background:#fee2e2; color:#dc2626;"><i class="fa-solid fa-video"></i></div>
+                    <h4>Video</h4>
+                    <p>Formatos: MP4 (H.264/H.265), MOV, WEBM. Resolución: 720p, 1080p, 4K. FPS: 24 cine, 30 estándar, 60 fluido. Edición: CapCut, DaVinci Resolve, Premiere. Guion: inicio-nudo-desenlace, plano, corte, transición.</p>
+                </div>
+            </div>
+            <div class="card-hs">
+                <div>
+                    <div class="icon-box" style="background:#d1fae5; color:#059669;"><i class="fa-solid fa-music"></i></div>
+                    <h4>Audio y Podcast</h4>
+                    <p>Formatos: MP3, WAV, AAC. Micrófono, reducción de ruido. Edición: Audacity, Adobe Podcast. Podcast: idea, guion, grabación, postproducción, publicación en Spotify. Música libre: YouTube Audio Library, Pixabay Music.</p>
+                </div>
+            </div>
+            <div class="card-hs">
+                <div>
+                    <div class="icon-box" style="background:#ede9fe; color:#7c3aed;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h4>Animación y Storytelling</h4>
+                    <p>GIF, motion graphics, stop motion. Herramientas: Canva Animate, Genially, Prezi. Narrativa transmedia: contar la misma historia en distintos formatos y plataformas.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ejemplo-box" style="background:#fef2f2; border-color:#fecaca;">
+            <i class="fa-solid fa-clapperboard" style="color:#dc2626;"></i>
+            <div><strong>Flujo multimedia:</strong> Preproducción (idea + guion gráfico) → Producción (grabación/diseño) → Postproducción (edición + subtítulos) → Distribución (YouTube, Drive, LMS). Siempre agregar subtítulos por accesibilidad.</div>
+        </div>
+
+        <h3>Comparativa rápida</h3>
+        <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:14px;">
+                <thead><tr style="background:#1f2937; color:white;"><th style="padding:10px; border-radius:8px 0 0 0;">Tipo</th><th style="padding:10px;">Formato recomendado web</th><th style="padding:10px; border-radius:0 8px 0 0;">Herramienta gratuita</th></tr></thead>
+                <tbody>
+                    <tr style="background:#f9fafb;"><td style="padding:10px; border-bottom:1px solid #e5e7eb;">Imagen</td><td style="padding:10px; border-bottom:1px solid #e5e7eb;">WEBP / PNG</td><td style="padding:10px; border-bottom:1px solid #e5e7eb;">Photopea, Canva</td></tr>
+                    <tr><td style="padding:10px; border-bottom:1px solid #e5e7eb;">Audio</td><td style="padding:10px; border-bottom:1px solid #e5e7eb;">MP3 128kbps</td><td style="padding:10px; border-bottom:1px solid #e5e7eb;">Audacity</td></tr>
+                    <tr style="background:#f9fafb;"><td style="padding:10px;">Video</td><td style="padding:10px;">MP4 H.264 1080p</td><td style="padding:10px;">CapCut, DaVinci</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- AUTOEVALUACIÓN 3 (Módulo 5 y 6) -->
+    <div class="quiz-section" id="quizContainer3" style="background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border:1px solid #fed7aa;">
+        <div class="quiz-header-toggle" onclick="toggleQuiz(3)">
+            <h2 style="color:#9a3412;"><i class="fa-solid fa-list-check" style="background:#ffedd5; color:#ea580c;"></i> Autoevaluación 3: Módulos 5 y 6 (Colaboración y Multimedia)</h2>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="quiz-body">
+            <p style="margin-bottom:20px; color:#7c2d12; font-size:14px;">Comunicación efectiva y producción multimedia con criterio.</p>
+            <form id="quizForm3">
+                <div class="question-card" id="q3a1" data-correct="b"><p class="q-title">1. ¿Qué diferencia hay entre comunicación sincrónica y asincrónica?</p><div class="options-list"><label><input type="radio" name="q3a1" value="a"> a) No hay diferencia</label><label><input type="radio" name="q3a1" value="b"> b) Sincrónica es en tiempo real (Meet), asincrónica en diferido (mail, foro)</label><label><input type="radio" name="q3a1" value="c"> c) Sincrónica es por carta</label><label><input type="radio" name="q3a1" value="d"> d) Asincrónica solo es WhatsApp</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q3a2" data-correct="a"><p class="q-title">2. ¿Qué es la netiqueta?</p><div class="options-list"><label><input type="radio" name="q3a2" value="a"> a) Conjunto de normas de comportamiento respetuoso en internet</label><label><input type="radio" name="q3a2" value="b"> b) Una red social nueva</label><label><input type="radio" name="q3a2" value="c"> c) Un cable de red</label><label><input type="radio" name="q3a2" value="d"> d) Un virus</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q3a3" data-correct="c"><p class="q-title">3. En Google Drive, ¿qué permiso permite solo ver y comentar, no editar?</p><div class="options-list"><label><input type="radio" name="q3a3" value="a"> a) Editor</label><label><input type="radio" name="q3a3" value="b"> b) Propietario</label><label><input type="radio" name="q3a3" value="c"> c) Comentarista / Lector</label><label><input type="radio" name="q3a3" value="d"> d) Administrador de red</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q3a4" data-correct="b"><p class="q-title">4. ¿Qué modelo integra tecnología, pedagogía y contenido?</p><div class="options-list"><label><input type="radio" name="q3a4" value="a"> a) TCP/IP</label><label><input type="radio" name="q3a4" value="b"> b) TPACK</label><label><input type="radio" name="q3a4" value="c"> c) MP3</label><label><input type="radio" name="q3a4" value="d"> d) USB</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q3a5" data-correct="a"><p class="q-title">5. ¿Qué formato de video es más compatible para web?</p><div class="options-list"><label><input type="radio" name="q3a5" value="a"> a) MP4 con códec H.264</label><label><input type="radio" name="q3a5" value="b"> b) .exe</label><label><input type="radio" name="q3a5" value="c"> c) .zip</label><label><input type="radio" name="q3a5" value="d"> d) .docx</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q3a6" data-correct="c"><p class="q-title">6. ¿Por qué agregar subtítulos a un video educativo?</p><div class="options-list"><label><input type="radio" name="q3a6" value="a"> a) Para que pese más</label><label><input type="radio" name="q3a6" value="b"> b) Solo por estética</label><label><input type="radio" name="q3a6" value="c"> c) Por accesibilidad, inclusión, y para ver sin audio, mejora SEO</label><label><input type="radio" name="q3a6" value="d"> d) Porque YouTube obliga</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q3a7" data-correct="b"><p class="q-title">7. ¿Qué es el storytelling transmedia?</p><div class="options-list"><label><input type="radio" name="q3a7" value="a"> a) Contar el mismo texto copiado en todos lados</label><label><input type="radio" name="q3a7" value="b"> b) Contar una historia expandida en múltiples formatos/plataformas (video, podcast, infografía, hilo)</label><label><input type="radio" name="q3a7" value="c"> c) Un tipo de virus</label><label><input type="radio" name="q3a7" value="d"> d) Solo hacer TikToks</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q3a8" data-correct="a"><p class="q-title">8. ¿Qué herramienta gratuita es buena para editar audio/podcast?</p><div class="options-list"><label><input type="radio" name="q3a8" value="a"> a) Audacity</label><label><input type="radio" name="q3a8" value="b"> b) Calculadora</label><label><input type="radio" name="q3a8" value="c"> c) Excel</label><label><input type="radio" name="q3a8" value="d"> d) Bloc de notas</label></div><div class="feedback-text"></div></div>
+                <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm3',1,8,'res3','q3a')" style="background: linear-gradient(135deg,#f97316 0%,#ea580c 100%);">Corregir Autoevaluación 3</button>
+                <div class="quiz-results" id="res3"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MÓDULO 7 -->
+    <div class="section-box" id="mod7">
+        <span class="badge-modulo" style="background:#0c2340;"><i class="fa-solid fa-shield-halved"></i> MÓDULO 7</span>
+        <h2><i class="fa-solid fa-user-shield" style="color:#0c2340;"></i> Ciudadanía digital</h2>
+        <p>Es la alfabetización ética y crítica. Ser ciudadano digital no es solo tener internet, es ejercer derechos y deberes con responsabilidad, seguridad y empatía en el entorno digital. Es el cierre integrador de las 6 anteriores.</p>
+
+        <div class="ciclo-grid">
+            <div class="ciclo-item" style="border-left-color:#0c2340;">
+                <div>
+                    <div class="icon-box" style="background:#e0e7ff; color:#3730a3;"><i class="fa-solid fa-fingerprint"></i></div>
+                    <h4>1. Huella e Identidad</h4>
+                    <p>Todo lo que publicás deja rastro. Huella digital activa (lo que posteas) y pasiva (datos que recolectan). Reputación online, configuración de privacidad, derecho al olvido. Pensar antes de publicar.</p>
+                </div>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#ef4444;">
+                <div>
+                    <div class="icon-box" style="background:#fee2e2; color:#b91c1c;"><i class="fa-solid fa-lock"></i></div>
+                    <h4>2. Seguridad y Privacidad</h4>
+                    <p>Contraseñas robustas + 2FA, phishing, ransomware, grooming, sexting. Ley de Protección de Datos Personales (Argentina 25.326). No compartir ubicación de menores, DNI, datos sensibles.</p>
+                </div>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#f59e0b;">
+                <div>
+                    <div class="icon-box" style="background:#fef3c7; color:#b45309;"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h4>3. Ética y Legalidad</h4>
+                    <p>Propiedad intelectual, ciberdelitos, discurso de odio, cancelación. Uso responsable de IA generativa: autoría, sesgos, plagio. Licencias, citación, respeto al trabajo ajeno.</p>
+                </div>
+            </div>
+            <div class="ciclo-item" style="border-left-color:#10b981;">
+                <div>
+                    <div class="icon-box" style="background:#d1fae5; color:#047857;"><i class="fa-solid fa-handshake-angle"></i></div>
+                    <h4>4. Bienestar y Participación</h4>
+                    <p>Equilibrio digital, fatiga de pantalla, ciberbullying vs conflicto. Participación ciudadana: peticiones, gobierno abierto, activismo responsable. Brecha digital e inclusión.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="hw-sw-grid">
+            <div class="card-hs" style="border-left:4px solid #ef4444;">
+                <h4><i class="fa-solid fa-triangle-exclamation"></i> Riesgos a prevenir</h4>
+                <p><strong>Grooming:</strong> adulto que se hace pasar por menor para ganar confianza.<br><strong>Phishing:</strong> mail/sms falso que simula banco/red social.<br><strong>Sharenting:</strong> sobreexposición de niños por sus padres.<br><strong>Doxxing:</strong> publicar datos privados de otro sin consentimiento.</p>
+            </div>
+            <div class="card-hs" style="border-left:4px solid #10b981;">
+                <h4><i class="fa-solid fa-heart"></i> Decálogo ciudadano digital</h4>
+                <p>1. Pienso antes de postear<br>2. Verifico antes de compartir<br>3. Respeto la privacidad ajena<br>4. Uso licencias abiertas<br>5. Protejo mis contraseñas<br>6. Pido permiso para etiquetar<br>7. No alimento el odio<br>8. Cuido mi tiempo de pantalla<br>9. Ayudo a incluir, no a excluir<br>10. Aprendo toda la vida</p>
+            </div>
+        </div>
+
+        <div class="ejemplo-box" style="background:#eff6ff; border-color:#bfdbfe;">
+            <i class="fa-solid fa-graduation-cap" style="color:#2563eb;"></i>
+            <div><strong>NTICx en el aula:</strong> La ciudadanía digital no es un módulo aislado, atraviesa todo. Cuando buscás info (M3), cuando creás una imagen (M4), cuando colaborás (M5), estás ejerciendo ciudadanía. El modelo TPACK nos recuerda que la tecnología sin pedagogía y ética es solo chatarra brillante.</div>
+        </div>
+    </div>
+
+    <!-- AUTOEVALUACIÓN 4 (Módulo 7) -->
+    <div class="quiz-section" id="quizContainer4" style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); border:1px solid #cbd5e1;">
+        <div class="quiz-header-toggle" onclick="toggleQuiz(4)">
+            <h2 style="color:#0f172a;"><i class="fa-solid fa-list-check" style="background:#e2e8f0; color:#0f172a;"></i> Autoevaluación 4: Módulo 7 - Ciudadanía Digital</h2>
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="quiz-body">
+            <p style="margin-bottom:20px; color:#334155; font-size:14px;">El módulo integrador: ética, seguridad y participación responsable.</p>
+            <form id="quizForm4">
+                <div class="question-card" id="q4a1" data-correct="b"><p class="q-title">1. ¿Qué es la huella digital?</p><div class="options-list"><label><input type="radio" name="q4a1" value="a"> a) Solo tu dedo en el celular</label><label><input type="radio" name="q4a1" value="b"> b) Rastro de datos que dejás online, activo (posteos) y pasivo (cookies, IP)</label><label><input type="radio" name="q4a1" value="c"> c) Un virus</label><label><input type="radio" name="q4a1" value="d"> d) La marca de tu zapatilla</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q4a2" data-correct="c"><p class="q-title">2. ¿Qué es el phishing?</p><div class="options-list"><label><input type="radio" name="q4a2" value="a"> a) Una técnica de pesca deportiva</label><label><input type="radio" name="q4a2" value="b"> b) Un filtro de Instagram</label><label><input type="radio" name="q4a2" value="c"> c) Engaño que suplanta identidad (banco, AFIP, Instagram) para robar contraseñas/datos</label><label><input type="radio" name="q4a2" value="d"> d) Un juego</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q4a3" data-correct="a"><p class="q-title">3. ¿Qué es el grooming?</p><div class="options-list"><label><input type="radio" name="q4a3" value="a"> a) Adulto que engaña a un menor haciéndose pasar por par para obtener confianza con fines de abuso</label><label><input type="radio" name="q4a3" value="b"> b) Peinar a tu mascota</label><label><input type="radio" name="q4a3" value="c"> c) Un corte de pelo</label><label><input type="radio" name="q4a3" value="d"> d) Un meme</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q4a4" data-correct="d"><p class="q-title">4. ¿Qué práctica mejora tu seguridad?</p><div class="options-list"><label><input type="radio" name="q4a4" value="a"> a) Usar la misma contraseña 1234 en todo</label><label><input type="radio" name="q4a4" value="b"> b) Compartir tu DNI en historias</label><label><input type="radio" name="q4a4" value="c"> c) Clickear cualquier link que te llega</label><label><input type="radio" name="q4a4" value="d"> d) Contraseña larga + 2FA + no compartir datos sensibles + verificar remitente</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q4a5" data-correct="b"><p class="q-title">5. ¿Qué implica usar IA generativa con ciudadanía digital?</p><div class="options-list"><label><input type="radio" name="q4a5" value="a"> a) Copiar y pegar sin decir nada y entregar como propio</label><label><input type="radio" name="q4a5" value="b"> b) Citar que usaste IA, verificar sesgos, no subir datos personales, asumir responsabilidad por lo que publicás</label><label><input type="radio" name="q4a5" value="c"> c) La IA no tiene implicancias éticas</label><label><input type="radio" name="q4a5" value="d"> d) Prohibir la IA en todos lados</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q4a6" data-correct="a"><p class="q-title">6. ¿Qué ley argentina protege los datos personales?</p><div class="options-list"><label><input type="radio" name="q4a6" value="a"> a) Ley 25.326 de Protección de Datos Personales</label><label><input type="radio" name="q4a6" value="b"> b) Ley de Gravedad</label><label><input type="radio" name="q4a6" value="c"> c) Ley de Ohm</label><label><input type="radio" name="q4a6" value="d"> d) No hay ley</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q4a7" data-correct="c"><p class="q-title">7. ¿Qué es el sharenting?</p><div class="options-list"><label><input type="radio" name="q4a7" value="a"> a) Compartir memes</label><label><input type="radio" name="q4a7" value="b"> b) Compartir apuntes</label><label><input type="radio" name="q4a7" value="c"> c) Sobreexposición de hijos menores en redes por parte de padres/madres sin considerar su privacidad futura</label><label><input type="radio" name="q4a7" value="d"> d) Un tipo de hardware</label></div><div class="feedback-text"></div></div>
+                <div class="question-card" id="q4a8" data-correct="b"><p class="q-title">8. ¿Cuál es un principio de bienestar digital?</p><div class="options-list"><label><input type="radio" name="q4a8" value="a"> a) Estar 18 horas pegado a la pantalla sin pausa</label><label><input type="radio" name="q4a8" value="b"> b) Equilibrio, pausas activas, gestión del tiempo, no alimentar discurso de odio, pedir ayuda ante ciberbullying</label><label><input type="radio" name="q4a8" value="c"> c) Responder insultando siempre</label><label><input type="radio" name="q4a8" value="d"> d) Compartir ubicación en tiempo real siempre</label></div><div class="feedback-text"></div></div>
+                <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm4',1,8,'res4','q4a')" style="background: linear-gradient(135deg,#0f172a 0%,#334155 100%);">Corregir Autoevaluación 4</button>
+                <div class="quiz-results" id="res4"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<a href="contacto.html" class="btn-flotante-soporte" title="Contacto"><i class="fa-solid fa-headset"></i></a>
+<div class="modal-overlay" id="supportModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <button class="modal-close-btn" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-heart-icon"><i class="fa-solid fa-heart"></i></div>
+            <div class="modal-title-box"><h3>¡Gracias por usar Academia Digital!</h3><p>Tu apoyo mantiene el proyecto vivo</p></div>
+        </div>
+        <div class="modal-body">
+            <p>Academia Digital es gratuito y sin publicidad. Si te ahorra tiempo y te ayuda en tus estudios, podés invitarme un cafecito con Mercado Pago.</p>
+            <div class="modal-link-box">
+                <div class="modal-link-info"><i class="fa-solid fa-wallet"></i><div><span>Link de Mercado Pago</span><p id="mpLinkText">https://link.mercadopago.com.ar/academiadigital2026</p></div></div>
+                <button class="btn-copiar" id="copyLinkBtn">Copiar</button>
+            </div>
+            <a href="https://link.mercadopago.com.ar/academiadigital2026" target="_blank" class="btn-mp-primary"><i class="fa-solid fa-heart" style="color:#ef4444;"></i> Colaborar con Mercado Pago <i class="fa-solid fa-arrow-right"></i></a>
+            <span class="modal-footer-text">100% seguro • Mercado Pago • Podés poner el monto que quieras</span>
+        </div>
+    </div>
+</div>
+ <!-- Ventana Modal de Ledger Digital -->
+    <div class="modal-overlay" id="ledgerModal">
+        <div class="modal-card">
+            <div class="modal-header-ledger">
+                <button class="modal-close-btn" id="closeLedgerModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            
+                <div class="modal-ledger-logo-box">
+                    <img style="max-width:56px;width:56px;height:auto;object-fit:contain;" src="icon/logo-icon-512.png" alt="Logo Ledger Digital">
+                </div>
+                <div class="modal-title-box">
+                    <h3>LEDGER</h3>
+                    <p>Tus cuentas, al día.</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Mantén tus cuentas al día de forma inteligente. LEDGER, Funciona como un <strong>libro diario de consumos</strong> para registrar y organizar con precisión tus gastos fijos, compras en cuotas, consumos únicos y mucho más.</p>
+                <div class="modal-link-box">
+                    <div class="modal-link-info">
+                        <i class="fa-solid fa-globe" style="color: #000000;"></i>
+                        <div>
+                            <span>Sitio Web Oficial</span>
+                            <p id="ledgerLinkText">https://ledgerdigital.netlify.app/</p>
+                        </div>
+                    </div>
+                    <button class="btn-copiar" id="copyLedgerLinkBtn">Copiar</button>
+                </div>
+                <a href="https://ledgerdigital.netlify.app/" target="_blank" class="btn-ledger-primary">
+                    <i class="fa-solid fa-external-link-alt"></i> Ir a LEDGER <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <span class="modal-footer-text" style="display: block; margin-top: 15px;">Controla tus finanzas personales &bull; Simple y Accesible</span>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Ventana Modal de Evaluacion -->
+    <div class="modal-overlay" id="evaluacionModal">
+        <div class="modal-card">
+            <div class="modal-header-evaluacion">
+                <button class="modal-close-btn" id="closeEvaluacionModalBtn"><i class="fa-solid fa-xmark"></i></button>
+                
+                <div class="modal-evaluacion-icon">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <div class="modal-title-box">
+                    <h3>Evaluación General</h3>
+                    <p>Todos los programas incluidos</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Estás por iniciar la <strong>evaluación integradora</strong> sobre todos los programas de NTX | Academia Digital: Informática, Redes, Ofimática, Diseño, Comunicación, Multimedia y Seguridad.</p>
+                
+                <div class="modal-eval-info-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div>
+                        <span>¿Qué incluye?</span>
+                        <p>Preguntas de los 7 módulos del programa de formación. Podrás ver tu puntaje al finalizar y repasar tus respuestas.</p>
+                    </div>
+                </div>
+                <button id="confirmEvaluacionBtn" class="btn-evaluacion-primary">
+                    <i class="fa-solid fa-play"></i> Sí, iniciar evaluación <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button id="cancelEvaluacionBtn" class="btn-evaluacion-secondary">
+                    Seguir explorando
+                </button>
+                <span class="modal-footer-text" style="display: block; margin-top: 15px;">La evaluación es sin tiempo límite &bull; Podés intentarlo las veces que quieras</span>
+            </div>
+        </div>
+    </div>
+
+<div id="footer-placeholder"></div>
+
+<script src="js/header.js"></script>
+<script src="js/footer.js?v=1"></script>
+<script>
+function toggleQuiz(num){ if(num===undefined||num===null||num===''){ var c=document.getElementById('quizSectionContainer'); if(c) c.classList.toggle('open'); return; } let container=document.getElementById('quizContainer'+num); if(container) container.classList.toggle('open'); }
+function corregirQuiz(formId,inicio,fin,resultadoId,prefix){ let aciertos=0; const form=document.getElementById(formId); for(let i=inicio;i<=fin;i++){ let card=document.getElementById(prefix+i); if(!card) continue; let correcta=card.getAttribute('data-correct'); let sel=form.querySelector('input[name="'+prefix+i+'"]:checked'); let fb=card.querySelector('.feedback-text'); if(!fb) continue; card.classList.remove('correct','incorrect'); if(sel){ if(sel.value===correcta){ card.classList.add('correct'); fb.textContent="¡Respuesta correcta!"; aciertos++; } else { card.classList.add('incorrect'); fb.textContent="Incorrecta. Era '"+correcta.toUpperCase()+"'."; } } else { card.classList.add('incorrect'); fb.textContent="No seleccionaste opción."; } } let r=document.getElementById(resultadoId); if(r){ r.style.display='block'; r.innerHTML="Obtuviste "+aciertos+" de "+(fin-inicio+1)+" correctas ("+Math.round((aciertos/(fin-inicio+1))*100)+"%)."; r.scrollIntoView({behavior:'smooth'}); } }
+document.addEventListener('DOMContentLoaded', function(){
+  let copyBtn=document.getElementById('copyLinkBtn');
+  let txt=document.getElementById('mpLinkText');
+  if(copyBtn&&txt){ copyBtn.addEventListener('click', function(){ navigator.clipboard.writeText(txt.innerText).then(function(){ let o=copyBtn.innerText; copyBtn.innerText='¡Copiado!'; setTimeout(function(){ copyBtn.innerText=o; },2000); }); }); }
+  let closeBtn=document.getElementById('closeModalBtn');
+  let modal=document.getElementById('supportModal');
+  if(closeBtn&&modal){ closeBtn.addEventListener('click', function(){ modal.style.display='none'; }); }
+  if(modal){ modal.addEventListener('click', function(e){ if(e.target===modal) modal.style.display='none'; }); }
+});
+// Ledger modal
+  let ledgerModal=document.getElementById('ledgerModal');
+  let openLedgerBtn=document.getElementById('openLedgerModalBtn');
+  let closeLedgerBtn=document.getElementById('closeLedgerModalBtn');
+  let copyLedgerBtn=document.getElementById('copyLedgerLinkBtn');
+  let ledgerLinkEl=document.getElementById('ledgerLinkText');
+  if(openLedgerBtn && ledgerModal) openLedgerBtn.addEventListener('click', (e)=>{ e.preventDefault(); ledgerModal.style.display='flex'; });
+  if(closeLedgerBtn && ledgerModal) closeLedgerBtn.addEventListener('click', ()=> ledgerModal.style.display='none');
+  if(ledgerModal) ledgerModal.addEventListener('click', (e)=>{ if(e.target===ledgerModal) ledgerModal.style.display='none'; });
+  if(copyLedgerBtn && ledgerLinkEl){
+    copyLedgerBtn.addEventListener('click', ()=>{
+      navigator.clipboard.writeText(ledgerLinkEl.innerText).then(()=>{
+        let o=copyLedgerBtn.innerText; copyLedgerBtn.innerText='¡Copiado!'; setTimeout(()=> copyLedgerBtn.innerText=o, 2000);
+      });
+    });
+  }
+
+  // Evaluacion modal
+  let evalModal=document.getElementById('evaluacionModal');
+  let openEval=document.getElementById('openEvaluacionModalBtn');
+  let closeEval=document.getElementById('closeEvaluacionModalBtn');
+  let cancelEval=document.getElementById('cancelEvaluacionBtn');
+  let confirmEval=document.getElementById('confirmEvaluacionBtn');
+  if(openEval && evalModal) openEval.addEventListener('click', (e)=>{ e.preventDefault(); evalModal.style.display='flex'; });
+  if(closeEval && evalModal) closeEval.addEventListener('click', ()=> evalModal.style.display='none');
+  if(cancelEval && evalModal) cancelEval.addEventListener('click', ()=> evalModal.style.display='none');
+  if(confirmEval) confirmEval.addEventListener('click', ()=> window.location.href='examen.html');
+  if(evalModal) evalModal.addEventListener('click', (e)=>{ if(e.target===evalModal) evalModal.style.display='none'; });
+
+  if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=24');
+  });
+}
+</script>
+</body>
+</html>

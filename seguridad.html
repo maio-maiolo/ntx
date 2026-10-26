@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Ciberseguridad | NTX</title>
+<link rel="manifest" href="manifest.json?v=24">
+
+<meta name="theme-color" content="#0a1930">
+
+<!-- Favicon para SOLAPA NAVEGADOR - Libro circular -->
+<link rel="icon" href="/favicon.ico?v=24" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png?v=24">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png?v=24">
+
+<!-- Apple / iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png?v=24">
+
+<!-- PWA / Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192x192.png?v=24">
+<link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512x512.png?v=24">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary-color:#0c2340;--secondary-color:#112334;--accent-blue:#3b82f6;--bg-light:#f4f7fa;--text-main:#333;--text-muted:#666;--white:#fff;--cyan:#06b6d4;--amber:#f59e0b;--violet:#8b5cf6;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{background:var(--white);color:var(--text-main);overflow-x:hidden;line-height:1.6;}
+.hero {
+            background: #112334;
+            color: var(--white);
+            padding: 50px 20px;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 30px;
+            text-align: left;
+        }
+
+        .hero img {
+            max-width: 140px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .hero-text h1 {
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero-text p {
+            font-size: 15.5px;
+            color: #d1d5db;
+            line-height: 1.5;
+        }
+
+        /* Main Content Container */
+        .content-container {
+            max-width: 1350px;
+            margin: 40px auto 80px auto;
+            padding: 0 20px;
+        }
+
+        .section-box {
+            background: var(--white);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+        }
+
+        .section-box h2 {
+            font-size: 26px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+        }
+
+        .section-box h2 i {
+            color: var(--accent-blue);
+        }
+
+        .section-box h3 {
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        .section-box p {
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        /* Ciclo / Fases Grid */
+        .ciclo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .ciclo-item {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--accent-blue);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .ciclo-content {
+            margin-bottom: 15px;
+        }
+
+        .ciclo-item h4 {
+            font-size: 16px;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .ciclo-item p {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .ciclo-img-container img {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .ejemplo-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            font-size: 14.5px;
+            color: #0369a1;
+        }
+
+        .ejemplo-box strong {
+            color: #03588c;
+        }
+
+        .hw-sw-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .perifericos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .card-hs {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-hs h4 {
+            font-size: 17px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-hs p {
+            font-size: 13.5px;
+        }
+
+        .software-img-grande {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .software-img-grande img {
+            max-width: 510px;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .software-logos img {
+            max-width: 500px;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .img-tarjeta-grande {
+            max-width: 100% !important;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            min-height: auto;
+            display: block;
+            margin: 20px auto 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+       }
+
+       .software-logos {
+            min-height: auto;
+            padding: 15px 0 0 0;
+       }
+
+       .ciclo-img-container {
+           min-height: auto;
+           padding: 15px;
+        }
+        /* Evaluacion / Cuestionario interactivo */
+        .quiz-section {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .quiz-header-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 15px;
+            margin-bottom: 0;
+        }
+
+        .quiz-header-toggle h2 {
+            color: #0369a1;
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .quiz-header-toggle h2 i {
+            color: #0284c7;
+        }
+
+        .toggle-icon {
+            font-size: 20px;
+            color: #0369a1;
+            transition: transform 0.3s ease;
+        }
+
+        .quiz-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.3s ease;
+            padding-top: 0;
+        }
+
+        .quiz-section.open .quiz-body {
+            max-height: 5000px;
+            padding-top: 25px;
+        }
+
+        .quiz-section.open .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .question-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #e5e7eb;
+        }
+
+        .question-card p.q-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .options-list label {
+            background: #f9fafb;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            border: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .options-list label:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+
+        .options-list input[type="radio"] {
+            accent-color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        .question-card.correct {
+            border-color: #22c55e;
+            background-color: #f0fdf4;
+        }
+
+        .question-card.incorrect {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+
+        .feedback-text {
+            margin-top: 12px;
+            font-size: 13.5px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .question-card.correct .feedback-text {
+            display: block;
+            color: #15803d;
+        }
+
+        .question-card.incorrect .feedback-text {
+            display: block;
+            color: #b91c1c;
+        }
+
+        .btn-submit-quiz {
+            display: block;
+            width: 100%;
+            background-color: #0369a1;
+            color: var(--white);
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(3, 105, 161, 0.2);
+            transition: background 0.2s, transform 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn-submit-quiz:hover {
+            background-color: #0284c7;
+            transform: translateY(-2px);
+        }
+
+        .quiz-results {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: none;
+        }
+
+        footer {
+            background-color: var(--bg-light);
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 1200px) {
+            .perifericos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .ciclo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            
+            .perifericos-grid {
+                grid-template-columns: 1fr;
+            }
+            .ciclo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+</style>
+<link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/responsive-fix.css">
+<link rel="stylesheet" href="css/footer.css?v=1">
+<link rel="stylesheet" href="css/fix-autoevaluacion.css?v=1">
+<link rel="stylesheet" href="css/autoevaluacion-uniforme.css?v=1">
+
+</head>
+<body>
+<div id="header-placeholder"></div>
+<section class="hero">
+        <div class="hero-container">
+            <img src="img/seguridad.webp" alt="Ciberseguridad y Ciudadanía Digital">
+            <div class="hero-text">
+                <h1>Ciberseguridad, Ciudadanía Digital y Ética Tecnológica</h1>
+                <p>Concientización sobre los derechos, deberes y la seguridad en los entornos virtuales, abordando la prevención de amenazas, la gestión de la identidad digital y la convivencia pacífica en la red.</p>
+            </div>
+        </div>
+    </section>
+
+     <div class="content-container">
+
+        <div class="section-box">
+            <h2><i class="fa-solid fa-shield-halved"></i> Pilares de la Protección y Convivencia en Entornos Virtuales</h2>
+            <p>La participación activa y responsable en la sociedad digital requiere comprender las normativas, los riesgos latentes y las buenas prácticas de conducta. Los ejes fundamentales se estructuran en tres áreas clave:</p>
+            
+            <div class="ciclo-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="ciclo-item">
+                    <div class="ciclo-content">
+                        <h4>1. Seguridad: Prevención y Claves</h4>
+                        <p>Identificación de ciberamenazas, técnicas de ingeniería social y establecimiento de contraseñas robustas o autenticación multifactor.</p>
+                    </div>
+                    <div class="ciclo-img-container">
+                        <img src="img/seguridad-amenazas.webp" alt="Seguridad y Prevención">
+                    </div>
+                </div>
+
+                <div class="ciclo-item">
+                    <div class="ciclo-content">
+                        <h4>2. Privacidad e Identidad Digital</h4>
+                        <p>Gestión consciente de la huella digital, control de datos personales compartidos y configuración de la privacidad en redes.</p>
+                    </div>
+                    <div class="ciclo-img-container">
+                        <img src="img/privacidad-identidad.webp" alt="Privacidad e Identidad Digital">
+                    </div>
+                </div>
+
+                <div class="ciclo-item">
+                    <div class="ciclo-content">
+                        <h4>3. Convivencia y Netiquetas</h4>
+                        <p>Promoción del respeto mutuo en línea, aplicación de normas de cortesía digital y prevención activa del ciberacoso (grooming y bullying).</p>
+                    </div>
+                    <div class="ciclo-img-container">
+                        <img src="img/convivencia-netiquetas.webp" alt="Convivencia y Netiquetas">
+                    </div>
+                </div>
+            </div>
+
+            <div class="ejemplo-box">
+                <i class="fa-solid fa-lightbulb"></i> <strong>Aplicación práctica:</strong> Frente a un intento de suplantación de identidad o correo sospechoso (phishing), un ciudadano digital informado verifica la fuente, evita compartir credenciales y reporta el incidente bajo los protocolos de ética y seguridad tecnológica.
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h2><i class="fa-solid fa-lock"></i> Seguridad Informática y Gestión de Amenazas</h2>
+            <p>La defensa de los sistemas personales y colectivos demanda el entendimiento de las vulnerabilidades más comunes y la implementación de barreras defensivas activas:</p>
+            
+            <div class="hw-sw-grid">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-key"></i> Autenticación y Contraseñas Seguras</h4>
+                        <p>Uso de frases de contraseña robustas, gestores de claves cifradas y verificación en dos pasos (2FA) para bloquear accesos no autorizados a cuentas críticas.</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/desktop-security.webp" alt="Seguridad y Contraseñas" title="Desktop Security" class="img-tarjeta-grande">
+                    </div>
+                </div>
+
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-user-shield"></i> Prevención de Phishing y Malware</h4>
+                        <p>Reconocimiento de enlaces maliciosos, archivos adjuntos fraudulentos y suplantación de marcas, evitando la infección por software malicioso (ransomware, troyanos).</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/desktop-malware.webp" alt="Prevención de Malware" title="Desktop Malware" class="img-tarjeta-grande">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h2><i class="fa-solid fa-id-card"></i> Privacidad y Ciudadanía Digital Responsable</h2>
+            <p>Cada interacción en la red construye nuestra reputación digital. El ejercicio responsable de la ciudadanía exige proteger los derechos propios y ajenos:</p>
+
+            <div class="hw-sw-grid">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-fingerprint"></i> Huella Digital</h4>
+                        <p>Análisis del rastro de información que dejamos al navegar, comentar o publicar, comprendiendo que los datos compartidos en internet suelen persistir a largo plazo.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/huella-digital.webp" alt="Huella Digital">
+                    </div>
+                </div>
+
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-circle-user"></i> Configuración de Privacidad</h4>
+                        <p>Uso adecuado de los permisos en aplicaciones y redes sociales para limitar el acceso público a datos sensibles, fotos y ubicación geográfica en tiempo real.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/config-privacidad.webp" alt="Configuración de Privacidad">
+                    </div>
+                </div>
+
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-scale-balanced"></i> Derechos y Deberes en la Red</h4>
+                        <p>Concientización sobre la propiedad intelectual, el derecho a la propia imagen, el respeto a la diversidad de opiniones y la ciberética en los espacios virtuales.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/derechos-deberes.webp" alt="Derechos y Deberes en la Red">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-section" id="quizSectionContainer">
+            <div class="quiz-header-toggle" onclick="toggleQuiz()">
+                <h2><i class="fa-solid fa-list-check"></i> Autoevaluación 1: Ciberseguridad y Ciudadanía Digital</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon"></i>
+            </div>
+
+            <div class="quiz-body">
+                <p style="margin-bottom: 25px; color: #0369a1;">Selecciona una opción para cada pregunta y haz clic en "Corregir Cuestionario" al finalizar.</p>
+
+                <form id="quizForm">
+                    <div class="question-card" id="q1" data-correct="b">
+                        <p class="q-title">1. ¿Qué práctica es fundamental para mejorar la seguridad en el acceso a cuentas en línea?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p1" value="a"> a) Utilizar la misma contraseña sencilla en todos los sitios web para recordarla fácilmente.</label>
+                            <label><input type="radio" name="p1" value="b"> b) Implementar contraseñas robustas combinadas con autenticación multifactor (MFA).</label>
+                            <label><input type="radio" name="p1" value="c"> c) Compartir las claves de acceso exclusivamente con contactos cercanos.</label>
+                            <label><input type="radio" name="p1" value="d"> d) Desactivar las actualizaciones del sistema operativo.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q2" data-correct="c">
+                        <p class="q-title">2. ¿A qué se denomina "huella digital"?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p2" value="a"> a) Al hardware biométrico utilizado para desbloquear teléfonos inteligentes.</label>
+                            <label><input type="radio" name="p2" value="b"> b) Al registro físico de las teclas presionadas en un teclado mecánico.</label>
+                            <label><input type="radio" name="p2" value="b"> c) Al rastro de datos, interacciones y publicaciones que dejamos al navegar por internet.</label>
+                            <label><input type="radio" name="p2" value="d"> d) Al código de barras impreso en las licencias de software.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q3" data-correct="a">
+                        <p class="q-title">3. ¿Qué define el concepto de "netiqueta" en los entornos virtuales?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p3" value="a"> a) El conjunto de normas de comportamiento y cortesía digital aplicadas en la comunicación en red.</label>
+                            <label><input type="radio" name="p3" value="b"> b) Las etiquetas de precio utilizadas en tiendas de comercio electrónico.</label>
+                            <label><input type="radio" name="p3" value="c"> c) Los protocolos de red para enrutar paquetes de datos.</label>
+                            <label><input type="radio" name="p3" value="d"> d) Las políticas internas de seguridad contra virus informáticos.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q4" data-correct="b">
+                        <p class="q-title">4. ¿Cuál es el objetivo principal de una campaña de "phishing"?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p4" value="a"> a) Acelerar la velocidad de conexión a internet del usuario.</label>
+                            <label><input type="radio" name="p4" value="b"> b) Engañar a las personas para robar información confidencial como contraseñas o datos bancarios.</label>
+                            <label><input type="radio" name="p4" value="c"> c) Mejorar el posicionamiento SEO de páginas web comerciales.</label>
+                            <label><input type="radio" name="p4" value="d"> d) Actualizar de forma automática los navegadores web.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="q5" data-correct="c">
+                        <p class="q-title">5. ¿Por qué es importante la concientización sobre los derechos y deberes en la ciudadanía digital?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="p5" value="a"> a) Para limitar de forma absoluta el uso de las redes sociales.</label>
+                            <label><input type="radio" name="p5" value="b"> b) Para obligar a los usuarios a programar aplicaciones móviles.</label>
+                            <label><input type="radio" name="p5" value="c"> c) Para promover una convivencia respetuosa, prevenir el ciberacoso y garantizar la protección de la privacidad.</label>
+                            <label><input type="radio" name="p5" value="d"> d) Para evitar el uso de imágenes en los perfiles personales.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm', 1, 5, 'resultadoFinal')">Corregir Cuestionario</button>
+                    <div class="quiz-results" id="resultadoFinal"></div>
+                </form>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h2><i class="fa-solid fa-users-viewfinder"></i> Convivencia, Netiquetas y Prevención del Ciberacoso</h2>
+            
+            <h3>1. Normas de convivencia y respeto digital</h3>
+            <p>La empatía en la red es tan crucial como en el mundo físico. Fomentar un clima digital seguro previene conflictos y protege el bienestar emocional:</p>
+            
+            <div class="perifericos-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-comments"></i>Comunicación Empática</h4>
+                        <p>Evitar descalificaciones, valorar la diversidad de opiniones y redactar mensajes constructivos en foros, redes y chats.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/comunicacion-empatica.webp" alt="Comunicación Empática">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-shield-dog"></i>Prevención del Ciberacoso</h4>
+                        <p>Identificación temprana de situaciones de hostigamiento, bloqueo de usuarios malintencionados y canales de denuncia institucional.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/prevencion-ciberacoso.webp" alt="Prevención del Ciberacoso">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-handshake-angle"></i>Acción y Resguardo</h4>
+                        <p>No ser cómplice de la viralización de contenidos ofensivos y respaldar a las víctimas reportando el material inapropiado.</p>
+                    </div>
+                    <div class="software-logos">
+                        <img src="img/accion-resguardo.webp" alt="Acción y Resguardo Digital">
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 35px;">Ética Tecnológica y Responsabilidad Social</h3>
+            <p>El uso de la tecnología conlleva una responsabilidad ética frente a la veracidad de la información y el respeto a la propiedad intelectual:</p>
+            
+            <div class="hw-sw-grid">
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-triangle-exclamation"></i>Combate a la Desinformación (Fake News)</h4>
+                        <p>Verificación de fuentes antes de compartir noticias o contenidos virales, frenando la propagación de bulos y noticias falsas en la red.</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/fake-news.webp" alt="Combate a la Desinformación">
+                    </div>
+                </div>
+                <div class="card-hs">
+                    <div>
+                        <h4><i class="fa-solid fa-copyright"></i>Propiedad Intelectual y Ética</h4>
+                        <p>Respeto a los derechos de autor, citación de fuentes originales y uso ético de herramientas de inteligencia artificial y recursos multimedia.</p>
+                    </div>
+                    <div class="software-logos software-img-grande">
+                        <img src="img/propiedad-intelectual.webp" alt="Propiedad Intelectual">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-section" id="quizSectionContainer2" style="background: #f0f9ff; border: 1px solid #bae6fd;">
+            <div class="quiz-header-toggle" onclick="toggleQuiz2()" style="border-bottom: 2px solid #e0f2fe;">
+                <h2 style="color: #0369a1;"><i class="fa-solid fa-list-check" style="color: #0284c7;"></i> Autoevaluación 2: Convivencia y Ética Tecnológica</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon" style="color: #0369a1;"></i>
+            </div>
+
+            <div class="quiz-body">
+                <p style="margin-bottom: 25px; color: #0369a1;">Pon a prueba tus conocimientos sobre netiquetas, prevención del ciberacoso y ética digital.</p>
+
+                <form id="quizForm2">
+                    <div class="question-card" id="qd1" data-correct="c">
+                        <p class="q-title">1. ¿Qué actitud debe asumir un ciudadano digital frente a una situación de ciberacoso o bullying?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="pd1" value="a"> a) Compartir el contenido ofensivo para ganar mayor visibilidad.</label>
+                            <label><input type="radio" name="pd1" value="b"> b) Ignorar la situación por completo sin reportarla.</label>
+                            <label><input type="radio" name="pd1" value="c"> c) No participar en la difusión, ofrecer apoyo a la víctima y reportar el abuso a través de los canales correspondientes.</label>
+                            <label><input type="radio" name="pd1" value="d"> d) Responder con agresividad hacia el agresor para solucionar el conflicto.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="qd2" data-correct="a">
+                        <p class="q-title">2. ¿Por qué es importante verificar las fuentes antes de compartir una noticia en redes sociales?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="pd2" value="a"> a) Para evitar la propagación de desinformación (fake news) y mantener la fiabilidad en la red.</label>
+                            <label><input type="radio" name="pd2" value="b"> b) Para incrementar el peso de los archivos multimedia descargados.</label>
+                            <label><input type="radio" name="pd2" value="c"> c) Para impedir que el navegador web bloquee la dirección IP.</label>
+                            <label><input type="radio" name="pd2" value="d"> d) Para cumplir con los pagos de licencias de software privativo.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="qd3" data-correct="b">
+                        <p class="q-title">3. ¿Qué norma básica de netiqueta se debe aplicar al redactar mensajes en foros o chats educativos?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="pd3" value="a"> a) Escribir siempre en mayúsculas sostenidas para resaltar el texto.</label>
+                            <label><input type="radio" name="pd3" value="b"> b) Mantener el respeto, usar un tono constructivo y considerar los sentimientos de los demás.</label>
+                            <label><input type="radio" name="pd3" value="c"> c) Enviar mensajes masivos sin importar el propósito del grupo.</label>
+                            <label><input type="radio" name="pd3" value="d"> d) Ocultar la identidad mediante perfiles falsos.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="qd4" data-correct="c">
+                        <p class="q-title">4. ¿Qué implica respetar la propiedad intelectual en los entornos virtuales?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="pd4" value="a"> a) Descargar cualquier software de pago sin restricciones.</label>
+                            <label><input type="radio" name="pd4" value="b"> b) Atribuir las ideas ajenas como propias en trabajos académicos.</label>
+                            <label><input type="radio" name="pd4" value="c"> c) Reconocer los derechos de autor, citar las fuentes originales y utilizar licencias adecuadas.</label>
+                            <label><input type="radio" name="pd4" value="d"> d) Bloquear el acceso a contenidos educativos libres.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <div class="question-card" id="qd5" data-correct="d">
+                        <p class="q-title">5. ¿Cuál es el principal beneficio de practicar una ciudadanía digital responsable?</p>
+                        <div class="options-list">
+                            <label><input type="radio" name="pd5" value="a"> a) Garantizar velocidad ilimitada en la red de internet.</label>
+                            <label><input type="radio" name="pd5" value="b"> b) Eliminar la necesidad de configurar contraseñas.</label>
+                            <label><input type="radio" name="pd5" value="c"> c) Reducir el consumo eléctrico de los dispositivos.</label>
+                            <label><input type="radio" name="pd5" value="d"> d) Construir un entorno virtual más seguro, inclusivo, colaborativo y respetuoso para todos los usuarios.</label>
+                        </div>
+                        <div class="feedback-text"></div>
+                    </div>
+
+                    <button type="button" class="btn-submit-quiz" onclick="corregirQuiz('quizForm2', 1, 5, 'resultadoFinal2', 'qd')">Corregir Cuestionario 2</button>
+                    <div class="quiz-results" id="resultadoFinal2"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!-- Ventana Modal de Apoyo -->
+    <div class="modal-overlay" id="supportModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <!-- Botón de la X integrado dentro del encabezado -->
+                <button class="modal-close-btn" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+                
+                <div class="modal-heart-icon">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <div class="modal-title-box">
+                    <h3>¡Gracias por usar Academia Digital!</h3>
+                    <p>Tu apoyo mantiene el proyecto vivo</p>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <p>Academia Digital es gratuito y sin publicidad. Si te ahorra tiempo y te ayuda en tus estudios, podés invitarme un cafecito con Mercado Pago. Cada colaboración suma muchísimo.</p>
+                
+                <div class="modal-link-box">
+                    <div class="modal-link-info">
+                        <i class="fa-solid fa-wallet"></i>
+                        <div>
+                            <span>Link de Mercado Pago</span>
+                            <p id="mpLinkText">https://link.mercadopago.com.ar/academiadigital2026</p>
+                        </div>
+                    </div>
+                    <button class="btn-copiar" id="copyLinkBtn">Copiar</button>
+                </div>
+
+               <a href="https://link.mercadopago.com.ar/academiadigital2026" target="_blank" class="btn-mp-primary">
+                    <i class="fa-solid fa-heart" style="color: #ef4444;"></i> Quiero Colaborar <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+                <span class="modal-footer-text">100% seguro &bull; Mercado Pago &bull; Podés poner el monto que quieras</span>
+            </div>
+        </div>
+    </div>
+
+ <!-- Ventana Modal de Ledger Digital -->
+    <div class="modal-overlay" id="ledgerModal">
+        <div class="modal-card">
+            <div class="modal-header-ledger">
+                <button class="modal-close-btn" id="closeLedgerModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            
+                <div class="modal-ledger-logo-box">
+                    <img style="max-width:56px;width:56px;height:auto;object-fit:contain;" src="icon/logo-icon-512.png" alt="Logo Ledger Digital">
+                </div>
+                <div class="modal-title-box">
+                    <h3>LEDGER</h3>
+                    <p>Tus cuentas, al día.</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Mantén tus cuentas al día de forma inteligente. LEDGER, Funciona como un <strong>libro diario de consumos</strong> para registrar y organizar con precisión tus gastos fijos, compras en cuotas, consumos únicos y mucho más.</p>
+                <div class="modal-link-box">
+                    <div class="modal-link-info">
+                        <i class="fa-solid fa-globe" style="color: #000000;"></i>
+                        <div>
+                            <span>Sitio Web Oficial</span>
+                            <p id="ledgerLinkText">https://ledgerdigital.netlify.app/</p>
+                        </div>
+                    </div>
+                    <button class="btn-copiar" id="copyLedgerLinkBtn">Copiar</button>
+                </div>
+                <a href="https://ledgerdigital.netlify.app/" target="_blank" class="btn-ledger-primary">
+                    <i class="fa-solid fa-external-link-alt"></i> Ir a LEDGER <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <span class="modal-footer-text" style="display: block; margin-top: 15px;">Controla tus finanzas personales &bull; Simple y Accesible</span>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Ventana Modal de Evaluacion -->
+    <div class="modal-overlay" id="evaluacionModal">
+        <div class="modal-card">
+            <div class="modal-header-evaluacion">
+                <button class="modal-close-btn" id="closeEvaluacionModalBtn"><i class="fa-solid fa-xmark"></i></button>
+                
+                <div class="modal-evaluacion-icon">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <div class="modal-title-box">
+                    <h3>Evaluación General</h3>
+                    <p>Todos los programas incluidos</p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Estás por iniciar la <strong>evaluación integradora</strong> sobre todos los programas de NTX | Academia Digital: Informática, Redes, Ofimática, Diseño, Comunicación, Multimedia y Seguridad.</p>
+                
+                <div class="modal-eval-info-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div>
+                        <span>¿Qué incluye?</span>
+                        <p>Preguntas de los 7 módulos del programa de formación. Podrás ver tu puntaje al finalizar y repasar tus respuestas.</p>
+                    </div>
+                </div>
+                <button id="confirmEvaluacionBtn" class="btn-evaluacion-primary">
+                    <i class="fa-solid fa-play"></i> Sí, iniciar evaluación <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button id="cancelEvaluacionBtn" class="btn-evaluacion-secondary">
+                    Seguir explorando
+                </button>
+                <span class="modal-footer-text" style="display: block; margin-top: 15px;">La evaluación es sin tiempo límite &bull; Podés intentarlo las veces que quieras</span>
+            </div>
+        </div>
+    </div>
+
+<div id="footer-placeholder"></div>
+
+<script src="js/header.js"></script>
+<script src="js/footer.js?v=1"></script>
+    <script>
+
+         const modal = document.getElementById('supportModal');
+        const openBtn = document.getElementById('openModalBtn');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const copyBtn = document.getElementById('copyLinkBtn');
+        const linkText = document.getElementById('mpLinkText').innerText;
+
+        openBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.display = 'flex';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(linkText).then(() => {
+                copyBtn.innerText = '¡Copiado!';
+                setTimeout(() => {
+                    copyBtn.innerText = 'Copiar';
+                }, 2000);
+            });
+        });
+    
+        function toggleQuiz() {
+            let container = document.getElementById('quizSectionContainer');
+            container.classList.toggle('open');
+        }
+
+        function toggleQuiz2() {
+            let container = document.getElementById('quizSectionContainer2');
+            container.classList.toggle('open');
+        }
+
+        function corregirQuiz(formId, inicio, fin, resultadoId, prefix = 'q') {
+            let aciertos = 0;
+
+            for (let i = inicio; i <= fin; i++) {
+                let card = document.getElementById(prefix + i);
+                let correcta = card.getAttribute('data-correct');
+                let seleccionada = document.querySelector('input[name="' + (prefix === 'qd' ? 'pd' : 'p') + i + '"]:checked');
+                let feedback = card.querySelector('.feedback-text');
+
+                card.classList.remove('correct', 'incorrect');
+
+                if (seleccionada) {
+                    if (seleccionada.value === correcta) {
+                        card.classList.add('correct');
+                        feedback.textContent = "¡Respuesta correcta!";
+                        aciertos++;
+                    } else {
+                        card.classList.add('incorrect');
+                        feedback.textContent = "Respuesta incorrecta. La opción correcta era la '" + correcta.toUpperCase() + "'.";
+                    }
+                } else {
+                    card.classList.add('incorrect');
+                    feedback.textContent = "No seleccionaste ninguna opción.";
+                }
+            }
+
+            let resultadoDiv = document.getElementById(resultadoId);
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.innerHTML = `Obtuviste ${aciertos} de ${fin - inicio + 1} respuestas correctas (${(aciertos/(fin - inicio + 1))*100}%).`;
+            
+            resultadoDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+
+<a href="contacto.html" class="btn-flotante-soporte" title="Contacto">
+        <i class="fa-solid fa-headset"></i>
+    </a>
+
+<script src="js/header.js"></script>
+<script>
+function toggleQuiz(){ let c=document.getElementById('quizSectionContainer'); if(c) c.classList.toggle('open'); }
+function toggleQuiz2(){ let c=document.getElementById('quizSectionContainer2'); if(c) c.classList.toggle('open'); }
+function corregirQuiz(formId, inicio, fin, resultadoId, prefix='q'){
+  let aciertos=0;
+  for(let i=inicio;i<=fin;i++){
+    let card=document.getElementById(prefix+i);
+    if(!card) continue;
+    let correcta=card.getAttribute('data-correct');
+    let sel=document.querySelector('input[name="'+(prefix==='qd'?'pd':'p')+i+'"]:checked');
+    let fb=card.querySelector('.feedback-text');
+    if(!fb) continue;
+    card.classList.remove('correct','incorrect');
+    if(sel){
+      if(sel.value===correcta){card.classList.add('correct');fb.textContent='¡Correcta!';aciertos++;}
+      else{card.classList.add('incorrect');fb.textContent='Incorrecta. Era '+correcta.toUpperCase();}
+    } else {card.classList.add('incorrect');fb.textContent='No seleccionaste.';}
+  }
+  let r=document.getElementById(resultadoId);
+  if(r){ r.style.display='block'; r.innerHTML='Obtuviste '+aciertos+' de '+(fin-inicio+1)+' ('+Math.round(aciertos/(fin-inicio+1)*100)+'%).'; r.scrollIntoView({behavior:'smooth'}); }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  let copyBtn=document.getElementById('copyLinkBtn');
+  let txt=document.getElementById('mpLinkText');
+  if(copyBtn&&txt){ copyBtn.addEventListener('click', function(){ navigator.clipboard.writeText(txt.innerText).then(function(){ let o=copyBtn.innerText; copyBtn.innerText='¡Copiado!'; setTimeout(function(){ copyBtn.innerText=o; },2000); }); }); }
+  let closeBtn=document.getElementById('closeModalBtn');
+  let modal=document.getElementById('supportModal');
+  if(closeBtn&&modal){ closeBtn.addEventListener('click', function(){ modal.style.display='none'; }); }
+  if(modal){ modal.addEventListener('click', function(e){ if(e.target===modal) modal.style.display='none'; }); }
+});
+ // Ledger modal
+  let ledgerModal=document.getElementById('ledgerModal');
+  let openLedgerBtn=document.getElementById('openLedgerModalBtn');
+  let closeLedgerBtn=document.getElementById('closeLedgerModalBtn');
+  let copyLedgerBtn=document.getElementById('copyLedgerLinkBtn');
+  let ledgerLinkEl=document.getElementById('ledgerLinkText');
+  if(openLedgerBtn && ledgerModal) openLedgerBtn.addEventListener('click', (e)=>{ e.preventDefault(); ledgerModal.style.display='flex'; });
+  if(closeLedgerBtn && ledgerModal) closeLedgerBtn.addEventListener('click', ()=> ledgerModal.style.display='none');
+  if(ledgerModal) ledgerModal.addEventListener('click', (e)=>{ if(e.target===ledgerModal) ledgerModal.style.display='none'; });
+  if(copyLedgerBtn && ledgerLinkEl){
+    copyLedgerBtn.addEventListener('click', ()=>{
+      navigator.clipboard.writeText(ledgerLinkEl.innerText).then(()=>{
+        let o=copyLedgerBtn.innerText; copyLedgerBtn.innerText='¡Copiado!'; setTimeout(()=> copyLedgerBtn.innerText=o, 2000);
+      });
+    });
+  }
+
+  // Evaluacion modal
+  let evalModal=document.getElementById('evaluacionModal');
+  let openEval=document.getElementById('openEvaluacionModalBtn');
+  let closeEval=document.getElementById('closeEvaluacionModalBtn');
+  let cancelEval=document.getElementById('cancelEvaluacionBtn');
+  let confirmEval=document.getElementById('confirmEvaluacionBtn');
+  if(openEval && evalModal) openEval.addEventListener('click', (e)=>{ e.preventDefault(); evalModal.style.display='flex'; });
+  if(closeEval && evalModal) closeEval.addEventListener('click', ()=> evalModal.style.display='none');
+  if(cancelEval && evalModal) cancelEval.addEventListener('click', ()=> evalModal.style.display='none');
+  if(confirmEval) confirmEval.addEventListener('click', ()=> window.location.href='examen.html');
+  if(evalModal) evalModal.addEventListener('click', (e)=>{ if(e.target===evalModal) evalModal.style.display='none'; });
+
+  if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=24');
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+/* LOGO SOLO LIBRO - 62px header */
+.logo-img{
+  width:62px !important;
+  height:auto !important;
+  filter: drop-shadow(0 0 10px rgba(0,213,255,0.5)) !important;
+}
+@media(max-width:900px){ .logo-img{width:54px !important;} }
